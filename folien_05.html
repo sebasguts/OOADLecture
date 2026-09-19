@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>OOAD Modul 5: Systemdesign, AI-Integration & Infrastructure as Code (IaC)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d35400;
+            --primary-dark: #a04000;
+            --secondary: #1e293b;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        .reveal {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 24px;
+            color: var(--text);
+        }
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+        .reveal h1 { font-size: 1.85em; }
+        .reveal h2 { font-size: 1.35em; color: var(--primary); }
+        .reveal h3 { font-size: 1.15em; }
+        .reveal h4 { font-size: 0.95em; color: var(--primary-dark); margin-bottom: 8px; }
+        .reveal p, .reveal li {
+            font-size: 0.88em;
+            line-height: 1.45;
+            color: var(--text);
+        }
+        .reveal ul, .reveal ol {
+            margin-left: 1.2em;
+            margin-bottom: 12px;
+        }
+        .reveal li { margin-bottom: 6px; }
+        .reveal pre {
+            width: 100% !important;
+            margin: 8px 0 !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+            border-radius: 8px !important;
+        }
+        .reveal pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72em !important;
+            line-height: 1.35 !important;
+            padding: 14px !important;
+            border-radius: 8px;
+        }
+        .reveal blockquote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 12px 18px;
+            margin: 12px 0;
+            font-style: normal;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85em;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .nav-home {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            background: rgba(255,255,255,0.92);
+            padding: 6px 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+        }
+        .nav-home a { text-decoration: none; color: var(--primary); font-weight: 600; }
+        
+        /* Two-Column Grid System */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .col { min-width: 0; }
+        .col-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Mermaid Diagram Container */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            min-height: 220px;
+            max-height: 480px;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .mermaid svg {
+            max-height: 440px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-home">
+        <a href="index.html">← Zur Übersicht</a> | Modul 5: Systemdesign, AI & IaC
+    </div>
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown data-separator="^---$" data-separator-vertical="^--$">
+                <script type="text/template">
+# Objektorientierte Analyse & Design
+## Modul 5: Systemdesign, Cloud Native & AI-Inference
+
+---
+
+### Präzise Lernziele
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Teil 1: Verteilte Systeme & Cloud Native
+1. **System First, Components Second verinnerlichen:** Begründen, warum Systemarchitektur vor dem Komponenten- und Klassenentwurf steht, und die Top-Down-Entwurfshierarchie anwenden.
+2. **Den 5-Stufen-Evolutionspfad beherrschen:** Den Weg von der Single Instance über State Extraction und horizontale Skalierung bis zu Serverless architektonisch planen.
+3. **Systemmetriken & Skalierung verstehen:** Skalierbarkeit, Hochverfügbarkeit und Latenz quantifizieren; Scale Up vs. Scale Out gegenüberstellen.
+4. **Architekturen mit C4 & Sequenzdiagrammen modellieren:** Die 4 Zoomstufen (C4) und zeitliche Abläufe mit Fragmenten (`loop`, `alt`, `opt`) formal spezifizieren.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Teil 2: Daten, APIs, AI & Infrastructure as Code
+5. **In-Memory-Caching mit Redis planen:** Read-Heavy-Lastprofile mit dem Cache-Aside-Muster entlasten und Cache-Invalidierung beherrschen.
+6. **REST-APIs verbindlich dokumentieren:** Den 6-Punkte-Pflichtenheft-Standard und Pydantic-Validierung anwenden.
+7. **AI-Inference & ReAct-Agenten absichern:** Hohe Latenzen durch Token-Streaming (SSE) abfedern; *Human-in-the-Loop*-Budgetgrenzen im Backend verankern.
+8. **Cloud-Infrastruktur mit AWS CDK definieren:** AWS-Architekturdiagramme interpretieren und Infrastruktur deklarativ in Python (CDK) beschreiben.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Agenda
+
+<div class="two-cols">
+<div class="col">
+
+#### Teil 1: Systemdesign & Skalierung
+1. **Was ist Systemdesign?** Vom Laptop zur Cloud
+2. **System First, Components Second:** Die Top-Down-Entwurfshierarchie
+3. **Skalierung im Vergleich:** Scale Up vs. Scale Out
+4. **Monolith vs. Microservices:** Architektur-Trade-offs
+
+#### Teil 2: Vom klassischen Tool zu Cloud Native
+5. **Der 5-Stufen-Pfad:** Von Single Instance zu Serverless
+6. **Architektur-Trade-offs:** Wann lohnt sich welcher Schritt?
+7. **Cloud-Native Paradigmen:** *Pets vs. Cattle*
+8. **Zustandslosigkeit (Statelessness):** Die 12-Factor-App
+
+#### Teil 3: Architekturdokumentation & Sequenzdiagramme
+7. **Das C4-Modell:** Google Maps für Software
+8. **C4 Stufe 1 & 2:** Context & Container für Ada
+9. **Sequenzdiagramme:** Notation & Fragmente (`loop`, `alt`, `opt`)
+10. **Fallstudie:** Der Checkout-Prozess als Sequenzdiagramm
+
+</div>
+<div class="col">
+
+#### Teil 4: Datenmanagement & Caching
+11. **Datenbankentwurf:** Abfragemuster vor Tabellenbau
+12. **In-Memory-Caching:** Warum RAM die Festplatte schlägt
+13. **Cache-Aside mit Redis:** Hit, Miss & Invalidierung
+
+#### Teil 5: API-Design & Spezifikation
+14. **RESTful APIs:** HTTP-Verben & Statuscodes
+15. **API-Dokumentation im Pflichtenheft:** Der 6-Punkte-Standard
+16. **Pydantic-Validierung:** Typensichere Schemas
+
+#### Teil 6: AI-Inference & Autonome Agents
+17. **AI-Inference im Systemdesign:** Latenz & Token-Streaming
+18. **Autonome ReAct-Agenten:** Reasoning + Acting mit Tools
+19. **AI-Sicherheit:** Human-in-the-Loop-Budgetgrenzen
+
+#### Teil 7: Cloud-Architektur & AWS CDK
+20. **AWS-Service-Architektur:** Das Gesamtsystem
+21. **AWS CDK in Python:** Infrastructure as Code (vs. Terraform)
+22. **Zusammenfassung & Reflexionsfragen**
+
+</div>
+</div>
+
+
+---
+
+### Einordnung in die Vorlesung: Vom Code zum verteilten Gesamtsystem
+
+<div class="two-cols">
+<div class="col">
+
+### Rückblick auf Module 1–4:
+* Wir haben solide Komponenten, saubere Bounded Contexts, Dekoratoren und funktionale Pipelines gebaut.
+
+### Der Paradigmenwechsel:
+* Jetzt zoomen wir heraus! Wir betrachten nicht mehr einzelne Python-Dateien, sondern das Gesamtsystem:
+  * Load Balancer, Container, Caches, Datenbanken und autonome AI-Agenten.
+* **Ziel dieses Moduls:**
+  * Systemarchitektur mit dem C4-Modell dokumentieren.
+  * Der 5-Stufen-Pfad von der Single Instance zu Serverless.
+  * In-Memory Caching mit Redis und Infrastructure as Code mit AWS CDK.
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M4 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M5 fill:#2980b9,stroke:#1f618d,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+---
+
+### Was ist Systemdesign? Vom Laptop zur Cloud
+
+<div class="two-cols">
+<div class="col">
+
+Auf dem Entwickler-Laptop läuft eine Anwendung meist einfach:
+* 1 lokaler Python-Prozess (`python app.py`)
+* 1 lokale SQLite-Datei
+* 1 gleichzeitiger Nutzer (der Entwickler selbst!)
+
+#### Die Realität am Valentinstag bei Ada:
+* **50.000 Kunden** suchen gleichzeitig nach Blumensträußen.
+* **500 Bestellungen pro Sekunde** treffen im Checkout ein.
+* Wenn der Server abstürzt, verliert Ada tausende Euro Umsatz pro Minute!
+
+> **Systemdesign** fügt einzelne Softwarekomponenten und Services zu einer hochverfügbaren, skalierbaren Gesamtlösung zusammen.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die 3 Kernmetriken des Systemdesigns:
+
+1. **Skalierbarkeit (Scalability):**  
+   Kann das System mit 10-mal oder 100-mal mehr Anfragen umgehen, ohne zusammenzubrechen?
+2. **Hochverfügbarkeit (High Availability):**  
+   Läuft das System auch dann weiter, wenn einzelne Server oder ein ganzes Rechenzentrum ausfallen?  
+   *(99.9% Verfügbarkeit = max. 8,7 Stunden Ausfallzeit pro Jahr).*
+3. **Latenz (Latency):**  
+   Wie viele Millisekunden vergehen zwischen dem Klick des Nutzers und der Antwort im Browser?  
+   *(Industriestandard: Antwortzeit unter 200 ms).*
+
+</div>
+
+</div>
+</div>
+
+---
+
+### System First, Components Second: Die Entwurfshierarchie
+
+<div class="two-cols">
+<div class="col">
+
+#### Warum entwirft man das System VOR den Komponenten?
+* **Die typische Anfängerfalle:**
+  * Man beginnt sofort mit Klassen: `class Order`, `class Flower`, `class Customer`.
+  * Man weiß aber noch gar nicht: Läuft alles in einem Prozess? Wo werden Daten gespeichert? Welche Latenzen sind gefordert?
+  * **Folge:** Man baut starre Klassenstrukturen, die zerbrechen, sobald Netzwerk, Caching oder verteilte Datenbanken ins Spiel kommen.
+* **Die System-First-Methode:**
+  * Zuerst definieren wir die **Leitplanken des Gesamtsystems**: Servicegrenzen, synchrone vs. asynchrone Datenflüsse, Persistenz und Skalierungsanforderungen.
+  * Erst wenn das Makro-Design steht, entwerfen wir die internen Klassen und Komponenten (Mikro-Design).
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph S1["1. Systemebene (Makro - Modul 5)"]
+        Sys["Gesamtsystem & Systemgrenzen\n(Akteure, Cloud-Services, APIs, Queues)"]
+    end
+    subgraph S2["2. Module & Services (Meso - Modul 3)"]
+        Mod["Bounded Contexts & Packages\n(Hexagonale Architektur, Ports & Adapters)"]
+    end
+    subgraph S3["3. Komponenten & Klassen (Mikro - Modul 1 & 4)"]
+        Code["Klassen, Entwurfsmuster & Aspekte\n(SOLID, Strategy, Observer, Dekoratoren)"]
+    end
+    
+    Sys -->|gibt Leitplanken vor| Mod
+    Mod -->|strukturiert| Code
+    
+    style S1 fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style S2 fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+    style S3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+```
+
+> **Leitsatz:** *"Architecture represents the significant design decisions that shape a system, where significant is measured by cost of change."* (Grady Booch)
+
+</div>
+</div>
+
+---
+
+### Skalierung im Vergleich: Scale Up vs. Scale Out
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### 1. Vertikale Skalierung (Scale Up)
+*"Kauf einen größeren Server!"*
+
+* Man rüstet dieselbe Maschine auf: 128 CPU-Kerne, 1 TB RAM, schnellere SSDs.
+* **Vorteile:**
+  * Keine Software-Architekturänderung nötig.
+  * Keine Netzwerkverzögerung zwischen Services.
+* **Nachteile & Grenzen:**
+  * **Physikalische Obergrenze:** Mehr als die größte verfügbare Maschine geht nicht!
+  * **Astronomische Kosten:** Verdopplung der Leistung kostet oft das Vierfache.
+  * **Single Point of Failure (SPoF):** Fällt dieser eine Server aus, steht das gesamte Unternehmen still!
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### 2. Horizontale Skalierung (Scale Out)
+*"Nimm viele normale Server!"*
+
+* Eine Flotte kleiner Instanzen hinter einem **Load Balancer**, der die Anfragen verteilt.
+* **Vorteile:**
+  * **Nahezu unbegrenzt erweiterbar:** Bei Lastspitzen starten automatisch neue Instanzen (Auto-Scaling).
+  * **Ausfallsicherheit:** Fällt eine Instanz aus, übernehmen die restlichen Server ohne Ausfallzeit.
+* **Herausforderung:**
+  * Die Anwendungslogik muss **zustandslos (stateless)** sein! Sitzungsdaten dürfen nicht im Arbeitsspeicher des Webservers liegen, sondern gehören in einen zentralen Cache (Redis).
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Monolith vs. Microservices
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph Monolith["1. Monolithische Architektur"]
+        M_All["Web-App: Katalog + Checkout + Lager + AI in EINEM Prozess"]
+        M_DB[("Gemeinsame Datenbank")]
+        M_All --> M_DB
+    end
+
+    subgraph Microservices["2. Microservice-Architektur"]
+        GW["API Gateway / Load Balancer"]
+        S1["Katalog-Service"]
+        S2["Checkout-Service"]
+        S3["Lager & Agent Service"]
+        DB1[("Katalog-DB")]
+        DB2[("Auftrags-DB")]
+        DB3[("Lager-DB")]
+        
+        GW --> S1
+        GW --> S2
+        GW --> S3
+        S1 --> DB1
+        S2 --> DB2
+        S3 --> DB3
+    end
+```
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Architektur-Trade-offs:
+
+* **Der Monolith:**
+  * **Gut für kleine Teams:** Einfaches Deployment (1 Befehl), einfaches Debugging.
+  * **Schlecht bei Wachstum:** Ein Speicherleck im AI-Modul reißt den gesamten Checkout mit in den Abgrund!
+* **Microservices:**
+  * **Unabhängige Teams & Skalierung:** Der hochfrequentierte Katalog skaliert auf 20 Instanzen, während der Checkout auf 3 Instanzen läuft.
+  * **Fehlertoleranz:** Fällt der Lager-Service aus, können Kunden im Webshop trotzdem stöbern.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Der 5-Stufen-Pfad: Von Single Instance zu Serverless
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+flowchart TD
+    S1["Stufe 1: Single Instance Monolith\n(1 Server: App + DB + Dateien lokal)"]
+    S2["Stufe 2: State Extraction (Stateless App)\n(App-Server getrennt von Managed DB & S3)"]
+    S3["Stufe 3: Horizontale Skalierung\n(Load Balancer + Auto-Scaling + Redis Cache)"]
+    S4["Stufe 4: Container-Orchestrierung\n(Docker + ECS / Kubernetes + Microservices)"]
+    S5["Stufe 5: Cloud-Native & Serverless\n(API Gateway + Fargate/Lambda + EventBridge)"]
+
+    S1 -->|Daten auslagern| S2
+    S2 -->|Horizontal skalieren| S3
+    S3 -->|Containerisieren| S4
+    S4 -->|Serververwaltung eliminieren| S5
+
+    style S1 fill:#ffebee,stroke:#c62828
+    style S2 fill:#fff3e0,stroke:#e65100
+    style S3 fill:#fffde7,stroke:#fbc02d
+    style S4 fill:#e8f5e9,stroke:#2e7d32
+    style S5 fill:#e8f8f5,stroke:#16a085,stroke-width:2px
+```
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Kern-Erkenntnis der Evolution:
+* Kein System startet an Tag 1 als 50-teiliges Serverless-Konstrukt!
+* Erfolgreiche Systeme entwickeln sich **schrittweise entlang realer Last- und Geschäftsanforderungen**.
+* Jede Stufe löst den Flaschenhals der vorherigen Stufe, bringt aber auch neue architektonische Herausforderungen mit sich.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die 5 Stufen im architektonischen Detail
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Stufe 1: Single Instance Monolith
+* **Setup:** Eine EC2-Instanz oder Hetzner-Server. Python, SQLite/PostgreSQL und Bilddateien liegen auf derselben Festplatte.
+* **Grenze:** Fällt der Server aus $\to$ Totalausfall (**SPOF**). CPU/RAM-Limit erreicht $\to$ System stürzt ab.
+
+#### Stufe 2: State Extraction (Zustandslosigkeit)
+* **Setup:** Die Datenbank wandert zu **Amazon RDS**, Bilder zu **Amazon S3**.
+* **Gewinn:** Der Webserver speichert keine persistenten Daten mehr. Er kann jederzeit neu gestartet oder ersetzt werden!
+
+#### Stufe 3: Horizontale Skalierung
+* **Setup:** Ein **Application Load Balancer (ALB)** verteilt Traffic auf 2 bis 20 Webserver. Nutzersitzungen liegen in einem **Redis In-Memory-Cluster**.
+* **Gewinn:** Hohe Ausfallsicherheit und Bewältigung von Lastspitzen.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Stufe 4: Container & Microservices
+* **Setup:** Aufteilung in Bounded Contexts (Katalog, Checkout, Lager) als Docker-Container auf **AWS ECS** oder **Kubernetes**.
+* **Gewinn:** Teams deployen unabhängig; Komponenten mit Speicherlecks reißen andere nicht mit.
+
+#### Stufe 5: Serverless & Event-Driven
+* **Setup:** **AWS Fargate** für containerisierte REST-APIs, **AWS Lambda** für asynchrone Hintergrundjobs (z. B. Bildanalyse bei Upload), **EventBridge & SQS** zur Pufferung.
+* **Gewinn:** Zero-Server-Management, automatische Skalierung von 0 auf 10.000 Instanzen in Sekunden, **Pay-per-Use** (0 € Kosten bei Inaktivität!).
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Trade-off-Matrix: Wann lohnt sich welcher Schritt?
+
+| Stufe | Entwicklungsaufwand | Betriebskosten (Basis) | Skalierbarkeit | Ausfallsicherheit | Wann einsetzen? |
+|:---|:---|:---|:---|:---|:---|
+| **1. Single Instance** | Sehr gering (1 Tag) | Sehr niedrig (~5–10 €/Monat) | Minimal (nur vertikal) | Gering (SPOF) | MVP, Prototypen, Uni-Projekte |
+| **2. State Extraction** | Gering (1–2 Tage) | Niedrig (~30–50 €/Monat) | Mittel | Gut (DB gesichert) | Erste echte Nutzer, Startup-Start |
+| **3. Horiz. Skalierung** | Mittel (1–2 Wochen) | Moderat (~100–300 €/Monat) | Sehr hoch (Web-Tier) | Sehr hoch (Multi-AZ) | Wachsende Shops, Lastspitzen |
+| **4. Container/K8s** | Hoch (mehrere Wochen) | Hoch (~300–1.000 €/Monat) | Exzellent | Exzellent | Große Entwicklerteams, viele Services |
+| **5. Serverless** | Mittel bis hoch | Pay-per-Use (0 € bis variabel) | Nahezu unbegrenzt | Höchste (Cloud-nativ) | Unvorhersehbare Last, Event-Driven |
+
+> **Praxis-Faustregel:** Beginnen Sie so einfach wie möglich (Stufe 1 oder 2), aber entwerfen Sie den Code von Tag 1 an modular und **zustandslos** (Modul 3). Dann können Sie jederzeit ohne Neuschreiben des Fachcodes auf Stufe 3, 4 oder 5 wechseln!
+
+---
+
+### Cloud-Native Paradigmen: Pets vs. Cattle
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### 🐶 Das klassische Paradigma: *Pets (Haustiere)*
+* Früher gaben Administratoren ihren Servern Kosenamen (*"Server-Zeus"*, *"Athena"*).
+* Jeder Server wurde manuell per SSH konfiguriert und gepflegt.
+* Wenn *"Zeus"* krank wurde oder abstürzte:
+  * Panik im gesamten Team!
+  * Nachtschichten zur manuellen Wiederbelebung.
+  * Hohes Risiko von unerwünschten Konfigurationsabweichungen (*Configuration Drift*).
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### 🐮 Das Cloud-Native Paradigma: *Cattle (Nutztiere)*
+* Server und Container haben keine Namen, sondern zufällige IDs (`i-0a8b9c1d2e`).
+* Sie werden vollautomatisch aus standardisierten Bauplänen (Docker Images / AMI) gestartet.
+* Wenn eine Instanz nicht mehr reagiert:
+  * **Nicht reparieren, sondern terminieren!**
+  * Der Load Balancer wirft die Instanz raus.
+  * Das Auto-Scaling startet sofort einen frischen Ersatz.
+* **Regel:** Kein Server ist unersetzbar!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Cloud-Native Prinzip: Zustandslosigkeit (Statelessness)
+
+<div class="two-cols">
+<div class="col">
+
+Damit ein System horizontal skalieren und Instanzen beliebig beenden kann, müssen Anwendungsserver **zustandslos (stateless)** sein:
+
+#### ❌ Verboten auf Cloud-Native Servern:
+* **Lokale Session-Speicherung:** Der Login-Status eines Nutzers liegt im Arbeitsspeicher von Server 1. Schickt der Load Balancer den nächsten Klick an Server 2, fliegt der Kunde raus!
+* **Lokales Dateisystem (`/tmp/uploads`):** Wenn ein Kunde ein Bild hochlädt und der Server stirbt, ist das Bild für immer verloren.
+* **Hintergrund-Threads im Prozess:** Brechen ab, wenn die Instanz herunterskaliert wird.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### ✅ Die Lösung: Externe Zustandsspeicherung
+
+```
+Browser (Kunde)
+      │
+      ▼
+Load Balancer (ALB)
+      │
+      ├───────────────────────┐
+      ▼                       ▼
+Instanz 1 (Stateless)   Instanz 2 (Stateless)
+      │                       │
+      ├───────────┬───────────┤
+      ▼           ▼           ▼
+   [Redis]      [S3]     [PostgreSQL]
+  (Sessions)  (Bilder)   (Bestelldaten)
+```
+
+* **Vorteil:** Jeder Server kann jederzeit abstürzen oder neu starten – kein Nutzer merkt einen Unterschied!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Das C4-Modell für Architekturdokumentation
+
+<div class="two-cols">
+<div class="col">
+
+Klassische UML-Diagramme sind für moderne Cloud-Architekturen oft zu detailreich oder unübersichtlich.  
+Das **C4-Modell** (Simon Brown) nutzt das Prinzip von **Google Maps**:
+
+* **Stufe 1: System Context (Weltkarte)**  
+  Wer nutzt das System? Welche Fremdsysteme sind angebunden?
+* **Stufe 2: Container (Stadtplan)**  
+  Welche eigenständigen Einheiten (Web-App, API-Server, Datenbanken, Caches, Queues) existieren?
+* **Stufe 3: Component (Straßenansicht)**  
+  Aus welchen Controllern, Services und Repositories besteht ein einzelner Container?
+* **Stufe 4: Code (Gebäudeplan)**  
+  UML-Klassendiagramme für komplexe interne Klassen.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Zoom-Stufen im Vergleich
+```
+Stufe 1: System Context
+  └─ Ada's Platform & Akteure
+      │
+Stufe 2: Container
+  ├─ Web Frontend (React)
+  ├─ Backend API (FastAPI)
+  ├─ Datenbank (PostgreSQL)
+  └─ Cache (Redis)
+      │
+Stufe 3: Component (im Backend)
+  ├─ BestellService
+  ├─ LagerService
+  └─ AI-Agent-Controller
+      │
+Stufe 4: Code
+  └─ Dataclasses, Protocols, Repos
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+### C4 Stufe 1: System Context Diagramm
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+Das **System Context Diagramm** betrachtet *Ada's Botanical Platform* als Black Box und zeigt die Einbettung in die Umwelt:
+
+* **Menschliche Akteure:**
+  * 👤 **Endkunde:** Stöbert, bestellt Blumen, lädt Pflanzenfotos zur KI-Diagnose hoch.
+  * 💼 **Ladenpersonal:** Bedient das Kassensystem im Ladengeschäft.
+  * 👩‍💼 **Chefin Ada:** Überwacht Finanzen und gibt Großbestellungen frei.
+* **Externe Partnersysteme:**
+  * 💳 **Stripe / PayPal:** Sichere Zahlungsabwicklung.
+  * 🚚 **Stadtkurier-API:** Beauftragung von Express-Lieferungen.
+  * 🌦️ **Wetterdienst-API:** Lokale Vorhersagen für Bewässerungspläne.
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    Kunde["👤 Endkunde"] --> System["🏢 Ada's Botanical Platform"]
+    Personal["💼 Ladenpersonal"] --> System
+    Ada["👩‍💼 Chefin Ada"] --> System
+    
+    System --> Payment["💳 Stripe (Zahlungs-API)"]
+    System --> Courier["🚚 Kurierdienst-API"]
+    System --> Weather["🌦️ Wetterdienst-API"]
+```
+
+</div>
+</div>
+
+---
+
+### C4 Stufe 2: Container-Diagramm: *Ada's Platform*
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+Auf Container-Ebene sehen wir die **technologische Infrastruktur** und die Protokolle:
+
+* **Load Balancer (ALB):** Verteilt HTTPS-Traffic und terminiert SSL.
+* **Storefront Service (FastAPI):** Beantwortet Katalog- und Checkout-Anfragen via REST.
+* **Lager & Agent Service:** Führt autonome Einkäufe und Sensor-Monitoring durch.
+* **Redis:** Speichert Sessions und gecachte Katalogdaten (`< 1 ms`).
+* **PostgreSQL:** Persistente Hauptdatenbank für Kunden und Bestellungen.
+* **Message Queue (RabbitMQ / SQS):** Entkoppelt asynchrone Kurieraufträge.
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TB
+    Client["Kunde (Browser & App)"] --> Gateway["API Gateway / ALB"]
+    Gateway --> Store["Storefront Service (FastAPI)"]
+    Gateway --> Agent["Lager & Agent Service"]
+    Store --> Redis[(Redis In-Memory Cache)]
+    Store --> DB[(PostgreSQL Haupt-DB)]
+    Store --> Queue>Message Queue: Aufträge]
+    Queue --> Agent
+    Agent --> DB
+```
+
+</div>
+</div>
+
+---
+
+### Sequenzdiagramme im Systemdesign (Einführung)
+
+<div class="two-cols">
+<div class="col">
+
+Während Architekturdiagramme zeigen, *welche* Komponenten existieren, zeigen **Sequenzdiagramme**, **wie diese Komponenten zeitlich interagieren**:
+
+#### Die Kern-Elemente eines Sequenzdiagramms:
+1. **Lebenslinie (Lifeline):**  
+   Vertikale gestrichelte Linie unter jedem Teilnehmer (`participant` oder `actor`). Zeit verläuft von **oben nach unten**.
+2. **Synchrone Nachricht (`->>`):**  
+   Aufrufer wartet blockierend auf die Antwort (z. B. HTTP-Request).
+3. **Antwort-Nachricht (`-->>`):**  
+   Rückgabe der Daten (z. B. HTTP 200 OK mit JSON-Payload).
+4. **Asynchrone Nachricht:**  
+   Nachricht wird gesendet (z. B. Event in Message Queue), ohne auf Fertigstellung zu warten.
+
+</div>
+<div class="col">
+
+```mermaid
+sequenceDiagram
+    actor Kunde
+    participant Browser
+    participant Server
+    participant DB as Datenbank
+
+    Kunde ->> Browser: Klickt "Katalog"
+    Browser ->> Server: GET /api/v1/plants
+    Server ->> DB: SELECT * FROM plants
+    DB -->> Server: 50 Datensätze
+    Server -->> Browser: 200 OK (JSON)
+    Browser -->> Kunde: Zeigt Pflanzenkatalog an
+```
+
+</div>
+</div>
+
+---
+
+### Sequenzdiagramme: Fragmente (`alt`, `loop`, `opt`)
+
+<div class="two-cols">
+<div class="col">
+
+Aus den ursprünglichen Vorlesungsfolien (`Systemdesign.txt`): Wie modelliert man Schleifen und Verzweigungen im Sequenzdiagramm?
+
+#### Die wichtigsten Kontroll-Fragmente:
+* `alt ... else ... end` **(Alternative):**  
+  Bedingte Verzweigung (*If-Else*). Genau ein Zweig wird ausgeführt (z. B. Zahlung erfolgreich vs. abgelehnt).
+* `opt ... end` **(Optional):**  
+  Wird nur ausgeführt, wenn eine Bedingung zutrifft (*If ohne Else*, z. B. Prio-Zustellung für Express-Kunden).
+* `loop ... end` **(Schleife):**  
+  Wiederholt die Interaktion bis zum Abbruch (z. B. Polling oder Retry bei Netzwerkfehlern).
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Syntax-Beispiel in Mermaid:
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant Bank
+    
+    App ->> Bank: Prüfe Deckung(Betrag)
+    alt Betrag <= Kontostand
+        Bank -->> App: Buchung bestätigt (200 OK)
+    else Überzogen
+        Bank -->> App: Abgelehnt (402 Payment Required)
+    end
+    
+    opt Kunde will SMS-Beleg
+        App ->> Bank: Sende Bestätigungs-SMS
+    end
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Sequenzdiagramm Fallstudie: Checkout bei Ada
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+sequenceDiagram
+    actor Kunde
+    participant Store as Storefront API
+    participant DB as PostgreSQL
+    participant Stripe as Stripe API
+    participant Queue as Message Queue
+
+    Kunde ->> Store: POST /orders (Warenkorb)
+    Store ->> DB: Reserviere Bestand(Artikel, Menge)
+    DB -->> Store: Bestand reserviert
+    
+    Store ->> Stripe: Buche Zahlung ab(Kreditkarte, Betrag)
+    alt Zahlung erfolgreich
+        Stripe -->> Store: 200 OK (Zahlung bestätigt)
+        Store ->> DB: Setze Status = "Bezahlt"
+        Store ->> Queue: Publish(AuftragFuerKurier)
+        Store -->> Kunde: 201 Created (Bestellung #102)
+    else Zahlung abgelehnt
+        Stripe -->> Store: 402 Payment Failed
+        Store ->> DB: Gib Bestand wieder frei!
+        Store -->> Kunde: 400 Bad Request ("Karte abgelehnt")
+    end
+```
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Analyse des Workflows:
+
+* **Atomare Bestandsreservierung:** Der Bestand wird *vor* der Zahlung reserviert, damit kein anderer Kunde die letzte Pflanze wegschnappt.
+* **Fehlerbehandlung (`alt`):** Scheitert die Kreditkarte, wird die Reservierung in PostgreSQL sofort storniert!
+* **Asynchrone Entkopplung:** Die Kurier-Benachrichtigung läuft über die Message Queue – der Kunde muss nicht warten, bis der Kurierdienst antwortet!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Datenbankentwurf im Systemdesign
+
+<div class="two-cols">
+<div class="col">
+
+Aus `Systemdesign.txt`: Im Systemdesign plant man Datenbanken nicht nach Klassen, sondern nach **Abfragemustern (Queries)**!
+
+#### Die Grundregel:
+> *"Überlege dir zuerst, welche Fragen das System schnell beantworten muss, bevor du Tabellen anlegst!"*
+
+#### Relational (SQL) vs. NoSQL (Key-Value / Document):
+* **Relational (PostgreSQL, MySQL):**  
+  * Perfekt für Finanztransaktionen, Aufträge und Beziehungen (Foreign Keys).
+  * ACID-Garantien schützen vor Race Conditions und inkonsistenten Daten.
+* **Key-Value Store (Redis):**  
+  * Extrem schnell für einfache Abfragen per Schlüssel (`GET plant:101`).
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Tabellen-Design für Ada's Onlineshop:
+
+```sql
+-- 1. Tabelle für Pflanzen (Katalog)
+CREATE TABLE plants (
+    id VARCHAR(32) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price_cents INT NOT NULL,
+    stock_qty INT NOT NULL CHECK (stock_qty >= 0)
+);
+
+-- 2. Tabelle für Bestellungen
+CREATE TABLE orders (
+    id VARCHAR(32) PRIMARY KEY,
+    customer_email VARCHAR(120) NOT NULL,
+    total_cents INT NOT NULL,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+* `PRIMARY KEY` garantiert schnelle Indizierung und Eindeutigkeit.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Caching-Konzepte: Warum In-Memory?
+
+<div class="two-cols">
+<div class="col">
+
+#### Das Lastprofil eines Onlineshops:
+* **Read-to-Write Ratio:** 100 : 1.
+* 10.000 Besucher stöbern durch den Pflanzenkatalog (**Read**).
+* Nur 100 Kunden schließen am Ende eine Bestellung ab (**Write**).
+
+#### Das Problem:
+Wenn jeder Katalog-Aufruf eine komplexe SQL-Abfrage mit `JOIN` an PostgreSQL schickt, bricht die Datenbank unter Last zusammen!
+
+#### Die Latenz-Hierarchie (In-Memory vs. Disk):
+* **RAM (Redis):** Zugriff in **wenigen Mikrosekunden** (`< 1 ms`).
+* **NVMe SSD:** Zugriff in **10 bis 50 Millisekunden** (`10.000 µs`).
+* ⇒ RAM ist um den **Faktor 1.000 schneller**!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Cache-Regel für Architekten:
+
+```
+          [ Browser / Client ]
+                   │
+                   ▼
+       [ Storefront API (FastAPI) ]
+                   │
+       ┌───────────┴───────────┐
+       ▼                       ▼
+95% aller Anfragen      5% aller Anfragen
+  (Read-Hit)              (Cache-Miss / Write)
+       │                       │
+       ▼                       ▼
+ [ Redis Cache ]        [ PostgreSQL DB ]
+   (Latenz < 1 ms)        (Latenz ~ 30 ms)
+```
+
+* Durch Caching werden **95 % des Traffics** von der teuren relationalen Datenbank ferngehalten!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Caching mit Redis: Das Cache-Aside-Muster
+
+<div class="two-cols">
+<div class="col">
+
+Das **Cache-Aside-Muster** (Lazy Loading) ist der Standard für zustandslose Web-Backends:
+
+1. **Anfrage kommt an:** Die Anwendung prüft zuerst, ob der Datensatz im Redis-Cache liegt.
+2. **Cache Hit (Treffer):** Datensatz liegt im Cache ⇒ Direkt aus dem RAM als JSON an den Client zurückgeben.
+3. **Cache Miss (Fehlschlag):** Datensatz fehlt im Cache:
+   * Daten aus der relationalen PostgreSQL-Datenbank laden.
+   * Für künftige Anfragen im Redis-Cache ablegen (mit Ablaufzeit / TTL).
+   * Daten an den Client zurückgeben.
+
+</div>
+<div class="col">
+
+```python
+import json
+import redis
+
+# Verbindung zum In-Memory-Cache:
+r = redis.Redis(host='localhost', port=6379, db=0)
+
+def hole_pflanzen_details(pflanze_id: str) -> dict:
+    cache_key = f"plant:{pflanze_id}"
+    
+    # 1. Zuerst im Cache nachsehen (Cache Hit?):
+    cached = r.get(cache_key)
+    if cached:
+        return json.loads(cached)
+        
+    # 2. Cache Miss: Aus langsamer SQL-Datenbank laden:
+    print("⚠️ Cache Miss: Lade aus PostgreSQL...")
+    daten = db.query_plant_by_id(pflanze_id)
+    
+    # 3. Für 10 Minuten (600 Sekunden) im Cache ablegen:
+    r.setex(cache_key, 600, json.dumps(daten))
+    return daten
+```
+
+</div>
+</div>
+
+---
+
+### Cache-Invalidierung & Konsistenz
+
+<div class="two-cols">
+<div class="col">
+
+> *"There are only two hard things in Computer Science: cache invalidation and naming things."*  
+> (Phil Karlton)
+
+#### Das Problem veralteter Daten (*Stale Data*):
+Ada reduziert den Preis der Monstera im Admin-Panel von 40 € auf 25 €.  
+Im Webshop sehen Kunden aber noch 10 Minuten lang 40 €, weil der alte Preis im Redis-Cache festhängt!
+
+#### Die 2 Lösungsstrategien:
+1. **TTL (Time-To-Live / Verfallszeit):**  
+   Jeder Cache-Eintrag verfällt automatisch nach z. B. 300 Sekunden. Gut als Sicherheitsnetz.
+2. **Aktive Invalidierung bei Updates:**  
+   Wird ein Datensatz in PostgreSQL geändert, **löscht** der Schreibservice sofort den passenden Schlüssel in Redis!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Praxisbeispiel: Preis-Update mit Invalidierung
+
+```python
+def aktualisiere_pflanzen_preis(pflanze_id: str, 
+                                neuer_preis: float):
+    # 1. Haupt-Datenbank aktualisieren (Single Source of Truth):
+    db.execute(
+        "UPDATE plants SET price = %s WHERE id = %s",
+        (neuer_preis, pflanze_id)
+    )
+    
+    # 2. Cache aktiv löschen (Cache Invalidation):
+    cache_key = f"plant:{pflanze_id}"
+    r.delete(cache_key)
+    print(f"🧹 Cache-Schlüssel {cache_key} gelöscht!")
+    
+    # Nächster Seitenaufruf holt garantiert 
+    # den neuen Preis aus der Datenbank!
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+### RESTful APIs: Grundlagen & HTTP-Verben
+
+<div class="two-cols">
+<div class="col">
+
+> **REST (Representational State Transfer)** ist der globale Architektur-Standard für Webservices über das HTTP-Protokoll.
+
+#### Die 4 wichtigsten HTTP-Methoden:
+* `GET /api/v1/plants`  
+  Ressourcen abrufen (**Safe & Idempotent**: Ändert niemals Daten).
+* `POST /api/v1/orders`  
+  Neue Ressource erzeugen (**Nicht idempotent**: Jeder Aufruf legt eine neue Bestellung an!).
+* `PUT /api/v1/plants/{id}`  
+  Ressource vollständig überschreiben (**Idempotent**).
+* `DELETE /api/v1/plants/{id}`  
+  Ressource löschen (**Idempotent**).
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die HTTP-Statuscodes für Entwickler:
+
+* **2xx (Erfolg):**
+  * `200 OK`: Erfolgreich abgerufen oder geändert.
+  * `201 Created`: Neue Ressource erfolgreich angelegt.
+  * `202 Accepted`: Auftrag zur asynchronen Verarbeitung angenommen.
+* **4xx (Client-Fehler):**
+  * `400 Bad Request`: Ungültiges JSON oder Validierungsfehler.
+  * `401 Unauthorized`: API-Token fehlt oder ist abgelaufen.
+  * `404 Not Found`: Ressource existiert nicht.
+* **5xx (Server-Fehler):**
+  * `500 Internal Server Error`: Unbehandelter Fehler im Backend.
+  * `503 Service Unavailable`: Server überlastet oder Wartung.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### API-Dokumentation im Pflichtenheft
+
+<div class="two-cols">
+<div class="col">
+
+Wie wird eine REST-Schnittstelle im **Pflichtenheft** für Kunden und Entwickler verbindlich dokumentiert?
+
+Jeder API-Endpunkt muss genau **6 Pflichtelemente** enthalten:
+1. **Endpunkt & Methode:** z. B. `POST /api/v1/diagnose`
+2. **Fachliche Kurzbeschreibung:** Welcher Use Case wird bedient?
+3. **Erforderliche Header:** Authentifizierung (`Bearer Token`) & Content-Type.
+4. **Request Body Schema:** JSON-Struktur mit Datentypen und Validierungsregeln.
+5. **Erfolgsantwort (2xx):** Statuscode und JSON-Schema.
+6. **Fehlerantworten (4xx/5xx):** Welche Codes werden in welchen Fehlersituationen zurückgegeben?
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Muster-Dokumentation im Pflichtenheft:
+```http
+POST /api/v1/diagnose
+Authorization: Bearer <jwt_token>
+Content-Type: application/json
+
+Request Body:
+{
+  "plant_id": "PFL-402",          // string, Pflicht
+  "image_url": "https://s3.../1.jpg" // string, Pflicht, URI
+}
+
+Response 200 OK:
+{
+  "diagnosis": "Wassermangel",    // string
+  "confidence": 0.94,             // float, 0.0 - 1.0
+  "action": "Sofort 250 ml gießen" // string
+}
+
+Fehlercodes:
+* 400 Bad Request: Bildformat wird nicht unterstützt
+* 404 Not Found: plant_id existiert nicht
+* 503 Service Unavailable: AI-Modell vorübergehend offline
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Schema-Validierung mit Pydantic
+
+<div class="two-cols">
+<div class="col">
+
+In modernem Python (FastAPI) schreiben wir JSON-Schemas nicht als unleserlichen Text, sondern als **Pydantic-Klassen**:
+
+* **Automatische Typkonvertierung:** String `"42"` wird automatisch zu `int 42`.
+* **Präzise Validierung:** Grenzwerte (`gt`, `le`), E-Mail-Formate und Regex-Muster direkt deklariert.
+* **Automatische 422-Fehler:** Ungültige Anfragen werden vom Framework abgewiesen, bevor sie die Fachlogik erreichen!
+* **Automatische OpenAPI-Dokumentation (Swagger UI).**
+
+</div>
+<div class="col">
+
+```python
+from pydantic import BaseModel, Field, HttpUrl
+
+# Verbindliche Request-Struktur:
+class DiagnoseRequest(BaseModel):
+    plant_id: str = Field(min_length=3, max_length=32)
+    image_url: HttpUrl
+
+# Verbindliche Response-Struktur:
+class DiagnoseResponse(BaseModel):
+    diagnosis: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    action: str
+
+# Im FastAPI-Backend:
+@app.post("/api/v1/diagnose", response_model=DiagnoseResponse)
+def diagnose_plant(req: DiagnoseRequest):
+    # 'req' ist zu 100% typsicher und validiert!
+    result = ai_service.analyze(req.image_url)
+    return DiagnoseResponse(
+        diagnosis=result.label,
+        confidence=result.score,
+        action=result.recommendation
+    )
+```
+
+</div>
+</div>
+
+---
+
+### AI Inference APIs: Besondere Entwurfsregeln
+
+<div class="two-cols">
+<div class="col">
+
+Was unterscheidet einen Aufruf an ein **AI-Modell (LLM / Vision)** von einer normalen Datenbankabfrage?
+
+1. **Hohe Latenz:**  
+   Ein Vision-Modell braucht **2 bis 6 Sekunden** für die Bildanalyse (statt 20 ms in SQL).
+2. **Kosten pro Token / Inferenz:**  
+   Jeder Aufruf kostet echtes Geld (z. B. 0,02 € pro Bildanalyse). Schutz vor Missbrauch zwingend nötig!
+3. **Probabilistische Antworten:**  
+   Das Modell antwortet nicht deterministisch; Ausgaben müssen strikt mit Pydantic-Schemas validiert werden.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Architekturlösungen für AI-Endpunkte:
+
+* **Token-Streaming (Server-Sent Events / SSE):**  
+  Textfragmente werden sofort gestreamt, sobald sie berechnet sind. Der Nutzer sieht das Ergebnis live wachsen!
+* **Asynchrone Job-Verarbeitung:**  
+  Bei Bild-Uploads gibt das Backend sofort `202 Accepted` mit einer Job-ID zurück; das Frontend pollt oder nutzt WebSockets.
+* **Graceful Degradation:**  
+  Fällt die externe KI-API aus, darf der Checkout **nicht** crashen! Fallback: Standard-Floristentipps anzeigen.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Autonome AI-Agenten: Das ReAct-Pattern
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+> Ein **AI-Agent** nutzt ein Sprachmodell als *Reasoning Engine*, um selbstständig komplexe Ziele zu erreichen, indem er Werkzeuge (**Tools / Function Calling**) aufruft.
+
+#### Das ReAct-Muster (Reasoning + Acting):
+1. **Thought (Überlegung):**  
+   Das LLM analysiert das Ziel: *"Der Bestand von Ficus Benjamini ist auf 2 Stück gefallen. Ich muss Großhändlerpreise prüfen."*
+2. **Action (Werkzeugaufruf):**  
+   Ruft ein getyptes Tool auf: `query_supplier_prices(item_id="FIC-10")`.
+3. **Observation (Beobachtung):**  
+   Nimmt das Ergebnis entgegen: `[{"supplier": "A", "price": 12.50}]`.
+4. ⇒ Wiederholt die Schleife, bis das Ziel erreicht ist!
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    Goal["Ziel: Lager auffüllen"] --> T1["1. Thought: Was fehlt?"]
+    T1 --> A1["2. Action: get_low_stock()"]
+    A1 --> O1["3. Observation: 2 Ficus übrig"]
+    O1 --> T2["4. Thought: Vergleiche Preise"]
+    T2 --> A2["5. Action: query_prices()"]
+    A2 --> O2["6. Observation: Bester Preis 12.50 €"]
+    O2 --> Decision{Summe <= 500 €?}
+    Decision -->|Ja| Order["7. Action: place_order()"]
+    Decision -->|Nein| Human["Alarm: Freigabe durch Ada!"]
+```
+
+</div>
+</div>
+
+---
+
+### AI-Sicherheit: Human-in-the-Loop (HITL)
+
+<div class="two-cols">
+<div class="col">
+
+#### Das Problem unbeschränkter Autonomie:
+* Ein KI-Agent mit unkontrolliertem Zugriff könnte versehentlich 10.000 Ficus-Pflanzen für 120.000 € bestellen!
+* Prompt Injections oder Halluzinationen können Fehlentscheidungen auslösen.
+
+#### Das Prinzip: Human-in-the-Loop (HITL)
+* **Klare Budgetgrenzen im Backend verankern:**
+  * Bestellwert ≤ 500 €: Der Agent darf autonom bestellen.
+  * Bestellwert > 500 €: Die Transaktion wird pausiert; Ada erhält eine Push-Nachricht zur manuellen Freigabe!
+* Geschäftsregeln gehören **in den Backend-Code**, niemals nur in den LLM-System-Prompt!
+
+</div>
+<div class="col">
+
+```python
+from pydantic import BaseModel, Field
+
+class OrderRequest(BaseModel):
+    item_id: str
+    quantity: int = Field(gt=0, le=100)
+    max_price_per_unit: float
+
+def execute_agent_order(req: OrderRequest) -> str:
+    total = req.quantity * req.max_price_per_unit
+    
+    # Hartes Sicherheitslimit im Python-Code:
+    if total > 500.0:
+        ticket = create_approval_ticket(total, req)
+        return f"⏳ Genehmigung erforderlich! Ticket #{ticket.id} erstellt."
+        
+    order_id = supplier_api.place_order(req.item_id, req.quantity)
+    return f"✅ Autonom bestellt: Order #{order_id} ({total:.2f} €)"
+```
+
+</div>
+</div>
+
+---
+
+### Cloud-Architektur: AWS Service-Diagramm
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+flowchart TB
+    subgraph Edge["Edge & DNS"]
+        R53["🌐 AWS Route 53 (DNS)"]
+    end
+
+    subgraph Ingress["Ingress & Routing"]
+        ALB["⚖️ Application Load Balancer (ALB)"]
+    end
+
+    subgraph Compute["Serverless Compute (ECS Fargate)"]
+        ECS1["📦 Storefront Service Container"]
+        ECS2["📦 Einkaufs-Agent Container"]
+    end
+
+    subgraph Data["Persistenz & Caching"]
+        Cache[("⚡ AWS ElastiCache (Redis)")]
+        DB[("🗄️ AWS Aurora RDS (PostgreSQL)")]
+        S3[("🪣 AWS S3 (Pflanzenfotos)")]
+    end
+
+    subgraph Security["Sicherheit & Secrets"]
+        Sec["🔐 AWS Secrets Manager"]
+    end
+
+    R53 --> ALB
+    ALB --> ECS1
+    ALB --> ECS2
+    ECS1 --> Cache
+    ECS1 --> DB
+    ECS1 --> S3
+    ECS2 --> DB
+    ECS2 --> Sec
+```
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die AWS-Komponenten im Überblick:
+
+* **Route 53 (DNS):** Weltweiter Namensdienst, leitet Anfragen an den Load Balancer.
+* **Application Load Balancer (ALB):** Terminiert SSL/TLS, verteilt Anfragen gleichmäßig.
+* **ECS Fargate:** Führt Docker-Container *serverless* aus (keine EC2-Server patchen).
+* **Aurora RDS (PostgreSQL):** Hochverfügbare Datenbank mit automatischem Failover.
+* **ElastiCache (Redis):** In-Memory-Cache für Sub-Millisekunden-Antwortzeiten.
+* **S3 Bucket:** Hochgradig skalierbarer Objektspeicher für Pflanzenfotos.
+* **Secrets Manager:** Verschlüsselte Verwahrung von Passwörtern und API-Tokens.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Infrastructure as Code: AWS CDK in Python
+
+<div class="two-cols">
+<div class="col">
+
+Statt Cloud-Ressourcen mühsam per Hand in der Webkonsole zusammenzuklicken (**"ClickOps"**), beschreiben wir die gesamte Infrastruktur mit dem **AWS Cloud Development Kit (CDK)** in echtem **Python-Code**!
+
+#### Vorteile von AWS CDK:
+1. **Echte Programmiersprache:** Klassen, Vererbung, Schleifen und Typ-Prüfung in der IDE.
+2. **Wiederverwendbare Konstrukte:** Vorkonfigurierte Best-Practice-Bausteine von AWS.
+3. **Synthese:** Kompiliert in CloudFormation-Vorlagen und wird atomar ausgerollt.
+
+> **Hinweis zu Terraform:**  
+> Das weit verbreitete Werkzeug **HashiCorp Terraform** nutzt eine deklarative Sprache (HCL) und ist provider-agnostisch (AWS, Azure, GCP). CDK ist die moderne, objektorientierte Alternative!
+
+</div>
+<div class="col">
+
+```python
+from aws_cdk import (
+    Stack,
+    aws_s3 as s3,
+    aws_elasticache as cache,
+    RemovalPolicy
+)
+from constructs import Construct
+
+class AdasBotanicalStack(Stack):
+    def __init__(self, scope: Construct, construct_id: str, **kwargs):
+        super().__init__(scope, construct_id, **kwargs)
+
+        # 1. S3-Bucket für Pflanzenbilder definieren:
+        self.plant_bucket = s3.Bucket(
+            self, "PlantImagesBucket",
+            bucket_name="adas-botanical-images-prod",
+            encryption=s3.BucketEncryption.S3_MANAGED,
+            removal_policy=RemovalPolicy.RETAIN
+        )
+
+        # 2. In-Memory Redis Cache Cluster definieren:
+        self.redis_cache = cache.CfnCacheCluster(
+            self, "RedisCache",
+            engine="redis",
+            cache_node_type="cache.t4g.micro",
+            num_cache_nodes=1
+        )
+```
+
+</div>
+</div>
+
+---
+
+### Zusammenfassung Modul 5
+
+<div class="two-cols">
+<div class="col">
+
+1. **Systemdesign & Skalierung:** Scale Out (horizontal) hinter einem Load Balancer garantiert Ausfallsicherheit und Elastizität.
+2. **Vom Monolith zu Cloud Native:** *Cattle statt Pets* – Server sind anonyme, austauschbare Einheiten ohne lokalen Zustand.
+3. **C4-Modell:** Dokumentiert Architekturen verständlich auf 4 Zoomstufen (Context, Container, Component, Code).
+4. **Sequenzdiagramme:** Visualisieren zeitliche Abläufe, Synchrone/Asynchrone Aufrufe und Fragmente (`loop`, `alt`, `opt`).
+
+</div>
+<div class="col">
+
+5. **In-Memory-Caching mit Redis:** Das Cache-Aside-Muster fängt 95 % der Leseanfragen ab und schützt relationale Datenbanken.
+6. **REST-Pflichtenheft-Standard:** Spezifiziert Endpunkte mit Pydantic-Schemas, Statuscodes und Fehlerszenarien.
+7. **AI-Inference & ReAct-Agenten:** Token-Streaming fängt Latenzen ab; Budgetgrenzen gehören als HITL deterministisch ins Backend.
+8. **Infrastructure as Code (AWS CDK):** Cloud-Ressourcen werden versioniert, typisiert und reproduzierbar in Python deklariert.
+
+</div>
+</div>
+
+---
+
+### Denkpause & Reflexionsfragen
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Frage 1: Caching & Konsistenz
+Ada ändert den Preis einer Monstera im Admin-Panel von 29.99 € auf 19.99 €. Im Webshop sehen Kunden aber noch 10 Minuten lang den alten Preis.  
+* Welches Problem im Systemdesign liegt hier vor und wie löst man es?
+
+</div>
+
+<div class="col-card" style="margin-top: 15px;">
+
+#### Frage 2: AI-Agenten-Sicherheit
+Warum darf die 500-€-Budgetgrenze des Agenten nicht einfach als Satz im LLM-System-Prompt stehen (*"Bitte bestelle nie für mehr als 500 €"*), sondern muss im Backend-Code geprüft werden?
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Antworten zur Selbstkontrolle:
+1. **Fehlende Cache-Invalidierung:**  
+   Beim Update in PostgreSQL muss der Cache-Schlüssel `plant:123` in Redis aktiv gelöscht werden (`r.delete(key)`), damit die nächste Anfrage den neuen Preis lädt.
+2. **Schutz vor Prompt Injections & Halluzinationen:**  
+   Ein LLM kann Regeln im Prompt ignorieren, austricksen lassen oder halluzinieren. Harte Sicherheits- und Budgetgrenzen gehören **immer als deterministischer Code ins Backend**!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Ausblick auf Modul 6: Threat Modeling & Security by Design
+
+<div class="two-cols">
+<div class="col">
+
+### Was wir in Modul 5 erreicht haben:
+* Skalierbare Cloud-Architektur, C4-Modell, Redis Cache-Aside, autonome AI-Agenten mit Budgetgrenzen und AWS CDK in Python.
+
+### Die nächste Herausforderung:
+* Unser System ist online und skaliert. Aber wer greift uns an? Wie schützen wir uns vor Bots, DDoS, Preis-Tampering und Prompt Injection?
+* **Was uns in Modul 6 erwartet:**
+  * Bedrohungsakteure charakterisieren.
+  * Design-basierte Bedrohungsanalyse mit STRIDE im Doppelpack.
+  * DREAD-Risikobewertung und KI-Sicherheits-Guardrails.
+
+> **Frage zum Weiterdenken:** Warum ist Sicherheit ein Architekturmerkmal (*Security by Design*) und kein nachträgliches Feature?
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M5 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M6 fill:#c0392b,stroke:#962d22,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+</script>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontFamily: '"Inter", system-ui, sans-serif'
+        });
+        async function renderSlideMermaid(slide) {
+            if (!slide) return;
+            // 1. Convert any code containing mermaid class to div.mermaid
+            slide.querySelectorAll('code[class*="mermaid"]').forEach((el) => {
+                const pre = el.closest('pre');
+                if (pre) {
+                    const div = document.createElement('div');
+                    div.className = 'mermaid';
+                    let text = el.textContent || '';
+                    text = text.replace(/--&gt;/g, '-->')
+                               .replace(/&gt;/g, '>')
+                               .replace(/&lt;/g, '<')
+                               .replace(/&amp;/g, '&')
+                               .replace(/&quot;/g, '"');
+                    div.textContent = text.trim();
+                    pre.replaceWith(div);
+                }
+            });
+
+            // 2. Also clean up any div.mermaid written directly in HTML
+            slide.querySelectorAll('.mermaid:not([data-processed="true"])').forEach((el) => {
+                let text = el.textContent || '';
+                text = text.replace(/--&gt;/g, '-->')
+                           .replace(/&gt;/g, '>')
+                           .replace(/&lt;/g, '<')
+                           .replace(/&amp;/g, '&')
+                           .replace(/&quot;/g, '"');
+                el.textContent = text.trim();
+            });
+
+            // 3. Render all unrendered div.mermaid in this active slide
+            const nodes = slide.querySelectorAll('.mermaid:not([data-processed="true"])');
+            if (nodes.length > 0) {
+                try {
+                    await mermaid.run({ nodes: nodes, suppressErrors: false });
+                } catch (err) {
+                    console.error('Mermaid run error:', err);
+                }
+            }
+        }
+
+        Reveal.initialize({
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            plugins: [ RevealMarkdown, RevealHighlight ]
+        }).then(() => {
+            renderSlideMermaid(Reveal.getCurrentSlide());
+        });
+
+        Reveal.on('slidechanged', (event) => {
+            renderSlideMermaid(event.currentSlide);
+        });
+    </script>
+</body>
+</html>

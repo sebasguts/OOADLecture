@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>OOAD Modul 4: Aspekte, Entwurfsmuster & Funktionale Programmierung</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --primary-dark: #6c3483;
+            --secondary: #1e293b;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        .reveal {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 24px;
+            color: var(--text);
+        }
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+        .reveal h1 { font-size: 1.85em; }
+        .reveal h2 { font-size: 1.35em; color: var(--primary); }
+        .reveal h3 { font-size: 1.15em; }
+        .reveal h4 { font-size: 0.95em; color: var(--primary-dark); margin-bottom: 8px; }
+        .reveal p, .reveal li {
+            font-size: 0.88em;
+            line-height: 1.45;
+            color: var(--text);
+        }
+        .reveal ul, .reveal ol {
+            margin-left: 1.2em;
+            margin-bottom: 12px;
+        }
+        .reveal li { margin-bottom: 6px; }
+        .reveal pre {
+            width: 100% !important;
+            margin: 8px 0 !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+            border-radius: 8px !important;
+        }
+        .reveal pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72em !important;
+            line-height: 1.35 !important;
+            padding: 14px !important;
+            border-radius: 8px;
+        }
+        .reveal blockquote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 12px 18px;
+            margin: 12px 0;
+            font-style: normal;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85em;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .nav-home {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            background: rgba(255,255,255,0.92);
+            padding: 6px 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+        }
+        .nav-home a { text-decoration: none; color: var(--primary); font-weight: 600; }
+        
+        /* Two-Column Grid System */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .col { min-width: 0; }
+        .col-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Mermaid Diagram Container */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            min-height: 220px;
+            max-height: 480px;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .mermaid svg {
+            max-height: 440px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-home">
+        <a href="index.html">← Zur Übersicht</a> | Modul 4: Aspekte, Muster & FP
+    </div>
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown data-separator="^---$" data-separator-vertical="^--$">
+                <script type="text/template">
+# Objektorientierte Analyse & Design
+## Modul 4: Aspekte, Entwurfsmuster & Funktionales Design
+
+---
+
+### Präzise Lernziele
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Teil 1: Aspekte & Entwurfsmuster
+1. **Querschneidende Belange analysieren:** Die Gefahren von *Code Tangling* (Verfilzung) und *Code Scattering* (Verstreuung) im Softwareentwurf identifizieren.
+2. **Aspekte im Klassendiagramm modellieren:** Aspekte mit dem Stereotyp `<<aspect>>`, Pointcuts und Abhängigkeitspfeilen dokumentieren.
+3. **Aspekte mit Python-Decorators umsetzen:** Querschneidende Funktionen (Logging, Caching, Resilienz mit `@retry_with_backoff`) sauber von der Fachlogik trennen.
+4. **Ereignisgesteuerte Entkopplung realisieren:** Das *Observer Pattern* verstehen und einen typsicheren `EventBus` für lose gekoppelte Modulkommunikation implementieren.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Teil 2: Funktionales Design & Pattern Matching
+5. **Mathematischer Funktionsbegriff & Immutability:** Pure Functions ohne Seiteneffekte und unveränderliche Datenstrukturen einsetzen.
+6. **Typensystem im Funktionalen Design:** Primitive Typen, Produkt-Typen (Tupel), Union-Typen und Listen für Geschäftsobjekte definieren.
+7. **Higher-Order Functions & Currying:** Funktionen als First-Class Citizens (Daten) übergeben, spezialisieren und partiell applizieren.
+8. **Datenflüsse & Pipelines entwerfen:** Programme als gerichtete Sequenz seiteneffektfreier Funktionsboxen modellieren.
+9. **Structural Pattern Matching beherrschen:** `match/case` gezielt gegen fehleranfälliges `isinstance`-Spaghetti abgrenzen und anwenden.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Agenda
+
+<div class="two-cols">
+<div class="col">
+
+#### Teil 1: Aspekte & Cross-Cutting Concerns
+1. **Das Problem:** Code Tangling & Code Scattering
+2. **Die Lösung:** Aspektorientierte Programmierung (AOP)
+3. **UML-Modellierung:** Aspekte im Klassendiagramm
+4. **Python Decorators verstehen:** Wrapper-Funktionen Schritt für Schritt
+5. **Praxisbeispiel Resilienz:** Der `@retry_with_backoff`-Decorator
+
+#### Teil 2: Ereignissteuerung & Entwurfsmuster
+6. **Das Observer Pattern:** Entkopplung nach dem Sender-Empfänger-Prinzip
+7. **Implementierung:** Ein typsicherer `EventBus` in Python
+
+</div>
+<div class="col">
+
+#### Teil 3: Funktionales Design, Typen & Datenflüsse
+8. **Warum Funktionales Design?** Mutability & Seiteneffekte
+9. **Mathematische Funktionen:** Pure Functions & Immutability
+10. **Typen:** Primitive Typen & Produkt-Typen (Tupel)
+11. **Typen:** Union-Typen & Listen
+12. **Funktionstypen & Vollständigkeit**
+13. **Higher-Order Functions:** Funktionen als Daten
+14. **Currying & Partielle Applikation**
+15. **Ada's Blumenladen:** Datenfluss mit Daten- & Funktionsboxen
+16. **Datenstrom-Verarbeitung:** Pipelines in modernem Python
+
+#### Teil 4: Pattern Matching & Synthese
+17. **Das Gegenbeispiel:** Spaghetti-`if/isinstance` (Anti-Pattern)
+18. **Die Lösung:** Structural Pattern Matching (`match/case`)
+19. **Zusammenfassung & Reflexionsfragen**
+
+</div>
+</div>
+
+
+---
+
+### Einordnung in die Vorlesung: Von Modulen zu Aspekten & Funktionalen Mustern
+
+<div class="two-cols">
+<div class="col">
+
+### Rückblick auf Modul 3:
+* Wir haben saubere Packages, Ports und Adapter geschaffen.
+
+### Das neue Problem:
+* Was passiert mit Querschnittsaufgaben wie **Logging, Caching, Retry oder Performance-Messung**?
+* Wenn wir diesen Hilfscode in jeden Service schreiben, verletzen wir erneut das Single Responsibility Principle!
+* **Ziel dieses Moduls:**
+  * Aspektorientierte Programmierung (Dekoratoren in Python).
+  * Observer-Pattern (`EventBus`) zur Entkopplung.
+  * Funktionale Programmierung & Pattern Matching (`match/case`).
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M3 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M4 fill:#9b59b6,stroke:#8e44ad,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+---
+
+### Das Problem: Querschneidende Belange
+
+<div class="two-cols">
+<div class="col">
+
+In jedem Softwaresystem gibt es zwei Arten von Code:
+
+#### 1. Fachlogik (Core Concerns)
+* Das eigentliche Geschäftsziel: "Bestellung aufgeben", "Pflanze gießen", "Lagerbestand prüfen".
+* Gehört klar in eine bestimmte Fachklasse (`BestellService`).
+
+#### 2. Querschneidende Belange (Cross-Cutting Concerns)
+* Aufgaben, die **in fast jedem Modul** gebraucht werden:
+  * Logging & Audit-Trails
+  * Caching von Datenbank-Abfragen
+  * Performance-Messung
+  * Sicherheits- & Authentifizierungsprüfungen
+  * Fehlerbehandlung & Retries
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Alltagsanalogie: *Salz in der Küche*
+* Ein Koch kocht Pasta, brät Steak oder backt Brot (das sind die **Fachgerichte**).
+* Aber in **jedem einzelnen Gericht** braucht er Salz, Pfeffer und eine saubere Arbeitsplatte.
+* *Das Problem:* Wenn das Würzen und Putzen 80 % der Rezeptbeschreibung ausmacht, geht das eigentliche Kochen unter!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die Zwillingsprobleme: Tangling & Scattering
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### 1. Code Tangling (Verfilzung)
+Fachlicher Code wird von technischem Hilfscode überwuchert.  
+Die Kernlogik ist kaum noch erkennbar!
+
+```python
+# ❌ Verfilzte Methode (Tangling):
+def bestelle_pflanze(id: str, kunde: str):
+    log.info("Start Bestellung")       # Logging
+    t0 = time.time()                   # Timing
+    if not auth.is_logged_in(kunde):   # Sicherheit
+        raise AuthError()
+    # 2 Zeilen eigentliche Fachlogik:
+    item = db.get(id)
+    order = db.create_order(item)
+    
+    cache.set(f"order:{order.id}", order) # Caching
+    metrics.record("order_time", time.time() - t0)
+    return order
+```
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### 2. Code Scattering (Verstreuung)
+Derselbe Logging-, Caching- oder Sicherheits-Code ist redundant über 30 Klassen im ganzen Projekt verstreut.
+
+* **Wartungs-Albtraum:**  
+  Ändert sich das Logging-Format oder der Cache-Server, müssen **alle 30 Klassen manuell angefasst** werden!
+* **Vergesslichkeit:**  
+  Ein Entwickler vergisst in einer neuen Methode den Try-Catch-Block ⇒ System stürzt ab.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die Lösung: Aspektorientierte Programmierung
+
+<div class="two-cols">
+<div class="col">
+
+> **Aspektorientierte Programmierung (AOP)** trennt querschneidende Belange (Aspekte) sauber von der fachlichen Geschäftslogik.
+
+* **Reiner Fachcode:** Fachklassen kümmern sich zu 100 % um ihr Geschäftsziel.
+* **Zentrale Definition:** Jeder Aspekt (z. B. Logging, Caching) existiert genau einmal.
+* **Automatisches Einweben:** Das System fügt den Aspekt zur Laufzeit oder Übersetzungszeit vor/nach der Zielmethode ein.
+* **In Python:** Wir nutzen dafür das mächtige Sprachmittel der **Decorators**!
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph Fachlogik["Reine Fachlogik"]
+        M1["BestellService"]
+        M2["LagerService"]
+        M3["ZahlungsService"]
+    end
+    
+    subgraph Aspekte["Zentrale Aspekte"]
+        C1["@audit_log"]
+        C2["@cached"]
+        C3["@retry_on_<br/>failure"]
+    end
+
+    C1 -.-> M1
+    C1 -.-> M2
+    C2 -.-> M1
+    C3 -.-> M3
+```
+
+</div>
+</div>
+
+---
+
+### Aspekte im UML-Klassendiagramm modellieren
+
+<div class="two-cols">
+<div class="col">
+
+#### Das Entwurfs-Dilemma bei Aspekten:
+Da ein Aspekt transparent agiert (Aufrufer und Fachklasse rufen ihn im Fachcode nicht explizit auf), ist er im klassischen Klassendiagramm schwer sichtbar!
+
+#### Standard-Konvention im Softwareentwurf:
+1. **Eigene Aspekt-Komponente:**
+   Wird als Klasse mit dem Stereotyp `<<aspect>>` dargestellt.
+2. **Pointcuts & Advices als Operationen:**
+   Zeigt, *wann* der Aspekt eingreift (z. B. `before()`, `around(joinpoint)`, `after()`).
+3. **Explizite Abhängigkeitspfeile:**
+   Eine gestrichelte Abhängigkeit (`..>`) mit Stereotyp `<<uses aspect>>` zeigt, welche Fachmethode durch den Aspekt geschützt oder erweitert wird.
+
+</div>
+<div class="col">
+
+```mermaid
+classDiagram
+    class BestellService {
+        +erstelleBestellung(kundeId, items)
+        +frageGrosshaendlerPreis(artNr)
+    }
+    class RetryAspect {
+        <<aspect>>
+        +max_retries: int = 3
+        +delay: float = 0.5
+        +around(joinpoint) Any
+    }
+    class AuditLogAspect {
+        <<aspect>>
+        +before(joinpoint) void
+        +after(joinpoint) void
+    }
+    BestellService ..> RetryAspect : "uses aspect (frageGrosshaendlerPreis)"
+    BestellService ..> AuditLogAspect : "uses aspect (erstelleBestellung)"
+```
+
+</div>
+</div>
+
+---
+
+### Python Decorators Schritt für Schritt
+
+<div class="two-cols">
+<div class="col">
+
+Ein **Decorator** ist eine Funktion, die eine andere Funktion als Parameter entgegennimmt, sie in eine Hülle ("Wrapper") einpackt und die erweiterte Funktion zurückgibt.
+
+#### Der Aufbau eines Decorators:
+1. **Äußere Funktion:** Nimmt die Originalfunktion `func` entgegen.
+2. **Innere Wrapper-Funktion:**  
+   Führt Vorarbeiten aus, ruft `func(*args, **kwargs)` auf, führt Nacharbeiten aus und gibt das Ergebnis zurück.
+3. **`@functools.wraps`:**  
+   Bewahrt den ursprünglichen Funktionsnamen und den Docstring.
+
+</div>
+<div class="col">
+
+```python
+import time
+from functools import wraps
+
+def measure_time(func):
+    """Zentraler Timing-Aspekt"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        # Aufruf der eigentlichen Fachfunktion:
+        result = func(*args, **kwargs)
+        dauer = time.perf_counter() - start
+        print(f"⏱️ {func.__name__} brauchte {dauer:.4f}s")
+        return result
+    return wrapper
+
+# Anwendung mit sauberer @-Syntax:
+@measure_time
+def berechne_inventurwert(pflanzen: list) -> float:
+    time.sleep(0.1)  # Simuliere Arbeit
+    return sum(p.preis for p in pflanzen)
+```
+
+</div>
+</div>
+
+---
+
+### Praxis-Aspekt: Resilienz mit `@retry_with_backoff`
+
+<div class="two-cols">
+<div class="col">
+
+In verteilten Systemen schlagen Netzwerkaufrufe (z. B. zur Großhändler-API oder zu IoT-Bodenfeuchtesensoren) gelegentlich fehl.
+
+Statt in jeder Methode manuelle `while`-Schleifen und `try-except`-Blöcke zu schreiben, kapseln wir das Wiederholungsverhalten in einem wiederverwendbaren Decorator:
+
+* Fängt Netzwerkfehler (`ConnectionError`, `TimeoutError`) ab.
+* Wiederholt den Aufruf bis zu `max_retries` Mal.
+* Verdoppelt die Wartezeit nach jedem Versuch (**exponentieller Backoff**), um den überlasteten Server zu schonen.
+
+</div>
+<div class="col">
+
+```python
+import time
+from functools import wraps
+
+def retry_with_backoff(max_retries=3, delay=1.0):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            current_delay = delay
+            for attempt in range(1, max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except (ConnectionError, TimeoutError) as e:
+                    if attempt == max_retries:
+                        raise  # Letzter Versuch gescheitert!
+                    print(f"⚠️ Versuch {attempt} fehlgeschlagen. "
+                          f"Warte {current_delay}s...")
+                    time.sleep(current_delay)
+                    current_delay *= 2.0  # Exponentieller Backoff
+        return wrapper
+    return decorator
+
+@retry_with_backoff(max_retries=3, delay=0.5)
+def frage_grosshaendler_preis(art_nr: str) -> float:
+    # Fachcode bleibt völlig frei von Retry-Schleifen!
+    return api_client.get_price(art_nr)
+```
+
+</div>
+</div>
+
+---
+
+### Das Observer Pattern (Beobachter-Muster)
+
+<div class="two-cols">
+<div class="col">
+
+#### Das Problem enger Kopplung:
+Wenn ein Kunde eine Bestellung aufgibt, müssen mehrere Module reagieren:
+* Das **Lager** muss die Ware reservieren.
+* Der **Kurierdienst** muss die Route planen.
+* Die **Marketing-Abteilung** muss Treuepunkte gutschreiben.
+
+Wenn der `BestellService` all diese Klassen direkt importiert und aufruft, entsteht ein unentwirrbares Knäuel aus Abhängigkeiten!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Lösung: Der Radio-Sender
+* Das Subjekt (**EventBus / Sender**) ruft niemanden direkt an.
+* Es sendet lediglich eine Benachrichtigung: *"Bestellung #42 wurde bezahlt!"*.
+* Beliebig viele **Beobachter (Observer / Listener)** abonnieren das Ereignis unabhängig voneinander.
+* Neue Listener (z. B. ein Statistik-Modul) können hinzugefügt werden, **ohne den BestellService auch nur um eine Zeile zu ändern!**
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Implementierung: Ein typsicherer `EventBus`
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+classDiagram
+    class EventBus {
+        -dict _subscribers
+        +subscribe(Type eventType, Callable handler) void
+        +publish(Object event) void
+    }
+    class LagerListener {
+        +onBestellung(BestellEvent e) void
+    }
+    class KurierListener {
+        +onBestellung(BestellEvent e) void
+    }
+    EventBus --> LagerListener : benachrichtigt
+    EventBus --> KurierListener : benachrichtigt
+```
+
+</div>
+<div class="col">
+
+```python
+from collections import defaultdict
+from typing import Callable, Type, Any
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class BestellungPlatziert:
+    bestell_nr: str
+    gesamtbetrag: float
+
+class EventBus:
+    def __init__(self):
+        self._subscribers: dict[Type, list[Callable]] = defaultdict(list)
+
+    def subscribe(self, event_type: Type, handler: Callable[[Any], None]):
+        self._subscribers[event_type].append(handler)
+
+    def publish(self, event: Any):
+        for handler in self._subscribers[type(event)]:
+            handler(event)
+
+# Nutzung:
+bus = EventBus()
+bus.subscribe(BestellungPlatziert, lambda e: print(f"📦 Lager packt: {e.bestell_nr}"))
+bus.subscribe(BestellungPlatziert, lambda e: print(f"🚚 Kurier plant Tour für {e.bestell_nr}"))
+
+bus.publish(BestellungPlatziert("BEST-101", 49.90))
+```
+
+</div>
+</div>
+
+---
+
+### Warum Funktionales Design? Der Mutability-Bug
+
+<div class="two-cols">
+<div class="col">
+
+In rein objektorientierten Programmen wird der Zustand von Objekten ständig im Speicher verändert (**veränderlicher Zustand / Mutability**).
+
+#### Der gefürchtete "Aliasing-Bug":
+* Zwei Variablen verweisen im Arbeitsspeicher auf **dasselbe Objekt**.
+* Funktion A ändert den Zustand im Glauben, alleine damit zu arbeiten.
+* Funktion B stürzt später an völlig anderer Stelle ab, weil sich die Daten "von Geisterhand" verändert haben!
+* In nebenläufigen Systemen (Threads/Async) führt das zu katastrophalen Race Conditions.
+
+</div>
+<div class="col">
+
+```python
+# ❌ Der heimliche Mutability-Bug:
+class Pflanze:
+    def __init__(self, name: str, preis: float):
+        self.name = name
+        self.preis = preis
+
+def wende_sonderrabatt_an(p: Pflanze):
+    p.preis *= 0.5  # 💥 Verändert das Originalobjekt!
+
+katalog_monstera = Pflanze("Monstera", 40.0)
+
+# Kunde bekommt Rabatt berechnet:
+wende_sonderrabatt_an(katalog_monstera)
+
+# Böses Erwachen: Im Katalog kostet die Monstera 
+# ab jetzt für ALLE Kunden nur noch 20.00 €!
+print(katalog_monstera.preis)  # 20.0 (Unerwünschter Seiteneffekt!)
+```
+
+</div>
+</div>
+
+---
+
+### Was ist Funktionale Programmierung?
+
+<div class="two-cols">
+<div class="col">
+
+#### Der mathematische Funktionsbegriff:
+In der Mathematik ist eine Funktion *f* eine eindeutige Zuordnung:
+<div style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 8px 0; color: #1e293b; font-weight: 600;">
+    f: D → Z, &nbsp; x ↦ f(x)
+</div>
+Jedem Element *x* aus der Definitionsmenge *D* wird **genau ein** Element *y* aus der Zielmenge *Z* zugeordnet.
+
+#### Die Kernprinzipien im Code:
+* **Deterministisch:** Bei gleicher Eingabe *x* erhalten wir **immer** die gleiche Ausgabe *y*.
+* **Seiteneffektfrei (Stateless):** Eine Funktion verändert weder globale Variablen noch ihre übergebenen Argumente noch den Systemzustand.
+* **Referenzielle Transparenz:** Ein Funktionsaufruf `f(x)` kann jederzeit durch sein Ergebnis ersetzt werden, ohne das Programmverhalten zu ändern!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Gegenüberstellung: Methode vs. Pure Function
+
+```python
+# ❌ Imperativ mit Seiteneffekt (Impure):
+kontostand = 100.0
+
+def buche_ab(betrag: float):
+    global kontostand
+    kontostand -= betrag  # Ändert globalen Zustand!
+
+# ✅ Funktional ohne Seiteneffekt (Pure):
+def berechne_neuen_stand(stand: float, 
+                         betrag: float) -> float:
+    # Verändert nichts, gibt nur neues Ergebnis zurück:
+    return stand - betrag
+
+neuer_stand = berechne_neuen_stand(kontostand, 30.0)
+```
+
+> **Wichtig für Anfänger:** In der FP wird das Ergebnis einer Funktion **immer als Rückgabewert weitergereicht**, statt bestehende Variablen im Speicher zu überschreiben!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Pure Functions & Unveränderlichkeit (Immutability)
+
+<div class="two-cols">
+<div class="col">
+
+#### 1. Pure Functions (Reine Funktionen)
+* **Deterministisch:** Gleicher Input erzeugt **immer** exakt denselben Output.
+* **Keine Seiteneffekte (No Side Effects):**  
+  Keine globalen Variablen ändern, keine Parameter manipulieren, keine Festplatten- oder Datenbankänderungen im Verborgenen.
+* Extrem einfach zu testen und parallel auszuführen!
+
+#### 2. Immutability (Unveränderlichkeit)
+* Ein Datenobjekt kann nach der Erstellung **niemals modifiziert werden**.
+* Bei Änderungen wird ein **neues Objekt** mit den neuen Werten erzeugt.
+
+</div>
+<div class="col">
+
+```python
+from dataclasses import dataclass, replace
+
+# ✅ Unveränderliche Datenstruktur:
+@dataclass(frozen=True)
+class Pflanze:
+    botanischer_name: str
+    preis: float
+
+# ✅ Reine Funktion (Pure Function):
+def berechne_rabattierten_preis(p: Pflanze, faktor: float) -> Pflanze:
+    # Original 'p' bleibt zu 100% unangetastet!
+    return replace(p, preis=p.preis * faktor)
+
+katalog_monstera = Pflanze("Monstera", 40.0)
+angebots_monstera = berechne_rabattierten_preis(katalog_monstera, 0.5)
+
+print(katalog_monstera.preis)   # 40.0 (Unverändert sicher!)
+print(angebots_monstera.preis)  # 20.0 (Neues Objekt!)
+```
+
+</div>
+</div>
+
+---
+
+### Typen im Funktionalen Design: Primitive & Produkt-Typen
+
+<div class="two-cols">
+<div class="col">
+
+In der OOP modellieren wir die Welt über Klassen mit Methoden.  
+Im **Funktionalen Design** trennen wir Daten und Logik strikt: **Daten sind reine Typen!**
+
+#### 1. Primitive Typen (Basiselemente):
+* Typen beschreiben Wertemengen: `int`, `float`, `str`, `bool`.
+* Ein Wert gehört zu einem Typ (z. B. `42: int`, `"Monstera": str`).
+
+#### 2. Produkt-Typen (Kartesisches Produkt A × B):
+* Das kartesische Produkt `A × B` ist die Menge aller Paare `(a, b)` mit `a ∈ A` und `b ∈ B`.
+* In der Programmierung: Ein **Tupel** oder Record mit **fester Anzahl** an Feldern verschiedener Typen.
+* *Beispiel Ada's Blumenladen:*
+  <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
+    BestellPosition = ArtikelId × Menge × Einzelpreis<br>
+    (str × int × float)
+  </div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Produkt-Typen in modernem Python
+
+```python
+from typing import NamedTuple
+
+# Variante 1: Einfaches Tupel (ohne Feldnamen):
+pos_tupel: tuple[str, int, float] = ("PFL-101", 3, 14.50)
+
+# Variante 2: NamedTuple (typsicher & selbsterklärend):
+class BestellPosition(NamedTuple):
+    artikel_id: str
+    menge: int
+    einzelpreis: float
+
+pos = BestellPosition("PFL-101", 3, 14.50)
+print(pos.artikel_id)  # "PFL-101"
+print(pos.menge * pos.einzelpreis)  # 43.50
+
+# Unveränderlich (Immutable):
+# pos.menge = 5  💥 AttributeError: can't set attribute!
+```
+
+* **Vorteil:** Feste Struktur, kein verdecktes Überschreiben, direkte Destrukturierbarkeit!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Typen im Funktionalen Design: Union-Typen & Listen
+
+<div class="two-cols">
+<div class="col">
+
+Neben dem Produkt zweier Typen gibt es zwei weitere grundlegende Typkonstruktionen:
+
+#### 3. Union-Typen (Summen-Typen A ∪ B):
+* Ein Wert ist **entweder** vom Typ `A` **oder** vom Typ `B`.
+* Modelliert Alternativen und Varianten ohne Vererbungshierarchien!
+* *Beispiel Ada's Blumenladen:*
+  <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
+    Zahlungsart = Bar | Kreditkarte | Rechnung<br>
+    Rabatt = KeinRabatt | Prozent(float) | Gutschein(float)
+  </div>
+
+#### 4. Listen-Typen ([A] bzw. `list[A]`):
+* Eine Sequenz von **beliebig vielen Werten desselben Typs** `A`.
+* **Unterschied Tupel vs. Liste:**
+  * **Tupel (Produkt):** Feste Länge, unterschiedliche Typen (heterogen).
+  * **Liste:** Variable Länge, gleicher Typ (homogen).
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Python-Syntax für Union & Listen
+
+```python
+from dataclasses import dataclass
+
+# Union-Typen mit modernem Pipe-Operator (|):
+@dataclass(frozen=True)
+class Bar: pass
+
+@dataclass(frozen=True)
+class Karte:
+    kartennummer_hash: str
+
+@dataclass(frozen=True)
+class Rechnung:
+    iban: str
+
+type Zahlungsart = Bar | Karte | Rechnung
+
+# Listen-Typ: Warenkorb als Liste von Positionen
+type Warenkorb = list[BestellPosition]
+
+bestellung: Warenkorb = [
+    BestellPosition("PFL-101", 2, 12.0),
+    BestellPosition("TOPF-05", 2, 5.0)
+]
+```
+
+* Vollständig typisiert, selbsterklärend und ideal für Pattern Matching!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Funktionstypen & Vollständigkeit
+
+<div class="two-cols">
+<div class="col">
+
+#### 1. Die Notation von Funktionstypen:
+In der funktionalen Modellierung schreiben wir:
+<div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
+    Eingabetyp → Ausgabetyp
+</div>
+
+* `BestellPosition → float`: Nimmt eine Position, berechnet deren Zeilenpreis.
+* `(float × float) → float`: Nimmt zwei Gleitkommazahlen, liefert eine Summe.
+* In Python: `Callable[[BestellPosition], float]`.
+
+#### 2. Das Prinzip der Vollständigkeit:
+In `Aspekte.txt` gilt: Eine Funktion muss für **jede gültige Eingabe eine definierte Ausgabe** liefern!
+* Imperativer Code wirft oft ungefangene Exceptions ⇒ Programm stürzt unvorhersehbar ab.
+* Funktionaler Code gibt stattdessen ein **Ergebnistupel** oder `Result`-Typ zurück:
+  <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
+    teile: (float × float) → (float × bool)
+  </div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Vollständigkeit im Python-Code
+
+```python
+from typing import Callable
+
+# Typdefinition einer Berechnungsfunktion:
+type PreisRechner = Callable[[BestellPosition], float]
+
+berechne_zeile: PreisRechner = (
+    lambda pos: pos.menge * pos.einzelpreis
+)
+
+# Sichere, vollständige Funktion ohne Crash:
+def sichere_division(zaehler: float, 
+                     nenner: float) -> tuple[float, bool]:
+    if nenner == 0.0:
+        return (0.0, False)  # Signal: Ungültig!
+    return (zaehler / nenner, True)  # Signal: Erfolg!
+
+ergebnis, ok = sichere_division(100.0, 0.0)
+if not ok:
+    print("⚠️ Ungültige Berechnung sicher abgefangen!")
+```
+
+* Fehler werden Teil des Datentyps – keine heimlichen Abstürze!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Higher-Order Functions: Funktionen als Daten
+
+<div class="two-cols">
+<div class="col">
+
+In der Funktionalen Programmierung sind Funktionen **First-Class Citizens**:
+* Sie können wie normale Variablen übergeben werden.
+* Sie können als Rückgabewert einer anderen Funktion entstehen.
+
+#### Was ist eine Higher-Order Function (HoF)?
+Eine Funktion, die:
+1. Mindestens eine **Funktion als Argument** entgegennimmt, oder
+2. Eine **neue Funktion als Ergebnis** zurückgibt.
+
+#### Der Funktionstyp einer HoF:
+<div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
+    A → (B → C)
+</div>
+*"Nimmt ein Argument vom Typ A und liefert eine Funktion, die B auf C abbildet."*
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Beispiel: Rabatt-Fabrik für Ada's Blumenladen
+
+```python
+from typing import Callable
+
+# HoF: Erzeugt eine spezialisierte Rabattfunktion:
+def erstelle_rabatt_rechner(prozent: float) -> Callable[[float], float]:
+    """Schließt 'prozent' in einer Closure ein"""
+    def rabattiere(betrag: float) -> float:
+        return betrag * (1.0 - prozent / 100.0)
+    return rabattiere
+
+# Wir erzeugen spezialisierte Funktionsdaten:
+rabatt_stammkunde = erstelle_rabatt_rechner(10.0)
+rabatt_vip = erstelle_rabatt_rechner(25.0)
+
+# Jetzt wenden wir die Funktionsdaten an:
+print(rabatt_stammkunde(100.0))  # 90.0 €
+print(rabatt_vip(100.0))          # 75.0 €
+```
+
+* Die innere Funktion "merkt" sich den Rabattsatz (**Closure**), ohne globale Variablen zu benötigen!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Currying & Partielle Applikation
+
+<div class="two-cols">
+<div class="col">
+
+Oft haben Funktionen mehrere Parameter. Wie vereinfacht man deren Wiederverwendung?
+
+#### 1. Partielle Applikation:
+* Man legt einen Teil der Parameter fest und erhält eine neue Funktion mit weniger Parametern.
+* In Python direkt über `functools.partial` verfügbar.
+
+#### 2. Currying (nach Haskell Curry):
+* Die mathematische Umformung einer Funktion mit mehreren Argumenten in eine Kette einstelliger Funktionen:
+<div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.88em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
+    (A₁ × A₂ → B) &nbsp; ⟺ &nbsp; A₁ → (A₂ → B)
+</div>
+* Statt `f(x, y)` ruft man `f(x)(y)` auf.
+* Ermöglicht extrem modulare Datenfluss-Pipelines!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Praxis: Steuersätze im Blumenladen
+
+```python
+from functools import partial
+
+# Standard-Funktion mit 2 Parametern:
+def berechne_brutto(steuersatz: float, netto: float) -> float:
+    return round(netto * (1.0 + steuersatz), 2)
+
+# 1. Partielle Applikation mit partial():
+mwst_pflanzen = partial(berechne_brutto, 0.07)  # 7%
+mwst_deko = partial(berechne_brutto, 0.19)      # 19%
+
+print(mwst_pflanzen(20.0))  # 21.40 €
+print(mwst_deko(20.0))      # 23.80 €
+
+# 2. Curried-Syntax mit Lambdas:
+curried_brutto = lambda satz: lambda netto: netto * (1.0 + satz)
+print(curried_brutto(0.07)(20.0))  # 21.40 €
+```
+
+* Sehr nützlich, um universelle Funktionen in Daten-Pipelines einzubinden!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Ada's Blumenladen: Datenfluss mit Daten- & Funktionsboxen
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph InputData["1. Kompositionierte Daten (Records)"]
+        B["Bestellung: (Kunde, Positionen-Liste)"]
+        K["Kunde: (Id, Typ)"]
+        Pos["Positionen: Liste(Position)"]
+        B --> K
+        B --> Pos
+    end
+
+    subgraph FunctionsAsData["2. Funktionen als Daten (First-Class)"]
+        FnPos["Funktionsdatum:<br/>berechne_zeile (Pos → float)"]
+        BoxStrat["Funktionsbox:<br/>bestimme_rabatt_strategie(Kunde)"]
+        K --> BoxStrat
+        BoxStrat --> FnRabatt["Funktionsdatum:<br/>RabattFn (float → float)"]
+    end
+
+    subgraph Processing["3. Transformations-Pipeline"]
+        MapBox["Funktionsbox: map()"]
+        Pos --> MapBox
+        FnPos -.->|übergeben an| MapBox
+        MapBox --> PosSummen["Kompositioniert:<br/>Liste(Zeilenbetrag: float)"]
+        
+        SumBox["Funktionsbox: reduce / sum()"]
+        PosSummen --> SumBox
+        SumBox --> Zwischensumme["Zwischensumme: float"]
+        
+        ApplyBox["Funktionsbox: anwenden()"]
+        Zwischensumme --> ApplyBox
+        FnRabatt -.->|übergeben an| ApplyBox
+        ApplyBox --> Endpreis["Endpreis: float"]
+    end
+```
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Das Zusammenspiel im Code:
+
+```python
+from typing import Callable, NamedTuple
+
+class BestellPosition(NamedTuple):
+    art_nr: str
+    menge: int
+    einzelpreis: float
+
+# 1. Kompositionierte Daten:
+pos1 = BestellPosition("PFL-01", 2, 15.0)
+pos2 = BestellPosition("TOPF-02", 1, 10.0)
+kunde = ("K-42", "Stammkunde")
+
+# 2. Funktionsdaten bereitstellen:
+berechne_zeile = lambda p: p.menge * p.einzelpreis
+
+def waehle_rabatt(k) -> Callable[[float], float]:
+    if k[1] == "Stammkunde":
+        return lambda s: s * 0.9  # 10% Rabatt
+    return lambda s: s             # 0% Rabatt
+
+rabatt_fn = waehle_rabatt(kunde)
+
+# 3. Pipeline ausführen:
+zeilen_summen = list(map(berechne_zeile, [pos1, pos2]))
+zwischensumme = sum(zeilen_summen)   # 40.0 €
+endpreis = rabatt_fn(zwischensumme)   # 36.0 €
+```
+
+* Reiner Datenfluss: Keine Seiteneffekte, 100% deterministisch!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Funktionaler Datenfluss: Programme als Funktionsboxen
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+Statt Objekte kreuz und quer durch das System zu reichen und ihren Zustand zu manipulieren, betrachtet das **Funktionale Design** Programme als **gerichtete Datenflüsse (Data Flow)**:
+
+1. **Input:** Ein Strom unstrukturierter Rohdaten kommt an.
+2. **Funktionsboxen (Pipelines):**  
+   Jede Box ist eine kleine, reine Funktion, die Daten filtert, umwandelt oder aggregiert.
+3. **Output:** Das fertige Ergebnis verlässt die Pipeline.
+
+Jede Box kann unabhängig getestet, ausgetauscht oder parallelisiert werden!
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    In["Rohdaten: Sensor-Events"] --> F1["Box 1: filter(ist_aktiv)"]
+    F1 --> F2["Box 2: map(lese_feuchte)"]
+    F2 --> F3["Box 3: filter(unter_schwellwert)"]
+    F3 --> F4["Box 4: map(berechne_wasserbedarf)"]
+    F4 --> Out["Output: Bewässerungsplan"]
+```
+
+</div>
+</div>
+
+---
+
+### Datenfluss-Pipelines in modernem Python
+
+<div class="two-cols">
+<div class="col">
+
+In Python bilden wir solche Funktionsketten elegant mit **Generatoren**, **List Comprehensions** oder den Standardfunktionen `map()` und `filter()` ab:
+
+#### Aufgabe im Pflanzenladen:
+Aus einer Liste aller Töpfe:
+1. Filtere nur Zimmerpflanzen heraus.
+2. Finde diejenigen mit Feuchtigkeit < 30%.
+3. Berechne die benötigte Gießmenge in Millilitern.
+4. Berechne die Gesamtmenge an Wasser.
+
+Kein Schleifenspaghetti mit Zwischenvariablen!
+
+</div>
+<div class="col">
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class TopfStatus:
+    id: str
+    kategorie: str
+    feuchtigkeit_prozent: int
+
+daten = [
+    TopfStatus("T1", "Zimmer", 25),
+    TopfStatus("T2", "Garten", 15),
+    TopfStatus("T3", "Zimmer", 55),
+    TopfStatus("T4", "Zimmer", 20),
+]
+
+# Deklarative Datenfluss-Pipeline:
+trockene_zimmerpflanzen = (
+    t for t in daten 
+    if t.kategorie == "Zimmer" and t.feuchtigkeit_prozent < 30
+)
+
+wasserbedarf_ml = [
+    (100 - t.feuchtigkeit_prozent) * 5 
+    for t in trockene_zimmerpflanzen
+]
+
+print(f"Bedarf: {wasserbedarf_ml} ml") # [375, 400] ml
+print(f"Gesamt: {sum(wasserbedarf_ml)} ml") # 775 ml
+```
+
+</div>
+</div>
+
+---
+
+### Pattern Matching: Das Gegenbeispiel (Anti-Pattern)
+
+<div class="two-cols">
+<div class="col">
+
+#### Warum altes `if/elif isinstance` fehleranfällig ist:
+In älterem Python-Code oder prozeduralem Stil prüft man Typen oft über verschachtelte `if isinstance(...)`-Kaskaden:
+
+1. **Kein automatisches Entpacken:** Attribute müssen manuell ausgelesen und lokalen Variablen zugewiesen werden.
+2. **Laufzeitfehler (`AttributeError`):** Greift man versehentlich auf ein Attribut zu, das in einer Subklasse fehlt, stürzt das System zur Laufzeit ab!
+3. **Schwer lesbare Schachtelung:** Zusätzliche Bedingungen (Guards) erfordern tiefe `if/else`-Verschachtelungen.
+4. **Fehlende Vollständigkeitsprüfung:** Vergisst man einen neuen Event-Typ, fällt er stillschweigend durch!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### ❌ Anti-Pattern: Spaghetti aus isinstance & if
+
+```python
+# Unübersichtlich, fehleranfällig und redundant:
+def verarbeite_transaktion_alt(event):
+    if isinstance(event, NormalerVerkauf):
+        b = event.betrag
+        print(f"Standardkauf über {b:.2f} € verbucht.")
+        
+    elif isinstance(event, ExpressLieferung):
+        # Manuelles Entpacken aller Attribute:
+        b = event.betrag
+        k = event.kurier_id
+        # Verschachtelte Bedingung:
+        if getattr(event, "eilig", False):
+            print(f"🚨 Prio-Express über {b:.2f} € an Kurier {k}!")
+        else:
+            print(f"📦 Standard-Kurier {k} beauftragt.")
+            
+    else:
+        # Fällt stillschweigend durch, wenn vergessen!
+        print("❌ Unbekanntes Event!")
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Modernes Structural Pattern Matching (`match/case`)
+
+<div class="two-cols">
+<div class="col">
+
+Eingeführt in **Python 3.10**: Das mächtigste Werkzeug zur Datenzerlegung.
+
+#### Warum viel besser als altes `switch/case`?
+* Prüft nicht nur Werte, sondern die **Struktur** und die **Klassen** von Objekten!
+* **Automatisches Entpacken (Destructuring):**  
+  Attribute werden direkt in lokale Variablen gebunden.
+* **Guards (`if ...`):**  
+  Zusätzliche Bedingungen direkt im Pattern prüfbar.
+* Ersetzt hässliche und fehleranfällige `if isinstance(...)` Kaskaden!
+
+</div>
+<div class="col">
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class NormalerVerkauf:
+    betrag: float
+
+@dataclass
+class ExpressLieferung:
+    betrag: float
+    kurier_id: str
+    eilig: bool
+
+def verarbeite_transaktion(event):
+    match event:
+        case NormalerVerkauf(betrag=b):
+            print(f"Standardkauf über {b:.2f} € verbucht.")
+            
+        case ExpressLieferung(betrag=b, kurier_id=k, eilig=True):
+            print(f"🚨 Prio-Express über {b:.2f} € an Kurier {k}!")
+            
+        case ExpressLieferung(betrag=b, kurier_id=k, eilig=False):
+            print(f"📦 Standard-Kurier {k} beauftragt.")
+            
+        case _:
+            print("❌ Unbekanntes Event!")
+```
+
+</div>
+</div>
+
+---
+
+### Zusammenfassung Modul 4
+
+<div class="two-cols">
+<div class="col">
+
+1. **Querschneidende Belange** (Logging, Caching, Retry) gehören nicht in die Fachklassen (Code Tangling & Scattering vermeiden).
+2. **AOP & UML-Modellierung:** Aspekte werden als `<<aspect>>` modelliert und in Python elegant via Decorators umgesetzt.
+3. **Observer Pattern & EventBus** entkoppeln Subsysteme vollständig: Sender kennen ihre Empfänger nicht.
+4. **Mutability ist gefährlich:** Veränderlicher Zustand führt zu heimlichen Seiteneffekten und Aliasing-Bugs.
+
+</div>
+<div class="col">
+
+5. **Typen im Funktionalen Design:** Primitive Typen, Produkt-Typen (Tupel), Union-Typen und Listen bilden das Datenfundament.
+6. **Higher-Order Functions & Currying:** Funktionen sind Daten (First-Class Citizens) und können spezialisiert werden.
+7. **Datenfluss-Pipelines:** Modellierung von Systemen als gerichtete Sequenz seiteneffektfreier Funktionsboxen.
+8. **Structural Pattern Matching (`match/case`)** zerlegt strukturierte Events deklarativ statt mit `isinstance`-Spaghetti.
+
+</div>
+</div>
+
+---
+
+### Denkpause & Reflexionsfragen
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Frage 1: Pure Function oder Seiteneffekt?
+Ist folgende Python-Funktion "pure"?  
+```python
+historie = []
+def addiere(a: int, b: int) -> int:
+    historie.append((a, b))
+    return a + b
+```
+Warum oder warum nicht?
+
+</div>
+
+<div class="col-card" style="margin-top: 15px;">
+
+#### Frage 2: Decorator-Reihenfolge
+Was passiert, wenn man zwei Decorators stapelt?  
+```python
+@measure_time
+@retry_with_backoff(max_retries=3)
+def sync_data(): ...
+```
+Misst `measure_time` die Gesamtdauer inkl. aller Retries oder nur den letzten Versuch?
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Antworten zur Selbstkontrolle:
+1. **Nein, sie ist NICHT pure!**  
+   Sie modifiziert die globale Variable `historie` ⇒ Das ist ein verdeckter Seiteneffekt!
+2. **Die Gesamtdauer inklusive aller Retries!**  
+   Decorators werden von **unten nach oben** (von innen nach außen) ausgewertet. `@retry_with_backoff` verpackt die Funktion; `@measure_time` verpackt die gesamte Retry-Schleife!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Ausblick auf Modul 5: Systemdesign, Cloud Native & AI-Inference
+
+<div class="two-cols">
+<div class="col">
+
+### Was wir in Modul 4 erreicht haben:
+* Resilienz-Dekoratoren, Event-Bus, funktionale Datenpipelines und Pattern Matching. Unsere Komponenten sind intern sauber strukturiert.
+
+### Die nächste Herausforderung:
+* Unser Code läuft auf dem Laptop. Aber was passiert am Valentinstag, wenn 50.000 Kunden gleichzeitig bestellen? Wie skalieren wir horizontal in der Cloud?
+* **Was uns in Modul 5 erwartet:**
+  * „System First, Components Second“.
+  * Der 5-Stufen-Evolutionspfad von Single Instance zu Serverless.
+  * C4-Architekturmodell, Redis In-Memory-Caching und AWS CDK in Python.
+
+> **Frage zum Weiterdenken:** Warum ist Zustandslosigkeit (Statelessness) die wichtigste Eigenschaft für Systeme in der Cloud?
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M4 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M5 fill:#2980b9,stroke:#1f618d,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+</script>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontFamily: '"Inter", system-ui, sans-serif'
+        });
+        async function renderSlideMermaid(slide) {
+            if (!slide) return;
+            // 1. Convert any code containing mermaid class to div.mermaid
+            slide.querySelectorAll('code[class*="mermaid"]').forEach((el) => {
+                const pre = el.closest('pre');
+                if (pre) {
+                    const div = document.createElement('div');
+                    div.className = 'mermaid';
+                    let text = el.textContent || '';
+                    text = text.replace(/--&gt;/g, '-->')
+                               .replace(/&gt;/g, '>')
+                               .replace(/&lt;/g, '<')
+                               .replace(/&amp;/g, '&')
+                               .replace(/&quot;/g, '"');
+                    div.textContent = text.trim();
+                    pre.replaceWith(div);
+                }
+            });
+
+            // 2. Also clean up any div.mermaid written directly in HTML
+            slide.querySelectorAll('.mermaid:not([data-processed="true"])').forEach((el) => {
+                let text = el.textContent || '';
+                text = text.replace(/--&gt;/g, '-->')
+                           .replace(/&gt;/g, '>')
+                           .replace(/&lt;/g, '<')
+                           .replace(/&amp;/g, '&')
+                           .replace(/&quot;/g, '"');
+                el.textContent = text.trim();
+            });
+
+            // 3. Render all unrendered div.mermaid in this active slide
+            const nodes = slide.querySelectorAll('.mermaid:not([data-processed="true"])');
+            if (nodes.length > 0) {
+                try {
+                    await mermaid.run({ nodes: nodes, suppressErrors: false });
+                } catch (err) {
+                    console.error('Mermaid run error:', err);
+                }
+            }
+        }
+
+        Reveal.initialize({
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            plugins: [ RevealMarkdown, RevealHighlight ]
+        }).then(() => {
+            renderSlideMermaid(Reveal.getCurrentSlide());
+        });
+
+        Reveal.on('slidechanged', (event) => {
+            renderSlideMermaid(event.currentSlide);
+        });
+    </script>
+</body>
+</html>

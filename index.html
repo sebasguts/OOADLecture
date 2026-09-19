@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>OOAD: Objektorientierte Analyse und Design</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #1e8449;
+            --secondary: #2c3e50;
+            --accent: #d35400;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text: #334155;
+            --text-light: #64748b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2.4rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .badge {
+            display: inline-block;
+            background: #e8f8f5;
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #a3e4d7;
+        }
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
+        .card-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .card h2 {
+            font-size: 1.35rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .card-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        footer {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">Vorlesungsportal</div>
+            <h1>Objektorientierte Analyse und Design</h1>
+            <p>Interaktive Vorlesungsfolien zu moderner Softwarearchitektur, Analyse, Design Patterns und Cloud-Systemen.</p>
+        </header>
+
+        <div class="modules-grid">
+            <!-- Modul 1 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 1</div>
+                    <h2>Moderne Objektorientierung & Softwaredesign</h2>
+                    <p>Klassen, Objekte, Assoziation vs. Aggregation vs. Komposition. SOLID-Prinzipien, Composition over Inheritance, Modern Python (Dataclasses, Protocols, Type Hints) und Strategy Pattern.</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_01.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+
+            <!-- Modul 2 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 2</div>
+                    <h2>Objektorientierte Analyse & Übergang zum Design</h2>
+                    <p>Anforderungsanalyse, Lastenheft vs. Pflichtenheft, Akteure & Rollen, Use Cases mit &lt;&lt;include&gt;&gt; & &lt;&lt;extend&gt;&gt;, strukturierte 9-Punkte-Szenario-Tabellen, BDD (Gherkin), Bounded Contexts und der systematische Übergang zum Design (Abbott-Methode, OOA-zu-OOD-Matrix).</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_02.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+
+            <!-- Modul 3 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 3</div>
+                    <h2>Code-Modularisierung & Softwarearchitektur</h2>
+                    <p>Kognitive Last, Anti-Pattern der God-Datei, zirkuläre Importe in Python, Hohe Kohäsion & Lose Kopplung, Packages & Information Hiding, Schichtenarchitektur vs. Hexagonale Architektur (Ports & Adapters) und Dependency Injection.</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_03.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+
+            <!-- Modul 4 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 4</div>
+                    <h2>Aspekte, Entwurfsmuster & Funktionale Programmierung</h2>
+                    <p>Cross-Cutting Concerns, AOP & Python Decorators (Caching, Logging, Retry), GoF-Entwurfsmuster (Observer, Factory, Strategy), Pure Functions & Immutability, Streaming-Pipelines und Structural Pattern Matching.</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_04.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+
+            <!-- Modul 5 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 5</div>
+                    <h2>Systemdesign, Cloud Native & AI-Inference</h2>
+                    <p>System First vor Komponenten, der 5-Stufen-Evolutionspfad von Single Instance zu Serverless, C4-Architekturmodell, Sequenzdiagramme, In-Memory Caching mit Redis, AI Inference & ReAct Agents und Cloud-Infrastruktur mit AWS CDK in Python.</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_05.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+
+            <!-- Modul 6 -->
+            <div class="card">
+                <div>
+                    <div class="card-number">Modul 6</div>
+                    <h2>Threat Modeling & Security by Design</h2>
+                    <p>Security by Design, Threat Actors & Bedrohungsidentifikation, STRIDE-Bedrohungsmodell im Doppelpack (Beispiel & Gegenmaßnahmen je Kategorie), DREAD-Risikobewertung, AI/LLM-Bedrohungen und Security Guardrails.</p>
+                </div>
+                <div class="card-links">
+                    <a href="folien_06.html" class="btn btn-primary" target="_blank">Folien starten ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Vorlesungsmaterialien für <em>Objektorientierte Analyse und Design</em>.</p>
+        </footer>
+    </div>
+</body>
+</html>

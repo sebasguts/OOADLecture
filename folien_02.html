@@ -1,0 +1,1568 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>OOAD Modul 2: Objektorientierte Analyse (OOA)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2980b9;
+            --primary-dark: #1f618d;
+            --secondary: #1e293b;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        .reveal {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 24px;
+            color: var(--text);
+        }
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+        .reveal h1 { font-size: 1.85em; }
+        .reveal h2 { font-size: 1.35em; color: var(--primary); }
+        .reveal h3 { font-size: 1.15em; }
+        .reveal h4 { font-size: 0.95em; color: var(--primary-dark); margin-bottom: 8px; }
+        .reveal p, .reveal li {
+            font-size: 0.88em;
+            line-height: 1.45;
+            color: var(--text);
+        }
+        .reveal ul, .reveal ol {
+            margin-left: 1.2em;
+            margin-bottom: 12px;
+        }
+        .reveal li { margin-bottom: 6px; }
+        .reveal pre {
+            width: 100% !important;
+            margin: 8px 0 !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+            border-radius: 8px !important;
+        }
+        .reveal pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72em !important;
+            line-height: 1.35 !important;
+            padding: 14px !important;
+            border-radius: 8px;
+        }
+        .reveal blockquote {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 12px 18px;
+            margin: 12px 0;
+            font-style: normal;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85em;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .nav-home {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            background: rgba(255,255,255,0.92);
+            padding: 6px 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+        }
+        .nav-home a { text-decoration: none; color: var(--primary); font-weight: 600; }
+        
+        /* Two-Column Grid System */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .col { min-width: 0; }
+        .col-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Mermaid Diagram Container */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            min-height: 220px;
+            max-height: 480px;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .mermaid svg {
+            max-height: 440px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-home">
+        <a href="index.html">← Zur Übersicht</a> | Modul 2: Analyse (OOA)
+    </div>
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown data-separator="^---$" data-separator-vertical="^--$">
+                <script type="text/template">
+# Objektorientierte Analyse & Design
+## Modul 2: Objektorientierte Analyse (OOA)
+
+---
+
+### Präzise Lernziele
+
+<div class="two-cols">
+<div class="col">
+
+Nach aktiver Erarbeitung dieses Moduls können Sie:
+
+1. **Den Zweck der OOA begründen:** Erklären, warum Anforderungsanalyse vor dem Coden zwingend nötig ist und wie sie teure Fehlentwicklungen verhindert.
+2. **Lastenheft und Pflichtenheft formal unterscheiden:** Auftraggeber- und Entwicklersicht präzise abgrenzen und die jeweiligen Inhalte und Zielgruppen benennen.
+3. **Akteure und Use Cases identifizieren:** Akteure als Rollen (nicht als Personen) modellieren und Anwendungsfälle nach dem Blackbox-Prinzip mit Aktiv-Verben formulieren.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Weiterführende Entwurfsziele:
+4. **Beziehungen fehlerfrei anwenden:** Die Semantik und Pfeilrichtungen von `<<include>>` (zwingend erforderlich) und `<<extend>>` (optional/konditional) sicher einsetzen.
+5. **Kanonische Szenariotabellen erstellen:** Eine vollständige 9-Punkte-Tabelle mit Vor-/Nachbedingungen, Happy Path, alternativen Pfaden und Fehlerbehandlungen verfassen.
+6. **Agile Spezifikation & DDD verstehen:** User Stories in Gherkin-Syntax (BDD) formulieren, Aktivitätsdiagramme zeichnen und Bounded Contexts (DDD) voneinander abgrenzen.
+7. **Den Übergang von OOA zu OOD meistern:** Aus Analyse-Ergebnissen mit der Abbott-Methode und der Übergangsmatrix systematisch Klassen, Methoden und Modulgrenzen ableiten.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Agenda
+
+<div class="two-cols">
+<div class="col">
+
+#### Teil 1: Vom Kundenwunsch zur Struktur
+1. **Das Problem:** Warum Softwareprojekte scheitern
+2. **Lastenheft vs. Pflichtenheft:** Die Hausbau-Analogie
+3. **Akteure:** Rollen vs. konkrete Personen
+4. **Use Cases (Anwendungsfälle):** Das Blackbox-Prinzip
+5. **Use-Case-Beziehungen:** `<<include>>` vs. `<<extend>>`
+
+#### Teil 2: Detaillierte Spezifikation & Modellierung
+6. **Die kanonische Szenario-Tabelle:** Die 9 Pflichtfelder
+7. **Fallstudie Expresslieferung:** Happy Path, Alternativen & Fehler
+8. **User Stories & BDD:** Akzeptanzkriterien mit Gherkin
+9. **Aktivitätsdiagramme:** Entscheidungen & Parallelität
+10. **Bounded Contexts (DDD):** Warum ein einziges Datenmodell scheitert
+
+</div>
+<div class="col">
+
+#### Teil 3: Der Übergang von der Analyse zum Design
+11. **Paradigmenwechsel:** Vom Problemraum (OOA) zum Lösungsraum (OOD)
+12. **Die Abbott-Methode:** Substantiv-Verb-Analyse
+13. **Vom Szenario zum Klassenentwurf:** Zuweisung von Verantwortung
+14. **Vom Bounded Context zur Modulstruktur:** Keine Datenverfilzung
+15. **Die OOA-zu-OOD-Übergangsmatrix:** Das vollständige Mapping
+
+#### Teil 4: Synthese
+16. **Zusammenfassung & Reflexionsfragen**
+
+</div>
+</div>
+
+
+---
+
+### Einordnung in die Vorlesung: Von den Grundlagen zur Analyse
+
+<div class="two-cols">
+<div class="col">
+
+### Rückblick auf Modul 1:
+* Wir wissen, wie man saubere Klassen und Interfaces nach SOLID baut.
+
+### Warum jetzt OOA?
+* Bevor wir eine einzige Zeile Code schreiben, müssen wir den **Problemraum** verstehen:
+  * Wer sind die echten Akteure (Rollen vs. Personen)?
+  * Welche Geschäftsprozesse müssen abgebildet werden?
+* **Ziel dieses Moduls:**
+  * Anforderungen formal erfassen (Lasten- vs. Pflichtenheft, Use Cases, 9-Punkte-Szenarien).
+  * Systematischer Übergang zum Entwurf (Abbott-Methode, Bounded Contexts).
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M1 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M2 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+---
+
+### Warum scheitern Softwareprojekte?
+
+<div class="two-cols">
+<div class="col">
+
+> *"There is nothing quite so useless as doing with great efficiency something that should not be done at all."*  
+> (Peter Drucker)
+
+* **Das klassische Missverständnis:**
+  * Der Kunde erklärt, was er zu brauchen glaubt.
+  * Der Entwickler versteht etwas völlig anderes und programmiert sofort los.
+  * Am Ende entspricht das Produkt weder den Wünschen noch den realen Prozessen.
+* **Kosten von Fehlern:**
+  * Ein Fehler, der in der Analyse behoben wird: **1 €**.
+  * Derselbe Fehler beim Coden: **10 €**.
+  * Derselbe Fehler im Live-Betrieb beim Kunden: **100–1000 €**!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Das Phasenmodell der Softwaretechnik
+```
+1. Anforderungsanalyse  <- HIER entscheidet sich der Erfolg!
+   ↓
+2. Objektorientierte Analyse (OOA)
+   ↓
+3. Objektorientiertes Design (OOD)
+   ↓
+4. Implementierung (Code)
+   ↓
+5. Test & Qualitätssicherung
+   ↓
+6. Wartung & Betrieb
+```
+**OOA beantwortet das "WAS" (Fachdomäne), noch nicht das "WIE" (Technik).**
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Lastenheft vs. Pflichtenheft
+
+<div class="two-cols">
+<div class="col">
+
+#### Das Lastenheft (Auftraggebersicht)
+* **Wer schreibt es?** Der Kunde / Auftraggeber (z. B. Ada).
+* **Inhalt:** *Was* soll das System können? Welche fachlichen Ziele werden verfolgt?
+* **Sprache:** Reine Fachsprache der Domäne, **kein** technischer Jargon.
+
+#### Das Pflichtenheft (Auftragnehmersicht)
+* **Wer schreibt es?** Das Entwicklerteam / der Auftragnehmer.
+* **Inhalt:** *Wie* wird die Anforderung technisch gelöst? (Architektur, Datenmodelle, Schnittstellen, UI-Entwürfe).
+* **Sprache:** Technisch präzise, verbindliche Vertragsgrundlage!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Alltagsanalogie: *Hausbau*
+* **Lastenheft des Bauherrn:**
+  * "Ich möchte ein Einfamilienhaus für 4 Personen mit hellem Wohnzimmer, geringem Energieverbrauch und einer Garage."
+* **Pflichtenheft des Architekten:**
+  * Statik-Berechnungen, Grundriss mit Wandstärken in cm, Verlegeplan für Fußbodenheizung, Elektroschaltplan und Baustoffliste.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Akteure (Actors): Rolle vs. Person
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+> Ein **Akteur** stellt eine Rolle dar, die ein Anwender oder ein externes Fremdsystem gegenüber unserer Software einnimmt.
+
+* **Akteure stehen immer AUSSERHALB des Systems.**
+* **Rolle, nicht Person:**
+  * "Frau Müller" ist kein Akteur. Die Rolle `Kunde` oder `Verkäufer` ist der Akteur!
+  * Eine Person kann morgens als `Kunde` einkaufen und nachmittags als `Verkäufer` an der Kasse stehen.
+* **Auch Fremdsysteme sind vollwertige Akteure:**
+  * 💳 Zahlungsdienstleister (PayPal, Stripe)
+  * 🚚 Kurierdienst-API (Stadtkurier)
+  * 🌦️ Wetterdienst-API (Bewässerungsprognosen)
+
+<div style="margin-top: 10px; font-size: 0.82em; border-top: 1px solid #e2e8f0; padding-top: 8px;">
+
+**Die Rollen bei Ada im Überblick:**  
+* 👤 **Endkunde (`Kd`):** Bestellt im Webshop, zahlt online.
+* 🏢 **B2B-Kunde (`Kd_B2B`):** Spezialisierter Großkunde, bestellt auf Rechnung.
+* 💼 **Verkäufer (`Vk`):** Ladenpersonal, bedient die POS-Kasse im Geschäft.
+* 👩‍💼 **Chefin Ada (`Adm`):** Geschäftsführung, prüft Bestände und Freigaben.
+* 🤖 **Kurierdienst (`Ku`):** Externes REST-API-Partnersystem.
+
+</div>
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    Akteur["[Rolle] Akteur"]
+    Kunde["Kunde (extern)"]
+    Verkaeufer["Verkäufer (intern)"]
+    System["Kurier-API (Fremdsystem)"]
+    B2B["B2B-Kunde"]
+    Ada["Chefin Ada"]
+
+    Akteur --> Kunde
+    Akteur --> Verkaeufer
+    Akteur --> System
+    Kunde -->|Spezialisierung| B2B
+    Verkaeufer -->|Spezialisierung| Ada
+```
+
+</div>
+</div>
+
+---
+
+### Anwendungsfälle (Use Cases): Das Blackbox-Prinzip
+
+<div class="two-cols">
+<div class="col">
+
+> Ein **Use Case** beschreibt eine fachlich abgeschlossene Interaktion zwischen einem Akteur und dem System zur Erreichung eines konkreten geschäftlichen Ziels.
+
+#### Die goldenen Regeln für Use Cases:
+1. **Das System ist eine Blackbox:**
+   * Wir beschreiben, was von außen sichtbar passiert, nicht wie interne Algorithmen rechnen.
+2. **Benennungsregel:**
+   * Immer aktiv: `[Substantiv im Akkusativ] + [Verb im Infinitiv]`.
+   * *Richtig:* "Pflanze verkaufen", "Expresslieferung beauftragen".
+   * *Falsch:* "Datenbankzugriff", "Login-System", "Passwort hashen".
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Typische Anfängerfehler:
+* ❌ **Funktionszerlegung:** "Klick auf Button", "Validierung von Feld 3" sind keine Use Cases, sondern Bedienschritte!
+* ❌ **Interne Technik als Use Case:** "SQL-Backup durchführen" ist kein fachlicher Anwendungsfall der Pflanzenplattform.
+* ✅ **Der Test:** Hat der Akteur nach Abschluss des Use Cases einen echten fachlichen Mehrwert erhalten?
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Use-Case-Diagramm: *Ada's Botanical Platform*
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+Das **Use-Case-Diagramm** visualisiert den Systemumfang (Scope):
+
+* **Systemgrenze:** Der Kasten definiert, was Teil unserer Software ist.
+* **Außerhalb:** Akteure, die mit dem System interagieren.
+* **Innerhalb:** Ovale für die einzelnen Anwendungsfälle.
+* **Linien:** Zeigen, welcher Akteur an welchem Use Case beteiligt ist.
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart LR
+    subgraph Systemgrenze["Ada's Botanical Platform"]
+        UC1(["Pflanze verkaufen"])
+        UC2(["Expresslieferung beauftragen"])
+        UC3(["Lager auffüllen"])
+        UC4(["Pflanzengesundheit prüfen"])
+    end
+    Kunde["Kunde"] --> UC1
+    Kunde --> UC2
+    Kunde --> UC4
+    Verkaeufer["Verkäufer"] --> UC1
+    Chefin["Chefin Ada"] --> UC3
+    Kurier["Kurierdienst"] --> UC2
+```
+
+</div>
+</div>
+
+---
+
+### Beziehung 1: `«include»` (Zwingend erforderlich)
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+> Eine **`«include»`**-Beziehung bedeutet, dass der Basisfall das Verhalten eines anderen Use Cases **zwingend vollständig einbindet**. Ohne den inkludierten Fall kann der Basisfall nicht erfolgreich abschließen.
+
+* **Wann nutzen?**
+  * Um gemeinsame Teilabläufe auszulagern, die in mehreren Use Cases identisch vorkommen.
+  * Beispiel: Sowohl *"Online bestellen"* als auch *"Im Laden kaufen"* schließen die *"Zahlung abwickeln"* zwingend ein.
+* **Pfeilrichtung:**  
+  Vom Basisfall **hin** zum inkludierten Fall:  
+  `Basisfall -.->|include| InkludierterFall`
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    UC_Order(["Online bestellen"])
+    UC_BuyStore(["Im Laden kaufen"])
+    UC_Pay(["Zahlung abwickeln"])
+
+    UC_Order -.->|include| UC_Pay
+    UC_BuyStore -.->|include| UC_Pay
+```
+
+</div>
+</div>
+
+---
+
+### Beziehung 2: `«extend»` (Optional / Bedingt)
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+> Eine **`«extend»`**-Beziehung erweitert das Verhalten eines Basisfalls **nur unter bestimmten Bedingungen** an einem definierten *Extension Point*. Der Basisfall ist auch ohne die Erweiterung vollständig funktionsfähig!
+
+* **Wann nutzen?**
+  * Für rein optionale Zusätze, Sonderbehandlungen oder seltene Ausnahmen.
+  * Beispiel: Beim Blumenkauf kann der Kunde *optional* eine handschriftliche Grußkarte beilegen lassen oder Expresslieferung wählen.
+* **Pfeilrichtung (Achtung, häufiger Prüfungsfehler!):**  
+  Der Pfeil zeigt **von der optionalen Erweiterung ZUR Basis**:  
+  `Erweiterung -.->|extend| Basisfall`
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    UC_Order(["Bestellung aufgeben"])
+    UC_Gift(["Grußkarte beilegen"])
+    UC_Express(["Expresszuschlag buchen"])
+
+    UC_Gift -.->|extend| UC_Order
+    UC_Express -.->|extend| UC_Order
+```
+
+</div>
+</div>
+
+---
+
+### `<<include>>` vs. `<<extend>>`: Der direkte Vergleich
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### `<<include>>` (Zwingend)
+* **Ausführung:** Läuft **immer** ab, wenn der Basisfall läuft.
+* **Basisfall vollständig?** Nein, dem Basisfall fehlt ohne das Include ein unverzichtbarer Baustein.
+* **Pfeilrichtung:**  
+  `Basis  ----->  Include`
+* **Alltagsanalogie:**  
+  "Autofahren" schließt "Tanken/Laden" ein. Ohne Energie fährt das Auto nicht!
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### `<<extend>>` (Optional)
+* **Ausführung:** Läuft **nur unter Bedingungen** ab (Extension Point).
+* **Basisfall vollständig?** Ja! Der Basisfall funktioniert auch ohne die Erweiterung perfekt.
+* **Pfeilrichtung:**  
+  `Erweiterung  ----->  Basis`
+* **Alltagsanalogie:**  
+  "Sitzheizung einschalten" erweitert "Autofahren". Man kann problemlos fahren, ohne sie je einzuschalten!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die Szenario-Tabelle: Das Fundament der OOA
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+Ein Use-Case-Diagramm ist nur das **Inhaltsverzeichnis**.  
+**Die eigentliche Analysearbeit steckt in der Szenario-Tabelle!**
+
+* Ein Diagramm zeigt nur: *"Wer interagiert mit welchem Fall?"*
+* Die Szenario-Tabelle spezifiziert das **konkrete Verhalten**:
+  * Welche Vorbedingungen müssen zwingend erfüllt sein?
+  * Was garantiert das System nach erfolgreichem Abschluss?
+  * Welche Schrittfolge läuft im Erfolgsfall ab?
+  * Wie reagiert das System auf Ausnahmen und Fehler?
+
+Nach Alistair Cockburn besitzt eine professionelle Szenariotabelle genau **9 kanonische Abschnitte**.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die 9 Pflichtfelder im Überblick:
+1. **Name des Use Case** (Aktiv-Formulierung)
+2. **Kurzbeschreibung** (Kernzweck in 1–2 Sätzen)
+3. **Beteiligte Akteure & Kürzel** (Primär & Sekundär)
+4. **Vorbedingungen** (Preconditions – harte Wächter)
+5. **Nachbedingungen** (Postconditions – Garantien)
+6. **Auslöser / Trigger** (Start-Ereignis)
+7. **Standardszenario** (Happy Path: Schritte 1 bis n)
+8. **Alternative Pfade** (Erfolgreiche Verzweigungen)
+9. **Fehlersituationen / Ausnahmen** (Abbrüche & Rollbacks)
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Felder 1 & 2 (Name & Kurzbeschreibung)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 1: Eindeutiger Name
+* **Zweck:** Das zentrale Identifikationsmerkmal im Pflichtenheft, Code und Ticketsystem.
+* **Regel:** Immer im Aktiv formulieren:  
+  `[Substantiv im Akkusativ] + [Verb im Infinitiv]`.
+* ❌ *Schlecht:* `FastDeliveryService`, `DB_Insert_Order`
+* ✅ *Gut:* `Expresslieferung beauftragen (2h)`
+
+**Praxisbeispiel bei Ada:**
+> **1. Name:** `Expresslieferung per Kurier (2h)`
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 2: Kurzbeschreibung
+* **Zweck:** Bringt den geschäftlichen Kernzweck und den Nutzen für den Akteur auf den Punkt (1–2 Sätze).
+* **Regel:** Keine technischen Details (wie SQL, HTTP, JSON). Rein fachliche Sprache!
+* **Prüffrage:** Versteht ein Laie oder der Auftraggeber sofort das Ziel?
+
+**Praxisbeispiel bei Ada:**
+> **2. Kurzbeschreibung:**  
+> *"Ein Kunde bestellt Pflanzen zur sofortigen Auslieferung durch einen Stadtkurier innerhalb von maximal 2 Stunden nach Bestelleingang."*
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Felder 3 & 4 (Akteure & Vorbedingungen)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 3: Beteiligte Akteure & Kürzel
+* **Primärer Akteur:** Initiiert den Fall und hat das primäre Ziel (`Kd` = Kunde).
+* **Sekundäre Akteure:** Werden vom System eingebunden (`Ku` = Kurier, `Pay` = Zahlungsdienst).
+* **System-Kürzel:** `Sys` = Unsere Softwareplattform.
+
+**Praxisbeispiel bei Ada:**
+> **3. Akteure:**  
+> * `Kd` (Kunde, primär)  
+> * `Ku` (Kurierdienst, sekundär)  
+> * `Sys` (Ada's Botanical Platform)
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 4: Vorbedingungen (Preconditions)
+* **Zweck:** Harte Wächter! Nur wenn **alle** Vorbedingungen wahr sind, darf der Fall starten.
+* **Regel:** Müssen vorab prüfbar sein (keine Annahmen über den zukünftigen Verlauf).
+
+**Praxisbeispiel bei Ada:**
+> **4. Vorbedingungen:**  
+> 1. Kunde ist authentifiziert und eingeloggt (`Kd.is_authenticated == True`).  
+> 2. Lieferadresse liegt im Stadtgebiet (Radius ≤ 15 km).  
+> 3. Mindestens ein Kurier ist im System aktiv gemeldet und dienstbereit.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Felder 5 & 6 (Nachbedingungen & Trigger)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 5: Nachbedingungen (Garantien)
+* **Zweck:** Welcher dauerhafte System- und Realwelt-Zustand ist nach erfolgreichem Abschluss **garantiert**?
+* **Regel:** Gilt nur für den erfolgreichen Abschluss (Happy Path / alternative Pfade).
+
+**Praxisbeispiel bei Ada:**
+> **5. Nachbedingungen:**  
+> 1. Bestellung ist als bezahlt markiert und im ERP verbucht.  
+> 2. Ware ist im Lager physisch für den Kurier reserviert.  
+> 3. Kurier hat den Fahrauftrag digital bestätigt.  
+> 4. Kunde hat Bestätigung mit Live-Tracking-Link erhalten.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 6: Auslöser (Trigger)
+* **Zweck:** Das konkrete Anfangsereignis, das den Use Case anstößt.
+* **Wichtig:** Unterschied zur Vorbedingung:  
+  * *Vorbedingung:* Zustand (*"Kunde ist eingeloggt"*).  
+  * *Trigger:* Ereignis (*"Kunde klickt Button"*).
+
+**Praxisbeispiel bei Ada:**
+> **6. Auslöser (Trigger):**  
+> Kunde klickt im Warenkorb auf die Option:  
+> `[ ⚡ Express-Lieferung buchen (2h) ]`.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Feld 7 (Das Standardszenario / Happy Path)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 7: Der Happy Path
+* Die lineare Schrittfolge, wenn **alles optimal läuft** (keine Fehler, keine Ausnahmen).
+* **Formatierung:** Nummerierte Liste (1 bis n).
+* **Jeder Schritt nennt:**  
+  `[Nummer]. [Akteurskürzel] [präzise, beobachtbare Aktion]`.
+* Keine `if/else`-Verzweigungen im Happy Path!
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Schrittfolge bei Ada's Expresslieferung:
+1. `Kd` wählt Pflanze und klickt auf Express-Lieferung.
+2. `Sys` prüft Lagerbestand und Kurierverfügbarkeit in Echtzeit.
+3. `Sys` berechnet Gesamtpreis inkl. 5,90 € Expresszuschlag.
+4. `Kd` bestätigt Gesamtsumme und autorisiert Kreditkartenzahlung.
+5. `Sys` bucht Betrag ab und reserviert Pflanzenbestand im Lager.
+6. `Sys` übermittelt Abholauftrag an `Ku`.
+7. `Ku` bestätigt Annahme des Fahrauftrags innerhalb von 3 Minuten.
+8. `Sys` generiert Tracking-Link und sendet Benachrichtigung an `Kd`.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Felder 8 & 9 (Alternative Pfade & Fehler)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 8: Alternative Pfade (Extensions)
+* **Zweck:** Abweichende, aber **erfolgreiche** Abläufe.
+* **Nummerierung:** Schrittnummer aus dem Happy Path + Buchstabe (`4a`, `7a`).
+
+**Praxisbeispiel bei Ada:**
+* **4a. B2B-Rechnungskauf:**  
+  Ist `Kd` als B2B-Kunde verifiziert und Kreditlimit ausreichend ⇒ Schritte 4 & 5 erfolgen ohne Kreditkarte; Zahlungsziel 14 Tage auf Rechnung.
+* **7a. Kurierverzögerung:**  
+  Bestätigt `Ku` nicht in 3 Min ⇒ `Sys` delegiert Auftrag automatisch an den nächsten verfügbaren Kurier.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Feld 9: Fehlersituationen / Ausnahmen
+* **Zweck:** Was passiert bei Abbrüchen, ungültigen Daten oder Systemausfällen?
+* **Wichtig:** Wie räumt das System auf (Rollback von Reservierungen)?
+
+**Praxisbeispiel bei Ada:**
+* **2a. Artikel vergriffen:**  
+  Bestand < 1 ⇒ `Sys` bricht Express-Ablauf ab und bietet Standardversand aus Zentrallager an.
+* **4b. Zahlung abgelehnt:**  
+  Karte ungültig ⇒ `Sys` fordert neue Zahlungsart; Bestandsreservierung verfällt nach 10 Minuten.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Szenariotabelle: Die Gesamtreferenz (Expresslieferung)
+
+<div class="two-cols">
+<div class="col" style="font-size: 0.78em;">
+
+<div class="col-card">
+
+**1. Name & 2. Kurzbeschreibung:**  
+* **Name:** **Expresslieferung per Kurier (2h)**
+* **Ziel:** Kunde bestellt Pflanzen zur sofortigen Kurierauslieferung (max. 2h).
+
+**3. Akteure & 6. Trigger:**  
+* **Akteure:** `Kd` (Kunde, primär), `Ku` (Kurier, sekundär), `Sys` (Ada-Plattform).  
+* **Trigger:** `Kd` klickt `[Express-Lieferung buchen (2h)]`.
+
+**4. Vorbedingungen:**  
+1. `Kd` ist eingeloggt.  
+2. Lieferadresse im Stadtgebiet (Radius ≤ 15 km).  
+3. Mindestens 1 Kurier aktiv gemeldet.
+
+**5. Nachbedingungen:**  
+1. Zahlung gebucht & Ware im Stadtlager reserviert.  
+2. Kurierauftrag bestätigt & Tracking-Link an `Kd` gesendet.
+
+</div>
+
+</div>
+<div class="col" style="font-size: 0.78em;">
+
+<div class="col-card">
+
+**7. Standardszenario (Happy Path):**  
+1. `Kd` wählt Express-Lieferung.  
+2. `Sys` prüft Bestand & Kurier.  
+3. `Sys` berechnet Preis (+ 5,90 € Zuschlag).  
+4. `Kd` bestätigt & autorisiert Zahlung.  
+5. `Sys` bucht Zahlung & reserviert Ware.  
+6. `Sys` sendet Fahrauftrag an `Ku`.  
+7. `Ku` bestätigt Auftrag innerhalb von 3 Min.  
+8. `Sys` sendet Tracking-Link an `Kd`.
+
+**8. Alternative Pfade:**  
+* **4a.** B2B-Kunde mit Kreditlimit ⇒ Kauf auf Rechnung (14 Tage Ziel).  
+* **7a.** Kurier antwortet nicht in 3 Min ⇒ `Sys` eskaliert an nächsten Kurier.
+
+**9. Fehlersituationen:**  
+* **2a.** Bestand < 1 ⇒ Abbruch; Angebot Standardversand.  
+* **4b.** Zahlung fehlgeschlagen ⇒ Neue Zahlungsart; Reservierung erlischt nach 10 Min.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Agile Spezifikation: User Stories & BDD
+
+<div class="two-cols">
+<div class="col">
+
+In agilen Teams (Scrum/Kanban) werden Anforderungen als **User Stories** formuliert:
+
+> **Als** `[Rolle / Akteur]`  
+> **möchte ich** `[Ziel / Funktionalität]`,  
+> **damit** `[fachlicher Nutzen / Mehrwert]`.
+
+* Fördert das Verständnis: Entwickler verstehen **warum** ein Feature gebaut wird!
+* Eine User Story wird erst durch messbare **Akzeptanzkriterien** überprüfbar.
+* **BDD (Behavior-Driven Development):** Schreibt Akzeptanztests in lesbarer Gherkin-Syntax.
+
+</div>
+<div class="col">
+
+```gherkin
+Feature: B2B Express-Kauf auf Rechnung
+  Als verifizierter B2B-Kunde von Ada
+  Möchte ich Pflanzen per Express auf Rechnung bestellen
+  Damit die Bürobegrünung ohne Kreditkartenabrechnung ankommt
+
+  Scenario: Erfolgreicher Kauf bei ausreichendem Kreditlimit
+    Given Kunde "GreenOffice GmbH" ist als B2B verifiziert
+    And das verbleibende Kreditlimit beträgt 1.000 €
+    When der Kunde Pflanzen im Wert von 350 € per Express bestellt
+    Then wird die Bestellung sofort bestätigt
+    And das neue Kreditlimit beträgt 650 €
+    And ein Kurier wird innerhalb von 2 Stunden beauftragt
+
+  Scenario: Ablehnung bei Überschreitung des Limits
+    Given Kunde "StartUp AG" hat ein Restkreditlimit von 50 €
+    When der Kunde Pflanzen im Wert von 120 € bestellen will
+    Then wird der Rechnungskauf abgewiesen
+    And eine Sofortzahlung (Kreditkarte/PayPal) gefordert
+```
+
+</div>
+</div>
+
+---
+
+### Ablaufmodellierung: Aktivitätsdiagramme
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+Aktivitätsdiagramme visualisieren **Verzweigungen, Entscheidungen und parallele Abläufe** vor der Codierung:
+
+* `●` **Startknoten:** Wo beginnt der Prozess?
+* `[Aktion]` **Aktionszustand:** Eine durchgeführte Tätigkeit.
+* `<Entscheidung>` **Raute:** Verzweigung anhand von Bedingungen (`[Bedingung]`).
+* `===` **Synchronisationsbalken:** Fork (Aufspaltung in parallele Pfade) und Join (Warten auf alle Pfade).
+* `◎` **Endknoten:** Wo endet der Prozess?
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    Start([Start]) --> CheckStock{Bestand OK?}
+    CheckStock -->|Ja| Reserve[Bestand reservieren]
+    CheckStock -->|Nein| Abort[Abbruch: Ausverkauft]
+    Abort --> Ende([Ende])
+    
+    Reserve --> Pay{Zahlung OK?}
+    Pay -->|Ja| Deliver[Kurier beauftragen]
+    Deliver --> Ende
+    Pay -->|Nein| Release[Reservierung stornieren]
+    Release --> Ende
+```
+
+</div>
+</div>
+
+---
+
+### Bounded Contexts (Domain-Driven Design)
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+Warum scheitert die Idee einer einzigen, riesigen `Pflanze`-Klasse für das gesamte Unternehmen?
+
+* **Im Webshop (Verkauf):**  
+  Wichtig sind: Hochauflösendes Foto, emotionaler Marketingtext, Rabattstaffeln, Kundenbewertungen.
+* **Im Lager (Inventory):**  
+  Wichtig sind: Barcode, Regal- und Fachnummer, Mindestbestand, Lieferantennummer.
+* **In der Logistik (Kurier):**  
+  Wichtig sind: Gewicht in kg, Abmessungen in cm, Empfindlichkeit gegen Frost/Kippen.
+
+> Ein **Bounded Context** definiert eine klare Grenze, innerhalb derer ein fachliches Modell und eine einheitliche Sprache (**Ubiquitous Language**) uneingeschränkt gelten!
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph Verkauf["Context: Webshop und Verkauf"]
+        C1[Katalog-Artikel] --> C2[Warenkorb-Position]
+    end
+    subgraph Lager["Context: Lager und Bestand"]
+        L1[Lagerplatz] --> L2[Bestand]
+    end
+    subgraph Logistik["Context: Auslieferung"]
+        D1[Paket-Masse] --> D2[Kurier-Route]
+    end
+
+    C2 -->|BestellungBezahlt| L1
+    L2 -->|WareKommissioniert| D1
+```
+
+</div>
+</div>
+
+---
+
+### Defensive UI: Fehler im Keim ersticken
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+> *"Gutes Softwaredesign macht Fehlbedienung durch den Anwender unmöglich!"*
+
+#### Defensive UI-Prinzipien im Pflichtenheft:
+* **Deaktivieren statt Fehlermeldung:**  
+  Ist eine Pflanze ausverkauft, wird der "Express-Kauf"-Button **ausgegraut / disabled**. Der Anwender kann gar nicht erst in den Fehlerzustand geraten!
+* **Sofortige Inline-Validierung:**  
+  Postleitzahlen werden bei der Eingabe geprüft (z. B. *"Außerhalb unseres 15-km-Liefergebiets"*), nicht erst nach Absenden des gesamten Formulars.
+* **Rollenbasierte Sichten:**  
+  Ein Verkäufer sieht an der Kasse keine Buchhaltungs-Exportfunktionen; ein B2B-Kunde sieht sofort seine Netto-Preise und das verbleibende Kreditlimit.
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Pflichtbestandteile der UI-Spezifikation:
+1. **Mockup / Wireframe:** Visuelle Skizze der Oberfläche mit allen Zuständen.
+2. **Feldtabelle:** Name, Datentyp, Pflichtfeld (Ja/Nein), Validierungsregel.
+3. **Zustandsübergänge:** Wann ist welcher Button aktiv (`enabled`), inaktiv (`disabled`) oder unsichtbar (`hidden`)?
+
+**Beispiel Zustandsmatrix:**
+* `Bestand > 0 && Kurier_verfügbar` ⇒ Button `[Express (2h)]` aktiv (blau).
+* `Bestand == 0` ⇒ Button `[Express (2h)]` deaktiviert (grau) + Badge: *"Ausverkauft"*.
+* `Lieferadresse > 15 km` ⇒ Warnmeldung inline + Button deaktiviert.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### UI-Mockup 1: Webshop & Defensive Adressprüfung
+
+<div class="two-cols">
+<div class="col">
+
+<!-- Visual UI Mockup Card 1: Available Product & In-Radius -->
+<div class="col-card" style="border: 2px solid #27ae60; background: #f8fafc;">
+
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; margin-bottom: 10px; font-size: 0.82em;">
+    <span>🌿 <strong>Ada's Botanical Shop</strong></span>
+    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 12px; color: #1e293b;">👤 <strong>Maria Muster</strong> (Privatkunde)</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between;">
+        <strong>🪴 Monstera Deliciosa</strong>
+        <span style="color: #27ae60; font-weight: bold;">29,99 €</span>
+    </div>
+    <div style="font-size: 0.75em; color: #16a34a; margin: 3px 0;">
+        🟢 12 Stück auf Lager
+    </div>
+    <div style="margin-top: 6px; font-size: 0.75em;">
+        <strong>Lieferadresse:</strong> Torstraße 44, 10119 Berlin<br>
+        <span style="color: #16a34a; font-weight: 600;">🟢 Im Liefergebiet (3.8 km ≤ 15 km) &bull; Kurier bereit</span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <button style="background: #27ae60; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">🛒 In den Warenkorb</button>
+        <button style="background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">⚡ Express (2h) [+5,90 €]</button>
+    </div>
+</div>
+
+<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #e2e8f0; padding-top: 6px;">
+    <strong>Was man links sieht (Happy Path / Normalfall):</strong>
+    <ul style="margin: 3px 0 0 16px; padding: 0;">
+        <li><strong>Erfüllte Vorbedingungen:</strong> Ware ist im Stadtlager vorrätig (12 Stk.) und Adresse liegt im Liefergebiet (3.8 km ≤ 15 km).</li>
+        <li><strong>Freigeschaltete Aktionen:</strong> Sowohl Standardversand als auch Expresslieferung (2h) sind aktiv und sofort anwählbar.</li>
+    </ul>
+</div>
+
+</div>
+
+</div>
+<div class="col">
+
+<!-- Visual UI Mockup Card 2: Out-of-stock & Out-of-radius (Defensive UI) -->
+<div class="col-card" style="border: 2px solid #dc2626; background: #fff5f5;">
+
+<div style="font-size: 0.82em; font-weight: bold; color: #dc2626; border-bottom: 1px solid #fecaca; padding-bottom: 6px; margin-bottom: 8px;">
+    🛡️ Defensive UI in Aktion (Fehlerausschluss):
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; opacity: 0.95;">
+    <div style="display: flex; justify-content: space-between;">
+        <strong style="color: #64748b;">🌵 Euphorbia Ingens</strong>
+        <span style="color: #64748b; font-weight: bold;">49,99 €</span>
+    </div>
+    <div style="font-size: 0.75em; color: #dc2626; margin: 3px 0; font-weight: 600;">
+        🔴 0 Stück im Stadtlager (Ausverkauft)
+    </div>
+    <div style="margin-top: 6px; font-size: 0.75em;">
+        <strong>Lieferadresse:</strong> Hauptstraße 1, 14467 Potsdam<br>
+        <span style="color: #dc2626; font-weight: 600;">🔴 Außerhalb Liefergebiet (26 km &gt; 15 km)</span>
+    </div>
+    <div style="display: flex; gap: 6px; margin-top: 8px;">
+        <button disabled style="background: #cbd5e1; color: #64748b; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: not-allowed;">⚡ Express (2h)</button>
+        <button style="background: #475569; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: pointer;">📦 Standardversand (DHL)</button>
+    </div>
+    <div style="margin-top: 6px; background: #fee2e2; border-left: 3px solid #dc2626; padding: 4px 6px; font-size: 0.7em; color: #991b1b;">
+        ⚠️ Express deaktiviert: Entfernung zu groß und lokaler Bestand erschöpft.
+    </div>
+</div>
+
+<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #fecaca; padding-top: 6px;">
+    <strong>Was man rechts sieht (Defensive UI / Fehlerprävention):</strong>
+    <ul style="margin: 3px 0 0 16px; padding: 0;">
+        <li><strong>Verletzte Vorbedingungen:</strong> Lokaler Bestand = 0 und Adresse außerhalb des Radius (26 km &gt; 15 km).</li>
+        <li><strong>Fehlerprävention durch Design:</strong> Der Express-Button ist <em>deaktiviert</em>, DHL-Versand wird als Alternative angeboten, und ein Banner erklärt die Ursache transparent.</li>
+    </ul>
+</div>
+
+</div>
+
+</div>
+</div>
+
+---
+
+### UI-Mockup 2: Rollenbasierte Sichten (Kasse vs. B2B)
+
+<div class="two-cols">
+<div class="col">
+
+<!-- View 1: POS Cashier Terminal -->
+<div class="col-card" style="border: 2px solid #0284c7; background: #f0f9ff;">
+
+<div style="border-bottom: 1px solid #bae6fd; padding-bottom: 6px; margin-bottom: 10px; font-size: 0.82em;">
+    <strong>💼 Sicht: Verkäufer (POS-Kassenterminal im Laden)</strong>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 0.78em;">
+    <div style="background: #0f172a; color: #38bdf8; font-family: monospace; padding: 6px 10px; border-radius: 4px; margin-bottom: 8px;">
+        SCAN: [ 4012345678901 ] &bull; Bonsumme: 29,99 €
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px;">
+        <button style="background: #16a34a; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">💶 Barzahlung</button>
+        <button style="background: #0284c7; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">💳 Kartenzahlung</button>
+    </div>
+    <div style="margin-top: 8px; font-size: 0.72em; color: #64748b;">
+        🔒 Keine Einsicht in B2B-Kreditlimits, Einkaufspreise oder Lieferantenverträge.
+    </div>
+</div>
+
+</div>
+
+</div>
+<div class="col">
+
+<!-- View 2: B2B Procurement Portal -->
+<div class="col-card" style="border: 2px solid #8b5cf6; background: #faf5ff;">
+
+<div style="border-bottom: 1px solid #e9d5ff; padding-bottom: 6px; margin-bottom: 10px; font-size: 0.82em;">
+    <strong>🏢 Sicht: B2B-Kunde (Firmen-Beschaffungsportal)</strong>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 0.78em;">
+    <div style="margin-bottom: 8px;">
+        <strong>Kreditlimit-Status (GreenOffice GmbH):</strong>
+        <div style="background: #e2e8f0; border-radius: 8px; height: 12px; width: 100%; margin-top: 4px; overflow: hidden;">
+            <div style="background: #8b5cf6; width: 65%; height: 100%;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: #64748b; margin-top: 2px;">
+            <span>Verbraucht: 350 €</span>
+            <span>Verfügbar: <strong>650 € / 1.000 €</strong></span>
+        </div>
+    </div>
+    <div style="margin-top: 8px; background: #f3e8ff; padding: 6px; border-radius: 4px; font-size: 0.72em; color: #6b21a8;">
+        ✅ Zahlungsart: <strong>Kauf auf Rechnung</strong> (14 Tage Zahlungsziel aktiv).
+    </div>
+    <button style="margin-top: 8px; width: 100%; background: #8b5cf6; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+        📄 Sammelbestellung auf Rechnung freigeben
+    </button>
+</div>
+
+</div>
+
+---
+
+### Der Übergang: Vom Problemraum (OOA) zum Lösungsraum (OOD)
+
+<div class="two-cols">
+<div class="col">
+
+Nachdem wir Akteure, Use Cases, Szenarien und Bounded Contexts analysiert haben, stehen viele Entwickler vor der Frage:  
+**Wie fange ich jetzt an zu programmieren?**
+
+#### 1. Die OOA beschreibt den Problemraum:
+* **Fokus:** Das **"WAS"** (Fachdomäne, Fachbegriffe, Geschäftsregeln).
+* **Zielgruppe:** Kunde, Fachexperten, Anwender.
+* **Sprache:** Reine Domänensprache (z. B. "Pflanze", "Kreditlimit", "Kurier").
+* **Technik:** Völlig frei von Implementierungsdetails (kein SQL, kein JSON, kein Python)!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### 2. Das OOD entwirft den Lösungsraum:
+* **Fokus:** Das **"WIE"** (Softwarearchitektur, Klassen, Schnittstellen, Datenstrukturen).
+* **Zielgruppe:** Entwickler, Architekten, Tester.
+* **Sprache:** Technische Spezifikation (z. B. `OrderService`, `PostgresRepository`, `JWT`, `REST`).
+* **Zuweisung von Verantwortung (Responsibility-Driven Design):**  
+  Welche Klasse speichert die Daten? Welche führt die Geschäftslogik aus? Welche kommuniziert mit der Außenwelt?
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die Abbott-Methode (Substantiv-Verb-Analyse)
+
+<div class="two-cols">
+<div class="col">
+
+Eine bewährte, intuitive Technik von Russell J. Abbott (1983) zur Ableitung von Klassen und Methoden direkt aus den Anforderungstexten und Szenariotabellen:
+
+#### Die grammatikalische Zuordnungsregel:
+* **Substantive (Nomen) → Klassen & Datentypen:**  
+  Dinge, Personen, Rollen oder Dokumente in der Domäne.
+* **Verben (Tätigkeitswörter) → Methoden & Operationen:**  
+  Aktionen, Berechnungen oder Statusänderungen.
+* **Adjektive & Beschreibungen → Attribute & Datentypen:**  
+  Eigenschaften, Maße, Preise oder Zustände.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Fallstudie: Analyse eines Szenario-Texts bei Ada
+
+> *"Der **Kunde** wählt eine **Pflanze** aus und legt sie in den **Warenkorb**. Er **bezahlt** die **Bestellung** mit einer **Kreditkarte**. Das System **reserviert** den **Bestand** und **beauftragt** einen **Kurier**."*
+
+#### Ableitung in den Entwurf:
+* **Klassen / Entitäten:** `Kunde`, `Pflanze`, `Warenkorb`, `Bestellung`, `Kreditkarte`, `Kurier`.
+* **Methoden:**  
+  * `Warenkorb.fuege_hinzu(pflanze, menge)`
+  * `ZahlungsService.buche_ab(karte, betrag)`
+  * `LagerService.reserviere_bestand(pflanze, menge)`
+  * `KurierService.erstelle_auftrag(adresse)`
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Vom Szenario zum Klassen- & Methodenentwurf
+
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="col-card">
+
+#### Aus Feld 7 der Szenariotabelle (Happy Path):
+```
+1. Kunde sendet Warenkorb ab.
+2. System prüft Kreditlimit (B2B) oder bucht Zahlung ab (B2C).
+3. System reduziert Lagerbestand um die Bestellmenge.
+4. System generiert Auftragsbestätigung und sendet E-Mail.
+```
+
+#### Zuweisung von Verantwortlichkeiten (GRASP):
+* Wer koordiniert den Gesamtprozess? → Ein **Application Service** (`BestellAbwicklungService`).
+* Wer kennt das Kreditlimit? → Das **Information Expert**-Objekt (`B2BKunde`).
+* Wer verändert den Lagerbestand? → Das `LagerRepository`.
+* Wer versendet die E-Mail? → Ein `EmailNotificationAdapter`.
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+classDiagram
+    class BestellAbwicklungService {
+        -LagerService lager
+        -ZahlungsService zahlung
+        -NotificationService notify
+        +fuehreBestellungAus(Kunde k, Warenkorb w) OrderResult
+    }
+    class B2BKunde {
+        -float kreditlimit
+        -float verbrauchterBetrag
+        +pruefeDeckung(float betrag) bool
+    }
+    BestellAbwicklungService --> B2BKunde : nutzt
+```
+
+</div>
+</div>
+
+---
+
+### Vom Bounded Context zur Modul- & Package-Struktur
+
+<div class="two-cols">
+<div class="col">
+
+In der OOA haben wir gelernt, dass eine einzige, riesige `Pflanze`-Klasse für das gesamte Unternehmen scheitert (**Bounded Contexts**).  
+**Wie wird dieser fachliche Schnitt im Design umgesetzt?**
+
+#### Die Übertragung in Softwarepakete:
+Jeder Bounded Context wird zu einem **eigenständigen Modul / Package** mit eigenem Domänenmodell:
+
+* **Modul 1: `sales` (Verkauf / Webshop)**  
+  Enthält `Pflanze` mit `name`, `katalog_preis`, `fotos`, `kategorie`.
+* **Modul 2: `inventory` (Lager & IoT)**  
+  Enthält `Pflanze` mit `topf_id`, `bodenfeuchte`, `giess_intervall`, `sensor_uid`.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die Paketstruktur im Projekt:
+
+```
+adas_botanical/
+├── sales/              # Bounded Context: Verkauf
+│   ├── models.py       # Webshop-Pflanze & Warenkorb
+│   └── service.py      # Checkout & Katalog
+├── inventory/          # Bounded Context: Lager & IoT
+│   ├── models.py       # Topf, Bodenfeuchte, Sensor
+│   └── service.py      # Bewässerung & Disposition
+└── shipping/           # Bounded Context: Logistik
+    ├── models.py       # KurierRoute, Lieferadresse
+    └── service.py      # Tour-Optimierung
+```
+
+* **Vorteil:** Änderungen an IoT-Bodenfeuchtesensoren können **niemals** den Webshop-Checkout zerstören!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Die kanonische OOA-zu-OOD-Übergangsmatrix
+
+<div class="two-cols" style="grid-template-columns: 1.35fr 0.85fr; gap: 20px;">
+<div class="col" style="font-size: 0.72em;">
+
+Die folgende Matrix dient als **Leitfaden für den gesamten Übergang** von den Analyse-Ergebnissen zur technischen Architektur:
+
+| OOA-Artefakt (Analyse) | OOD-Artefakt (Design) | Konkretes Beispiel bei Ada |
+| :--- | :--- | :--- |
+| **Akteur** | Client, Auth-Rolle, API-Consumer | `Verkaeufer` → POS-App / JWT-Rolle |
+| **Use Case** | Application Service / Interactor | `Bestellung aufgeben` → `OrderService` |
+| **Szenario-Schritt** | Methodenaufruf, Transaktion | Schritt 2 → `payment.charge()` |
+| **Vorbedingung** | Guard Clause / Validator | `Kunde verifiziert` → `if not user.is_active` |
+| **Nachbedingung** | Assertions, DB-Commit | `Bestand reserviert` → SQL `COMMIT` |
+| **Fehlerpfad** | Exception, Error-Response | `Limit überschritten` → `400 Bad Request` |
+| **Bounded Context** | Modul, Package, Microservice | `Lager vs. Webshop` → getrennte Pakete |
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Die 3 goldenen Regeln für den Übergang:
+1. **Kein Code ohne Analyse:** Wer ohne Szenariotabelle programmiert, vergisst 80 % der Fehlerfälle und Randbedingungen.
+2. **Klassen spiegeln die Domäne wider:** Namen im Code müssen den Begriffen entsprechen, die Chefin Ada im Laden verwendet (*Ubiquitous Language*).
+3. **Klare Schnittstellen:** Services kommunizieren über definierte Interfaces, nicht über globale Variablen oder geteilten Speicher.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Zusammenfassung Modul 2
+
+<div class="two-cols">
+<div class="col">
+
+1. **OOA klärt das "WAS":** Verhindert das teure Bauen falscher Software durch sauberes Anforderungsmanagement.
+2. **Lastenheft vs. Pflichtenheft:** Der Kunde beschreibt den fachlichen Wunsch, das Entwicklerteam die verbindliche technische Lösung.
+3. **Akteure sind Rollen:** Sie stehen außerhalb des Systems (Menschen oder Fremdsysteme).
+4. **Use Cases sind Blackboxen:** Formuliert im Aktiv (`[Substantiv] + [Verb]`).
+
+</div>
+<div class="col">
+
+5. **`<<include>>` ist Pflicht, `<<extend>>` die Kür:** Include läuft immer mit, Extend nur unter Bedingungen am Extension Point.
+6. **Die Szenariotabelle ist das Herzstück:** 9 kanonische Felder; der Happy Path allein reicht für die Praxis niemals aus!
+7. **User Stories & BDD:** Schlagen die Brücke zur agilen Entwicklung mit testbaren Gherkin-Szenarien.
+8. **Bounded Contexts (DDD):** Jedes Modul hat sein eigenes, schlankes Datenmodell.
+
+</div>
+</div>
+
+---
+
+### Denkpause & Reflexionsfragen
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Frage 1: Include oder Extend?
+* Anwendungsfall A: "Im Restaurant essen" und "Rechnung bezahlen".
+* Anwendungsfall B: "Kaffee bestellen" und "Hafermilch statt Kuhmilch wählen".  
+Welche Beziehung (`<<include>>` oder `<<extend>>`) liegt jeweils vor und in welche Richtung zeigt der Pfeil?
+
+</div>
+
+<div class="col-card" style="margin-top: 15px;">
+
+#### Frage 2: Use-Case-Formulierung
+Welcher der folgenden Namen ist ein valider Use Case nach OOA-Kriterien?  
+a) `PasswortHashBerechnen`  
+b) `GutscheinEinloesen`  
+c) `DatenbankTabelleErstellen`
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Antworten zur Selbstkontrolle:
+1. **Fall A:** `<<include>>` (Essen schließt Bezahlen zwingend ein; Pfeil von Essen → Bezahlen).  
+   **Fall B:** `<<extend>>` (Hafermilch ist optional; Pfeil von Hafermilch → Kaffee bestellen).
+2. **Nur b) `GutscheinEinloesen`** ist ein echter Use Case!  
+   * a) und c) sind rein interne technische Einzelschritte ohne eigenständigen geschäftlichen Kundennutzen.
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Ausblick auf Modul 3: Code-Modularisierung & Softwarearchitektur
+
+<div class="two-cols">
+<div class="col">
+
+### Was wir in Modul 2 erreicht haben:
+* Vollständige Spezifikation, 9-Punkte-Szenariotabellen, Bounded Contexts und die Abbott-Analyse.
+
+### Die nächste Herausforderung:
+* Wie verhindern wir, dass aus den Klassen ein riesiger 2000-Zeilen-Monolith („God-Datei“) wird?
+* Wie strukturieren wir Packages, verhindern zirkuläre Importe in Python und trennen Fachlogik von Datenbanken?
+
+> **Frage zum Weiterdenken:** Warum sollte unsere Kern-Domäne niemals wissen, ob die Daten in PostgreSQL, SQLite oder im RAM liegen?
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M2 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M3 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+```
+
+</div>
+</div>
+
+</script>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontFamily: '"Inter", system-ui, sans-serif'
+        });
+        async function renderSlideMermaid(slide) {
+            if (!slide) return;
+            // 1. Convert any code containing mermaid class to div.mermaid
+            slide.querySelectorAll('code[class*="mermaid"]').forEach((el) => {
+                const pre = el.closest('pre');
+                if (pre) {
+                    const div = document.createElement('div');
+                    div.className = 'mermaid';
+                    let text = el.textContent || '';
+                    text = text.replace(/--&gt;/g, '-->')
+                               .replace(/&gt;/g, '>')
+                               .replace(/&lt;/g, '<')
+                               .replace(/&amp;/g, '&')
+                               .replace(/&quot;/g, '"');
+                    div.textContent = text.trim();
+                    pre.replaceWith(div);
+                }
+            });
+
+            // 2. Also clean up any div.mermaid written directly in HTML
+            slide.querySelectorAll('.mermaid:not([data-processed="true"])').forEach((el) => {
+                let text = el.textContent || '';
+                text = text.replace(/--&gt;/g, '-->')
+                           .replace(/&gt;/g, '>')
+                           .replace(/&lt;/g, '<')
+                           .replace(/&amp;/g, '&')
+                           .replace(/&quot;/g, '"');
+                el.textContent = text.trim();
+            });
+
+            // 3. Render all unrendered div.mermaid in this active slide
+            const nodes = slide.querySelectorAll('.mermaid:not([data-processed="true"])');
+            if (nodes.length > 0) {
+                try {
+                    await mermaid.run({ nodes: nodes, suppressErrors: false });
+                } catch (err) {
+                    console.error('Mermaid run error:', err);
+                }
+            }
+        }
+
+        Reveal.initialize({
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'slide',
+            plugins: [ RevealMarkdown, RevealHighlight ]
+        }).then(() => {
+            renderSlideMermaid(Reveal.getCurrentSlide());
+        });
+
+        Reveal.on('slidechanged', (event) => {
+            renderSlideMermaid(event.currentSlide);
+        });
+    </script>
+</body>
+</html>
