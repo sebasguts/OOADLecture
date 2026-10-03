@@ -1,0 +1,1761 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Modul 3: Code-Modularisierung & Softwarearchitektur – Alle Folien</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #1e8449;
+            --secondary: #1e293b;
+            --text: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 24px 24px 60px;
+        }
+        .container {
+            max-width: 1680px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        /* Top Header */
+        .page-header {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+            transition: background 0.15s, color 0.15s;
+        }
+        .nav-link:hover {
+            background: #d1f2eb;
+        }
+        .header-title h1 {
+            font-size: 1.45rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .header-title p {
+            font-size: 0.92rem;
+            color: var(--text-light);
+        }
+        .print-btn {
+            background: var(--secondary);
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .print-btn:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* Slide Cards */
+        .slide-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px 36px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            position: relative;
+        }
+        .slide-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Typography inside slides */
+        .slide-content h1, .slide-content h2, .slide-content h3, .slide-content h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        .slide-content h1 { font-size: 1.8rem; }
+        .slide-content h2 { font-size: 1.4rem; color: var(--primary); }
+        .slide-content h3 { font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .slide-content h4 { font-size: 1.05rem; color: var(--primary-dark); margin-top: 14px; margin-bottom: 8px; }
+        .slide-content p, .slide-content li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .slide-content ul, .slide-content ol {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+        .slide-content li {
+            margin-bottom: 6px;
+        }
+        .slide-content strong {
+            color: #0f172a;
+        }
+
+        /* Two-Column Layout */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .col { min-width: 0; }
+        .col-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .col-card h4 {
+            margin-top: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        tr:nth-child(even) td {
+            background: #fafbfc;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        p code, li code, td code {
+            background: #f1f5f9;
+            color: #b91c1c;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 18px 0;
+            min-height: 180px;
+            overflow: auto;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .mermaid svg {
+            max-height: 480px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body { padding: 15px 12px; }
+            .slide-card { padding: 22px 18px; }
+            .two-cols, .two-cols-wide-left, .two-cols-wide-right {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container { max-width: 100% !important; width: 100% !important; }
+            .no-print { display: none !important; }
+            .slide-card {
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                box-shadow: none;
+                margin-bottom: 25px;
+                padding: 20px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .slide-badge {
+                border-color: #94a3b8;
+                color: #334155;
+                background: #f1f5f9;
+            }
+            pre {
+                background: #f8fafc !important;
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1;
+                font-size: 0.78rem;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+            pre code {
+                color: #0f172a !important;
+            }
+            .col-card {
+                border: 1px solid #cbd5e1;
+                background: #f8fafc;
+            }
+            .mermaid svg {
+                max-height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header no-print">
+            <div>
+                <div class="header-nav">
+                    <a href="index.html" class="nav-link">← Zur Kursübersicht</a>
+                    <a href="folien_03.html" class="nav-link" target="_blank">🖥 Folien präsentieren ↗</a>
+                </div>
+                <div class="header-title" style="margin-top: 12px;">
+                    <h1>Modul 3: Code-Modularisierung & Softwarearchitektur</h1>
+                    <p>Alle 29 Folien auf einer Seite – Zum Lesen, Lernen und als PDF drucken</p>
+                </div>
+            </div>
+            <div>
+                <button onclick="window.print()" class="print-btn">🖨️ Drucken / PDF speichern</button>
+            </div>
+        </header>
+
+        <main>
+            
+        <article class="slide-card" id="folie-1">
+            <div class="slide-badge">Folie 1 / 29</div>
+            <div class="slide-content">
+                <h1>Modul 3: Code-Modularisierung &amp; Softwarearchitektur</h1>
+<h2>Vom Analysemodell zu sauber strukturiertem, wartbarem Code</h2>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-2">
+            <div class="slide-badge">Folie 2 / 29</div>
+            <div class="slide-content">
+                <h2>Lernziele des Moduls</h2>
+<div class="two-cols">
+<div class="col">
+
+<p>Nach diesem Modul können Sie:</p>
+<ol>
+<li><strong>Die Notwendigkeit von Modularisierung</strong> anhand von kognitiver Last, Wartbarkeit und Teamarbeit begründen.</li>
+<li><strong>Typische Anfängerfehler</strong> wie die „God-Datei“ und <strong>zirkuläre Importe in Python</strong> erkennen, verstehen und beheben.</li>
+<li>Die Grundprinzipien <strong>Hohe Kohäsion (High Cohesion)</strong> und <strong>Lose Kopplung (Low Coupling)</strong> auf Codeebene anwenden.</li>
+<li>Python-Werkzeuge (<strong>Module, Packages, <code>__init__.py</code>, <code>__all__</code></strong>) gezielt für Kapselung und Information Hiding einsetzen.</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Weiterführende Architekturziele:</h4>
+<ol start="5">
+<li><strong>Schichtenarchitektur</strong> und <strong>Hexagonale Architektur (Ports &amp; Adapters / Clean Architecture)</strong> unterscheiden und bewerten.</li>
+<li>Die <strong>Bounded Contexts aus Modul 2</strong> in eine saubere Projekt- und Modulstruktur überführen.</li>
+<li><strong>Dependency Injection</strong> in Python implementieren, um Domänenlogik vollständig unabhängig von Datenbanken und Frameworks testbar zu machen.</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-3">
+            <div class="slide-badge">Folie 3 / 29</div>
+            <div class="slide-content">
+                <h2>Agenda</h2>
+<div class="mermaid">
+flowchart LR
+    A["1. Warum Modularisierung?"] --> B["2. Anfängerfallen in Python"]
+    B --> C["3. Kohäsion & Kopplung"]
+    C --> D["4. Packages & Kapselung"]
+    D --> E["5. Schichten & Hexagonal"]
+    E --> F["6. Praxis: Ada&#39;s Blumenladen"]
+    F --> G["7. Testbarkeit & Best Practices"]
+    
+    style A fill:#4a90e2,color:#fff
+    style B fill:#e74c3c,color:#fff
+    style C fill:#f39c12,color:#fff
+    style D fill:#2ecc71,color:#fff
+    style E fill:#9b59b6,color:#fff
+    style F fill:#1abc9c,color:#fff
+    style G fill:#34495e,color:#fff
+</div>
+<div class="two-cols">
+<div class="col">
+
+<ol>
+<li><strong>Warum Modularisierung?</strong> – Kognitive Belastung &amp; Wachstum</li>
+<li><strong>Typische Anfängerfallen</strong> – Die God-Datei &amp; Zirkuläre Importe</li>
+<li><strong>Fundamentale Prinzipien</strong> – Hohe Kohäsion &amp; Lose Kopplung</li>
+<li><strong>Python-Bausteine</strong> – Module, Packages &amp; <code>__init__.py</code></li>
+</ol>
+</div>
+<div class="col">
+
+<ol start="5">
+<li><strong>Architekturmuster</strong> – Schichten vs. Hexagonal (Ports &amp; Adapters)</li>
+<li><strong>Vom Analysemodell zum Code</strong> – Bounded Contexts strukturieren</li>
+<li><strong>Praxisfall Ada&#39;s Blumenladen</strong> – Domain, Ports, Adapters &amp; DI</li>
+<li><strong>Testbarkeit &amp; Best Practices</strong> – Triviales Unit-Testing im RAM</li>
+</ol>
+</div>
+</div>
+
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-4">
+            <div class="slide-badge">Folie 4 / 29</div>
+            <div class="slide-content">
+                <h2>Einordnung in die Vorlesung: Von der Analyse zur Architektur</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Rückblick auf Modul 2:</h3>
+<ul>
+<li>Wir haben Use Cases spezifiziert und vier <strong>Bounded Contexts</strong> abgegrenzt.</li>
+</ul>
+<h3>Warum jetzt Modularisierung?</h3>
+<ul>
+<li>Wenn wir alle Bounded Contexts in eine einzige Datei programmieren, kollabiert das System unter kognitiver Last und zirkulären Importen.</li>
+<li><strong>Ziel dieses Moduls:</strong><ul>
+<li>Bounded Contexts in eigenständige Python-Packages übersetzen.</li>
+<li><strong>Hexagonale Architektur (Ports &amp; Adapters)</strong> etablieren: Fachlogik vollständig von Datenbanken und Webframeworks entkoppeln.</li>
+<li>Dependency Injection für blitzschnelle Tests.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M2 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M3 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-5">
+            <div class="slide-badge">Folie 5 / 29</div>
+            <div class="slide-content">
+                <h2>1. Warum Modularisierung? Das Problem des Wachstums</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Tag 1: Das Ein-Datei-Paradies</h3>
+<ul>
+<li>Ein neues Projekt startet: <code>app.py</code>.</li>
+<li>50 Zeilen Code: Man versteht alles auf einen Blick.</li>
+<li>Keine Imports zwischen eigenen Dateien nötig.</li>
+<li>Schneller erster Prototyp („Funktioniert doch!“).</li>
+</ul>
+<h3>Tag 60: Die Realität</h3>
+<ul>
+<li><code>app.py</code> ist auf <strong>2.500 Zeilen</strong> angewachsen.</li>
+<li>Enthält: SQL-Queries, HTML-Rendering, Passwort-Hashing, Rabattberechnung, PDF-Export, E-Mail-Versand.</li>
+<li>Niemand im Team traut sich mehr, eine Zeile zu ändern.</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+graph TD
+    subgraph Spaghetti["Die unmodulare God-Datei (app.py)"]
+        UI["UI / Route Handler"]
+        AUTH["Passwort-Hashing"]
+        DB["SQL Queries"]
+        MAIL["SMTP Mailer"]
+        BIZ["Rabatt-Logik"]
+        PDF["PDF Generator"]
+        
+        UI <--> AUTH
+        UI <--> DB
+        UI <--> BIZ
+        BIZ <--> DB
+        BIZ <--> MAIL
+        AUTH <--> DB
+        BIZ <--> PDF
+        PDF <--> DB
+    end
+    style Spaghetti fill:#ffebee,stroke:#c62828,stroke-width:2px
+</div>
+<blockquote>
+<p><strong>Die Kernfrage:</strong> Warum bricht dieses Vorgehen zwangsläufig zusammen?</p>
+</blockquote>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-6">
+            <div class="slide-badge">Folie 6 / 29</div>
+            <div class="slide-content">
+                <h2>Kognitive Last: Warum unser Gehirn Module braucht</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die 7 ± 2 Regel (Miller&#39;s Law)</h3>
+<ul>
+<li>Das menschliche Arbeitsgedächtnis kann gleichzeitig nur <strong>etwa 4 bis 7 Informationseinheiten („Chunks“)</strong> aktiv halten.</li>
+<li>Wenn eine Datei 2000 Zeilen hat und 30 Dinge gleichzeitig tut, übersteigt das die menschliche Auffassungsgabe.</li>
+<li><strong>Folge:</strong> Entwickler übersehen Seiteneffekte. Ein Bugfix an Zeile 120 zerstört heimlich eine Funktion in Zeile 1.800.</li>
+</ul>
+<h3>Was Modularisierung bewirkt</h3>
+<ul>
+<li><strong>Abstraktion:</strong> Wir verstehen ein Modul über seine Schnittstelle, ohne den inneren Code zu kennen.</li>
+<li><strong>Isolation:</strong> Änderungen in Modul A können Modul B nicht beschädigen.</li>
+<li><strong>Paralleles Arbeiten:</strong> Teams arbeiten ohne ständige Merge-Konflikte.</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+graph TD
+    subgraph Modular["Modulare Architektur (Kognitiv handhabbar)"]
+        subgraph ModA["Modul: Katalog"]
+            A1["Blumenstrauss"]
+            A2["KatalogRepo"]
+        end
+        subgraph ModB["Modul: Bestellung"]
+            B1["Order"]
+            B2["OrderService"]
+        end
+        subgraph ModC["Modul: Zahlung"]
+            C1["PaymentGateway"]
+        end
+        
+        ModB -->|nutzt Schnittstelle| ModA
+        ModB -->|nutzt Schnittstelle| ModC
+    end
+    style Modular fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+</div>
+<blockquote>
+<p><strong>Leitsatz:</strong> Gute Architektur reduziert die kognitive Last auf das gerade relevante Modul.</p>
+</blockquote>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-7">
+            <div class="slide-badge">Folie 7 / 29</div>
+            <div class="slide-content">
+                <h2>2. Anfängerfalle 1: Die „God-Datei“</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Der Code-Smell: Alles in <code>app.py</code></h3>
+<p>In dieser einzigen Funktion sind <strong>vier völlig unterschiedliche Aufgaben</strong> vermischt:</p>
+<ol>
+<li><strong>HTTP-Routing &amp; Validierung:</strong> Liest JSON und prüft Pflichtfelder.</li>
+<li><strong>Direkte Datenbank-Abfragen:</strong> Führt rohes SQL mit <code>sqlite3</code> aus.</li>
+<li><strong>Geschäftsregeln:</strong> Rabattlogik (<code>preis *= 0.9</code>) ist hart einprogrammiert.</li>
+<li><strong>Externer Netzwerkaufruf:</strong> Verschickt E-Mails via SMTP.</li>
+</ol>
+<div class="col-card" style="margin-top: 12px;">
+
+<h4>Das fatale Test-Problem:</h4>
+<p>Wie schreibt man für die Rabattberechnung einen schnellen Unit-Test?<br><strong>Gar nicht!</strong> Man braucht zwingend eine SQLite-Datei und einen erreichbaren SMTP-Server.</p>
+</div>
+
+</div>
+<div class="col">
+
+<pre><code class="language-python"># app.py - ALLES in einer Datei (Anti-Pattern)
+@app.route(&#39;/order&#39;, methods=[&#39;POST&#39;])
+def place_order():
+    data = request.json
+    if not data.get(&#39;items&#39;):
+        return jsonify({&#39;error&#39;: &#39;Fehlt&#39;}), 400
+    
+    # 1. Datenbank &amp; Rabattlogik vermischt
+    conn = sqlite3.connect(&#39;shop.db&#39;)
+    cursor = conn.cursor()
+    total = 0.0
+    for item in data[&#39;items&#39;]:
+        cursor.execute(&quot;SELECT preis FROM blumen &quot;
+                       &quot;WHERE id = ?&quot;, (item[&#39;id&#39;],))
+        preis = cursor.fetchone()[0]
+        if item[&#39;menge&#39;] &gt;= 10:
+            preis *= 0.9  # 10% Rabatt hartcodiert!
+        total += preis * item[&#39;menge&#39;]
+    
+    # 2. Persistenz
+    cursor.execute(&quot;INSERT INTO orders VALUES (?)&quot;, 
+                   (total,))
+    conn.commit()
+    conn.close()
+    
+    # 3. Mailversand
+    smtplib.SMTP(&#39;smtp.mail.de&#39;).sendmail(...)
+    return jsonify({&#39;total&#39;: total})
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-8">
+            <div class="slide-badge">Folie 8 / 29</div>
+            <div class="slide-content">
+                <h2>2. Anfängerfalle 2: Zirkuläre Importe in Python</h2>
+<div class="two-cols">
+<div class="col">
+
+<pre><code class="language-python"># bestellung.py
+from kunde import Kunde  # &lt;--- Importiert Kunde
+
+class Bestellung:
+    def __init__(self, kunde: Kunde, betrag: float):
+        self.kunde = kunde
+        self.betrag = betrag
+</code></pre>
+<pre><code class="language-python"># kunde.py
+from bestellung import Bestellung  # &lt;--- Zirkulär!
+
+class Kunde:
+    def __init__(self, name: str):
+        self.name = name
+        self.bestellungen: list[Bestellung] = []
+
+    def neue_bestellung(self, betrag: float):
+        b = Bestellung(self, betrag)
+        self.bestellungen.append(b)
+</code></pre>
+</div>
+<div class="col">
+
+<h3>Der gefürchtete Python-Fehler:</h3>
+<pre><code class="language-text">ImportError: cannot import name &#39;Bestellung&#39; 
+from partially initialized module &#39;bestellung&#39; 
+(most likely due to a circular import)
+</code></pre>
+<h3>Warum passiert das?</h3>
+<ol>
+<li>Python lädt <code>bestellung.py</code>.</li>
+<li>Zeile 1: <code>from kunde import Kunde</code>.</li>
+<li>Python pausiert <code>bestellung.py</code> und beginnt <code>kunde.py</code> auszuführen.</li>
+<li>Zeile 1 in <code>kunde.py</code>: <code>from bestellung import Bestellung</code>.</li>
+<li>Python prüft <code>sys.modules</code>: <code>bestellung</code> wird gerade initialisiert, hat die Klasse <code>Bestellung</code> aber noch gar nicht erreicht!</li>
+<li><strong>Crash: <code>ImportError</code>!</strong></li>
+</ol>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-9">
+            <div class="slide-badge">Folie 9 / 29</div>
+            <div class="slide-content">
+                <h2>Wie löst man zirkuläre Importe sauber?</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Lösung A: Entkopplung über IDs (Empfohlen)</h3>
+<p>Trennen Sie Daten und Verhalten. <code>Bestellung</code> muss nicht die gesamte <code>Kunde</code>-Instanz kennen – eine <code>kunde_id</code> genügt!</p>
+<pre><code class="language-python"># Saubere Entkopplung über IDs
+class Bestellung:
+    def __init__(self, kunde_id: str, betrag: float):
+        self.kunde_id = kunde_id  # Keine Abhängigkeit!
+        self.betrag = betrag
+
+class Kunde:
+    def __init__(self, kunde_id: str, name: str):
+        self.id = kunde_id
+        self.name = name
+</code></pre>
+<blockquote>
+<p><strong>Design-Regel:</strong> Wenn zwei Module sich gegenseitig importieren müssen, gehören sie entweder in <strong>dasselbe Modul</strong> oder ihr Zusammenspiel muss über <strong>IDs / Interfaces</strong> entkoppelt werden.</p>
+</blockquote>
+</div>
+<div class="col">
+
+<h3>Lösung B: <code>typing.TYPE_CHECKING</code></h3>
+<p>Wenn der Import <strong>nur für Type Hints</strong> benötigt wird, verhindert <code>TYPE_CHECKING</code> den Import zur Python-Laufzeit:</p>
+<pre><code class="language-python">from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # Wird nur von mypy / IDE gelesen, 
+    # NIE zur Python-Laufzeit ausgeführt!
+    from bestellung import Bestellung
+
+class Kunde:
+    def __init__(self, name: str):
+        self.name = name
+        self.bestellungen: list[Bestellung] = []
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-10">
+            <div class="slide-badge">Folie 10 / 29</div>
+            <div class="slide-content">
+                <h2>3. Die fundamentalen Prinzipien: Kohäsion (Cohesion)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was ist Kohäsion?</h3>
+<ul>
+<li><strong>Definition:</strong> Kohäsion beschreibt den <strong>inneren Zusammenhalt</strong> eines Moduls oder einer Klasse.</li>
+<li><strong>Frage:</strong> „Tun alle Teile dieses Moduls Dienst an derselben, klar umrissenen Aufgabe?“</li>
+</ul>
+<h3>Niedrige Kohäsion (Low Cohesion - Schlecht)</h3>
+<ul>
+<li>Typische Mülleimer-Dateien: <code>utils.py</code>, <code>helpers.py</code>, <code>common.py</code>.</li>
+<li>Enthält: Datumsformatierung, String-Trimming, DB-Verbindung, Passwort-Hashing.</li>
+<li><strong>Problem:</strong> Niemand weiß, was die Datei eigentlich tut. Jede Änderung birgt Risiken.</li>
+</ul>
+<h3>Hohe Kohäsion (High Cohesion - Erstrebenswert)</h3>
+<ul>
+<li>Jedes Modul hat eine <strong>einzige, klare Verantwortung</strong> (Single Responsibility Principle).</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+graph TD
+    subgraph Low["Niedrige Kohäsion (Mülleimer-Modul)"]
+        U["utils.py"] --> U1["format_date()"]
+        U --> U2["hash_password()"]
+        U --> U3["connect_db()"]
+    end
+    subgraph High["Hohe Kohäsion (Fokussiert)"]
+        R["rabatt.py"] --> R1["MengenRabatt"]
+        R --> R2["TreueRabatt"]
+        R --> R3["GutscheinRabatt"]
+    end
+    style Low fill:#ffebee,stroke:#c62828
+    style High fill:#e8f8f5,stroke:#27ae60
+</div>
+<blockquote>
+<p><strong>Beispiel:</strong> <code>rabatt.py</code> enthält ausschließlich Rabattregeln. Ändern sich Rabatte, fasst man genau dieses Modul an.</p>
+</blockquote>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-11">
+            <div class="slide-badge">Folie 11 / 29</div>
+            <div class="slide-content">
+                <h2>3. Die fundamentalen Prinzipien: Kopplung (Coupling)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was ist Kopplung?</h3>
+<ul>
+<li><strong>Definition:</strong> Kopplung beschreibt den <strong>Grad der Abhängigkeit</strong> zwischen verschiedenen Modulen.</li>
+<li><strong>Frage:</strong> „Wie viel muss Modul A über das Innenleben von Modul B wissen?“</li>
+</ul>
+<h3>Enge Kopplung (Tight Coupling - Schlecht)</h3>
+<ul>
+<li>Modul A greift direkt auf interne SQL-Queries oder Variablen von Modul B zu.</li>
+<li>Ändert sich Modul B minimal, bricht Modul A sofort zusammen.</li>
+</ul>
+<h3>Lose Kopplung (Loose Coupling - Erstrebenswert)</h3>
+<ul>
+<li>Module kommunizieren <strong>ausschließlich über Schnittstellen</strong> (<code>Protocol</code>).</li>
+<li>Modul A weiß <em>was</em> Modul B tut, aber nicht <em>wie</em>.</li>
+<li>SQLite kann durch PostgreSQL oder In-Memory ersetzt werden, ohne Modul A zu ändern!</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph Tight["1. Enge Kopplung (Fragil)"]
+        A1["BestellService"] -->|kennt SQL & Tabellen| B1[("SQLite DB")]
+    end
+    subgraph Loose["2. Lose Kopplung (Flexibel)"]
+        A2["BestellService"] -->|nutzt| P["<<Protocol>>\nOrderRepository"]
+        B2[("PostgreSQL")] -.->|erfüllt| P
+        B3[("In-Memory")] -.->|erfüllt| P
+    end
+    style Tight fill:#ffebee,stroke:#c62828
+    style Loose fill:#e8f8f5,stroke:#27ae60
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-12">
+            <div class="slide-badge">Folie 12 / 29</div>
+            <div class="slide-content">
+                <h2>Das Zusammenspiel: Die goldene Architekturregel</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die 4 Architektur-Zustände</h3>
+<div class="col-card" style="margin-bottom: 12px;">
+
+<h4>🏆 Das Ziel: High Cohesion &amp; Low Coupling</h4>
+<ul>
+<li><strong>Hohe Kohäsion:</strong> Jedes Modul ist in sich hochgradig fokussiert.</li>
+<li><strong>Lose Kopplung:</strong> Module interagieren nur über schlanke, stabile Schnittstellen (<code>Protocol</code>).</li>
+<li><strong>Ergebnis:</strong> Wartbar, modular, isoliert testbar und zukunftssicher.</li>
+</ul>
+</div>
+
+<div class="col-card">
+
+<h4>⚠️ Die typischen Fehlzustände:</h4>
+<ul>
+<li><strong>Spaghetti-Code:</strong> Niedrige Kohäsion + Hohe Kopplung (Alles hängt von allem ab).</li>
+<li><strong>Verkrampft:</strong> Hohe Kohäsion + Hohe Kopplung (Klare Aufgaben, aber wie Kletten verhakt).</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph Ideal["🏆 Ideal: High Cohesion + Low Coupling"]
+        M1["Modul: Katalog\n(Fokussiert)"]
+        M2["Modul: Bestellung\n(Fokussiert)"]
+        M3["Modul: Zahlung\n(Fokussiert)"]
+        M1 <-->|Schlankes Protocol| M2
+        M2 <-->|Schlankes Protocol| M3
+    end
+    
+    subgraph Chaos["❌ Anti-Pattern: Spaghetti-Monolith"]
+        C1["app.py\n(Alles in einem)"]
+        C1 --> C2["DB"]
+        C1 --> C3["Mail"]
+        C1 --> C4["UI"]
+    end
+    
+    style Ideal fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+    style Chaos fill:#ffebee,stroke:#c62828,stroke-width:2px
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-13">
+            <div class="slide-badge">Folie 13 / 29</div>
+            <div class="slide-content">
+                <h2>4. Python-Bausteine: Module vs. Packages</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>1. Das Modul (<code>.py</code>-Datei)</h3>
+<ul>
+<li>Jede Python-Datei ist ein eigenständiges Modul mit eigenem Namensraum.</li>
+<li>Variablen in <code>katalog.py</code> verschmutzen <strong>nicht</strong> den Namensraum von <code>bestellung.py</code>.</li>
+<li>Zugriff erfolgt explizit über <code>import</code>:<pre><code class="language-python">import katalog
+blume = katalog.Blumenstrauss(...)
+</code></pre>
+</li>
+<li><strong>Best Practice:</strong> 1 Modul = 1 fachlich zusammengehöriges Thema (z. B. <code>rabatt.py</code>).</li>
+</ul>
+</div>
+<div class="col">
+
+<h3>2. Das Package (Verzeichnis)</h3>
+<ul>
+<li>Fasst mehrere verwandte Module zu einer hierarchischen Einheit zusammen.</li>
+<li>Enthält eine <code>__init__.py</code> zur Paket-Initialisierung.</li>
+<li>Ermöglicht saubere Unterstrukturen:<pre><code class="language-text">blumenladen/
+├── __init__.py
+├── katalog/
+│   ├── __init__.py
+│   ├── modelle.py
+│   └── repository.py
+</code></pre>
+</li>
+</ul>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-14">
+            <div class="slide-badge">Folie 14 / 29</div>
+            <div class="slide-content">
+                <h2>Die Rolle der <code>__init__.py</code>: Kapselung &amp; Facade</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Wozu dient <code>__init__.py</code>?</h3>
+<ol>
+<li><strong>Markiert Verzeichnis als Package:</strong> Signalisiert Python, dass der Ordner importierbar ist.</li>
+<li><strong>Kapselung (Information Hiding):</strong> Versteckt interne Dateistrukturen vor der Außenwelt.</li>
+<li><strong>Facade-Muster:</strong> Exponiert nur die öffentliche API des Pakets über <code>__all__</code>.</li>
+</ol>
+<h3>Der Vorteil für den Aufrufer:</h3>
+<p>Nutzer des Pakets müssen nicht wissen, ob <code>Blumenstrauss</code> intern in <code>modelle.py</code>, <code>entities.py</code> oder <code>schema.py</code> liegt. Sie importieren einfach aus dem Package!</p>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># blumenladen/katalog/__init__.py
+# Interne Aufteilung bleibt gekapselt.
+# Wir exponieren nur die öffentliche Schnittstelle:
+from .modelle import Blumenstrauss, Kategorie
+from .repository import KatalogRepository
+
+__all__ = [
+    &#39;Blumenstrauss&#39;, 
+    &#39;Kategorie&#39;, 
+    &#39;KatalogRepository&#39;
+]
+</code></pre>
+<pre><code class="language-python"># Verwendung von außen (sauber &amp; entkoppelt):
+from blumenladen.katalog import Blumenstrauss
+
+strauss = Blumenstrauss(name=&quot;Rose&quot;, preis=25.0)
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-15">
+            <div class="slide-badge">Folie 15 / 29</div>
+            <div class="slide-content">
+                <h2>Information Hiding in Python: Was ist öffentlich, was privat?</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Konvention statt Schlüsselwörter</h3>
+<p>Python hat kein <code>private</code> wie Java. Kapselung beruht auf <strong>Namenskonventionen</strong>:</p>
+<ol>
+<li><strong>Öffentlich (<code>public</code>):</strong><ul>
+<li>Kein Unterstrich: <code>def buche_betrag():</code></li>
+<li>Teil der stabilen Schnittstelle. Darf von außen genutzt werden.</li>
+</ul>
+</li>
+<li><strong>Modulintern (<code>_private</code>):</strong><ul>
+<li>Führender Unterstrich: <code>def _pruefe_limit():</code>, <code>_api_key</code></li>
+<li>Signal an Entwickler: <em>„Internes Detail! Nicht von außen importieren, kann sich jederzeit ändern.“</em></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Regel:</strong> Respektieren Sie den führenden Unterstrich <code>_</code>!</p>
+</blockquote>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># blumenladen/zahlung/service.py
+
+class ZahlungsService:
+    def __init__(self, api_key: str):
+        self._api_key = api_key  # Internes Detail
+    
+    # Öffentliche Methode (Teil der API)
+    def buche_betrag(self, betrag: float) -&gt; bool:
+        if not self._pruefe_limit(betrag):
+            return False
+        return self._sende_an_bank(betrag)
+    
+    # Interne Hilfsmethoden (Finger weg von außen!)
+    def _pruefe_limit(self, betrag: float) -&gt; bool:
+        return betrag &lt;= 5000.0
+        
+    def _sende_an_bank(self, betrag: float) -&gt; bool:
+        # ... Netzwerkaufruf an Bank ...
+        return True
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-16">
+            <div class="slide-badge">Folie 16 / 29</div>
+            <div class="slide-content">
+                <h2>5. Architekturmuster: Die klassische Schichtenarchitektur</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die 3 Schichten</h3>
+<ol>
+<li><strong>Präsentationsschicht (Presentation):</strong><ul>
+<li>UI, REST-Endpoints (FastAPI/Flask), CLI.</li>
+</ul>
+</li>
+<li><strong>Geschäftslogikschicht (Business / Service):</strong><ul>
+<li>Use Cases, Validierung, Rabattberechnung.</li>
+</ul>
+</li>
+<li><strong>Datenzugriffsschicht (Data Access):</strong><ul>
+<li>Datenbank-Queries, SQL, externe APIs.</li>
+</ul>
+</li>
+</ol>
+<h3>Die fundamentale Schichtenregel:</h3>
+<p>Abhängigkeiten fließen <strong>ausschließlich von OBEN nach UNTEN</strong>!<br>Jede Schicht kennt nur die Schicht direkt darunter.</p>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph Layer3["1. Präsentationsschicht"]
+        API["FastAPI Controller"]
+    end
+    subgraph Layer2["2. Geschäftslogik (Business)"]
+        OrderService["BestellService"]
+    end
+    subgraph Layer1["3. Datenzugriff (Persistence)"]
+        SQL["SQLAlchemy / SQLite"]
+    end
+    
+    API --> OrderService
+    OrderService --> SQL
+    
+    style Layer3 fill:#e3f2fd,stroke:#1565c0
+    style Layer2 fill:#e8f5e9,stroke:#2e7d32
+    style Layer1 fill:#fff3e0,stroke:#e65100
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-17">
+            <div class="slide-badge">Folie 17 / 29</div>
+            <div class="slide-content">
+                <h2>Die Schwachstelle der klassischen Schichtenarchitektur</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Das Problem der Datenbank-Dominanz</h3>
+<p>In der klassischen Schichtenarchitektur hängt die Geschäftslogik direkt von der Datenbank ab:</p>
+<div class="col-card" style="margin: 12px 0; text-align: center;">
+
+<p><strong>Geschäftslogik (Business)</strong> &rarr; <strong>Datenbank (Persistence)</strong></p>
+</div>
+
+<ul>
+<li><strong>Die fatale Konsequenz:</strong><ul>
+<li>Entwickler modellieren zuerst Datenbanktabellen (<code>CREATE TABLE ...</code>).</li>
+<li>Domänenklassen werden zu reinen Abbildern von ORM-Modellen (z. B. SQLAlchemy <code>Base</code>).</li>
+<li>Die Geschäftslogik ist untrennbar mit SQL und Fremdschlüsseln verstrickt.</li>
+</ul>
+</li>
+<li><strong>Test-Albtraum:</strong><ul>
+<li>Jeder Test der Geschäftslogik benötigt eine laufende Datenbank!</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph Problem["Die fatale Abhängigkeit"]
+        BL["Geschäftslogik\n(BestellService)"]
+        DB["Datenzugriff\n(SQLAlchemy ORM)"]
+        RDBMS[("Echte Datenbank\n(Postgres / SQLite)")]
+        
+        BL -->|importiert direkt| DB
+        DB -->|erfordert| RDBMS
+    end
+    style Problem fill:#ffebee,stroke:#c62828,stroke-width:2px
+</div>
+<blockquote>
+<p><strong>Kern-Einsicht:</strong> Die Datenbank ist nur ein technisches Detail. Warum sollte unsere Geschäftslogik von der Datenbank abhängen?</p>
+</blockquote>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-18">
+            <div class="slide-badge">Folie 18 / 29</div>
+            <div class="slide-content">
+                <h2>Hexagonale Architektur (Ports &amp; Adapters)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Das Prinzip der Dependency Inversion</h3>
+<ul>
+<li><strong>Die Domäne steht im Zentrum:</strong> Sie weiß <strong>NICHTS</strong> von Datenbanken, Webframeworks oder HTTP!</li>
+<li><strong>Ports (Schnittstellen):</strong> Die Domäne definiert Verträge für das, was sie braucht (<code>OrderRepository</code>, <code>PaymentGateway</code>).</li>
+<li><strong>Adapters (Technik):</strong> Externe Komponenten implementieren diese Ports (<code>PostgresRepo</code>, <code>StripeAdapter</code>).</li>
+</ul>
+<h3>Die Dependency Rule:</h3>
+<p><strong>Alle Abhängigkeiten zeigen nach INNEN!</strong><br>Technik hängt von der Domäne ab – niemals umgekehrt!</p>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph Adapter["Adapter (Außen: Technik)"]
+        Web["FastAPI Controller"]
+        DB["Postgres Adapter"]
+        Mem["In-Memory Test Adapter"]
+    end
+    
+    subgraph Core["Hexagon (Innen: Reine Domäne)"]
+        Ports["Ports (typing.Protocol)"]
+        Domain["Entities & Use Cases"]
+    end
+    
+    Web -->|ruft auf| Ports
+    Ports --> Domain
+    DB -.->|erfüllt| Ports
+    Mem -.->|erfüllt| Ports
+    
+    style Core fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+    style Adapter fill:#f4f6f7,stroke:#7f8c8d
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-19">
+            <div class="slide-badge">Folie 19 / 29</div>
+            <div class="slide-content">
+                <h2>Ports vs. Adapters im Detail</h2>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h3>1. Ports (Schnittstellen / Verträge)</h3>
+<ul>
+<li>Gehören zum <strong>inneren Kern</strong>.</li>
+<li>In Python meist als <code>typing.Protocol</code> definiert.</li>
+<li>Beschreiben <strong>WAS</strong> getan werden muss, nicht <em>WIE</em>.</li>
+<li><strong>Unterscheidung nach Cockburn (2 Richtungen):</strong><ul>
+<li><strong>Driving Ports (Primär / Eingehend):</strong> Steuern den Kern (z. B. Use-Case-Interfaces, die von Web-API oder CLI aufgerufen werden).</li>
+<li><strong>Driven Ports (Sekundär / Ausgehend):</strong> Werden vom Kern aufgerufen (z. B. Datenbank-Repositories, Payment-Gateways).</li>
+</ul>
+</li>
+<li><strong>Beispiele:</strong><ul>
+<li><code>OrderRepository</code>: Driven Port – „Kann eine <code>Order</code> speichern und laden.“</li>
+<li><code>PaymentGateway</code>: Driven Port – „Kann einen Betrag abbuchen.“</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h3>2. Adapters (Die konkrete Technik)</h3>
+<ul>
+<li>Liegen am <strong>äußeren Rand</strong>.</li>
+<li>Enthalten den konkreten technischen Code.</li>
+<li><strong>Beispiele für <code>OrderRepository</code>:</strong><ul>
+<li><code>SqliteOrderRepository</code> (Entwicklung)</li>
+<li><code>PostgresOrderRepository</code> (Produktion)</li>
+<li><code>InMemoryOrderRepository</code> (RAM-Tests!)</li>
+</ul>
+</li>
+<li><strong>Beispiele für <code>PaymentGateway</code>:</strong><ul>
+<li><code>StripeAdapter</code> (Echtbetrieb)</li>
+<li><code>FakePaymentAdapter</code> (Tests ohne Geld)</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+<blockquote>
+<p><strong>Analogie:</strong> Der Port ist die Wandsteckdose (230V, 50Hz). Der Adapter ist das Netzteil. Welches Netzteil eingesteckt wird, ist der Steckdose egal!</p>
+</blockquote>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-20">
+            <div class="slide-badge">Folie 20 / 29</div>
+            <div class="slide-content">
+                <h2>6. Vom Analysemodell (Modul 2) zur Code-Struktur</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die Brücke von der Analyse zum Code</h3>
+<p>In Modul 2 haben wir für Ada vier <strong>Bounded Contexts</strong> identifiziert:</p>
+<ol>
+<li><strong>Katalog (Catalog):</strong> Blumensträuße &amp; Kategorien.</li>
+<li><strong>Bestellung (Order):</strong> Warenkorb &amp; Checkout.</li>
+<li><strong>Zahlung (Payment):</strong> Autorisierung &amp; Buchung.</li>
+<li><strong>Benachrichtigung (Notification):</strong> SMS &amp; E-Mail.</li>
+</ol>
+<div class="col-card" style="margin-top: 14px;">
+
+<h4>Die fundamentale Architektur-Regel:</h4>
+<p><strong>1 Bounded Context = 1 eigenständiges Package!</strong><br>Jeder Bounded Context bildet ein eigenes Mini-Hexagon mit eigener Domäne, Ports und Adaptern.</p>
+</div>
+
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    subgraph BC_Katalog["1. Package: katalog"]
+        K1["Blumenstrauss"]
+    end
+    subgraph BC_Bestellung["2. Package: bestellung"]
+        B1["Order & OrderItem"]
+    end
+    subgraph BC_Zahlung["3. Package: zahlung"]
+        Z1["PaymentPort"]
+    end
+    subgraph BC_Notif["4. Package: notif"]
+        N1["NotificationPort"]
+    end
+    
+    BC_Bestellung -->|Preise abfragen| BC_Katalog
+    BC_Bestellung -->|Zahlung triggern| BC_Zahlung
+    BC_Bestellung -->|SMS senden| BC_Notif
+    
+    style BC_Katalog fill:#e3f2fd,stroke:#1565c0
+    style BC_Bestellung fill:#e8f5e9,stroke:#2e7d32
+    style BC_Zahlung fill:#fff3e0,stroke:#e65100
+    style BC_Notif fill:#f3e5f5,stroke:#7b1fa2
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-21">
+            <div class="slide-badge">Folie 21 / 29</div>
+            <div class="slide-content">
+                <h2>Die Projektstruktur für Ada&#39;s Blumenladen</h2>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Struktur im Bounded Context <code>bestellung</code>:</h4>
+<ul>
+<li>📁 <code>domain/</code>: <strong>Reine Fachlogik</strong><br><code>Order</code>, <code>OrderItem</code>, <code>Money</code> – ohne Frameworks!</li>
+<li>📁 <code>ports/</code>: <strong>Schnittstellenverträge</strong><br><code>OrderRepository</code>, <code>PaymentGateway</code> (<code>Protocol</code>).</li>
+<li>📁 <code>services/</code>: <strong>Application Services (Use Cases)</strong><br><code>PlaceOrderService</code> (orchestriert den Ablauf).</li>
+<li>📁 <code>adapters/</code>: <strong>Konkrete Technik</strong><br><code>SqliteOrderRepo</code>, <code>InMemoryOrderRepo</code>, <code>StripeAdapter</code>.</li>
+<li>📄 <code>main.py</code>: <strong>Composition Root</strong><br>Verdrahtet Adapter und Services via Dependency Injection.</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<pre><code class="language-text">adas_blumenladen/
+├── core/
+│   └── money.py                 # Value Object: Money
+├── bestellung/
+│   ├── __init__.py              # Öffentliche API
+│   ├── domain/
+│   │   └── models.py            # Order, OrderItem
+│   ├── ports/
+│   │   ├── order_repository.py  # Protocol: save()
+│   │   └── payment_gateway.py   # Protocol: charge()
+│   ├── services/
+│   │   └── place_order.py       # Use Case Service
+│   └── adapters/
+│       ├── sqlite_repo.py       # SQLite Adapter
+│       ├── in_memory_repo.py    # Test Adapter (RAM)
+│       └── stripe_adapter.py    # Stripe API
+├── main.py                      # Composition Root (DI)
+└── tests/
+    └── test_order.py            # Blitzschnelle Tests!
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-22">
+            <div class="slide-badge">Folie 22 / 29</div>
+            <div class="slide-content">
+                <h2>7. Praxisfall Ada: 1. Die reine Domäne (<code>models.py</code>)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die Domänenmodelle</h3>
+<ul>
+<li><strong>Value Object <code>OrderItem</code>:</strong><ul>
+<li>Unveränderliche Werte: Artikel-ID, Menge, Einzelpreis.</li>
+<li>Berechnet den Positionspreis selbstständig.</li>
+</ul>
+</li>
+<li><strong>Entity <code>Order</code>:</strong><ul>
+<li>Besitzt eine Identität (<code>id</code>).</li>
+<li>Fachliche Invarianten: <code>berechne_gesamtsumme()</code>.</li>
+<li>Statuswechsel: <code>markiere_als_bezahlt()</code>.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python">@dataclass
+class OrderItem:
+    artikel_id: str
+    menge: int
+    einzelpreis: Money
+
+    def gesamtpreis(self) -&gt; Money:
+        return self.einzelpreis.multiply(self.menge)
+</code></pre>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># bestellung/domain/models.py
+from dataclasses import dataclass, field
+from core.money import Money
+
+@dataclass
+class Order:
+    id: str
+    kunde_id: str
+    items: list[OrderItem] = field(default_factory=list)
+    bezahlt: bool = False
+
+    def berechne_gesamtsumme(self) -&gt; Money:
+        if not self.items:
+            return Money(0.0)
+        summe = self.items[0].gesamtpreis()
+        for item in self.items[1:]:
+            summe = summe.add(item.gesamtpreis())
+        return summe
+
+    def markiere_als_bezahlt(self) -&gt; None:
+        if self.bezahlt:
+            raise ValueError(&quot;Bereits bezahlt!&quot;)
+        self.bezahlt = True
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-23">
+            <div class="slide-badge">Folie 23 / 29</div>
+            <div class="slide-content">
+                <h2>Praxisfall Ada: 2. Die Ports (<code>ports/</code>)</h2>
+<div class="two-cols">
+<div class="col">
+
+<pre><code class="language-python"># bestellung/ports/order_repository.py
+from typing import Protocol, Optional
+from bestellung.domain.models import Order
+
+class OrderRepository(Protocol):
+    &quot;&quot;&quot;Port für Bestellspeicherung.&quot;&quot;&quot;
+    
+    def save(self, order: Order) -&gt; None:
+        &quot;&quot;&quot;Speichert die Bestellung.&quot;&quot;&quot;
+        ...
+        
+    def get_by_id(self, order_id: str) -&gt; Optional[Order]:
+        &quot;&quot;&quot;Lädt eine Bestellung per ID.&quot;&quot;&quot;
+        ...
+</code></pre>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># bestellung/ports/payment_gateway.py
+from typing import Protocol
+from core.money import Money
+
+class PaymentGateway(Protocol):
+    &quot;&quot;&quot;Port für Zahlungsdienstleister.&quot;&quot;&quot;
+    
+    def charge(self, kunde_id: str, betrag: Money) -&gt; bool:
+        &quot;&quot;&quot;Bucht Betrag ab. Gibt True bei Erfolg zurück.&quot;&quot;&quot;
+        ...
+</code></pre>
+</div>
+</div>
+
+<blockquote>
+<p><strong>Beachten Sie:</strong> Weder <code>OrderRepository</code> noch <code>PaymentGateway</code> enthalten Implementierungscode (<code>...</code>). Sie sind reine Schnittstellenverträge!</p>
+</blockquote>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-24">
+            <div class="slide-badge">Folie 24 / 29</div>
+            <div class="slide-content">
+                <h2>Praxisfall Ada: 3. Der Application Service (<code>services/</code>)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was macht der Service?</h3>
+<ul>
+<li>Bildet den <strong>Use Case</strong> ab (<em>„Bestellung aufgeben“</em>).</li>
+<li>Kennt <strong>nur die Ports</strong>, keine konkrete Datenbank oder APIs!</li>
+<li><strong>Ablauf im Service:</strong><ol>
+<li>Gesamtsumme fachlich ermitteln.</li>
+<li>Zahlung über den Port anfordern.</li>
+<li>Bei Erfolg: Domänenstatus auf <code>bezahlt</code> setzen.</li>
+<li>Über das Repository persistieren.</li>
+</ol>
+</li>
+</ul>
+<div class="col-card" style="margin-top: 12px;">
+
+<h4>Dependency Injection:</h4>
+<p>Repositories und Payment-Gateways werden dem Service im Konstruktor übergeben.</p>
+</div>
+
+</div>
+<div class="col">
+
+<pre><code class="language-python"># bestellung/services/place_order.py
+class PlaceOrderService:
+    def __init__(self, repo: OrderRepository, 
+                 payment: PaymentGateway):
+        self._repo = repo
+        self._payment = payment
+
+    def execute(self, order: Order) -&gt; bool:
+        summe = order.berechne_gesamtsumme()
+        
+        # 1. Bezahlung via Port
+        if not self._payment.charge(order.kunde_id, summe):
+            return False
+            
+        # 2. Fachlichen Status setzen
+        order.markiere_als_bezahlt()
+        
+        # 3. Speichern via Port
+        self._repo.save(order)
+        return True
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-25">
+            <div class="slide-badge">Folie 25 / 29</div>
+            <div class="slide-content">
+                <h2>Praxisfall Ada: 4. Die Adapter (<code>adapters/</code>)</h2>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>Adapter 1: Produktion (SQLite)</h4>
+<pre><code class="language-python"># bestellung/adapters/sqlite_repo.py
+import sqlite3
+from bestellung.domain.models import Order
+
+class SqliteOrderRepository:
+    def __init__(self, db_path: str):
+        self.db_path = db_path
+
+    def save(self, order: Order) -&gt; None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                &quot;INSERT OR REPLACE INTO orders &quot;
+                &quot;VALUES (?, ?, ?)&quot;,
+                (order.id, order.kunde_id, 
+                 order.bezahlt)
+            )
+</code></pre>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Adapter 2: Tests (In-Memory!)</h4>
+<pre><code class="language-python"># bestellung/adapters/in_memory_repo.py
+from typing import Optional
+from bestellung.domain.models import Order
+
+class InMemoryOrderRepository:
+    &quot;&quot;&quot;Speichert Daten blitzschnell im RAM.&quot;&quot;&quot;
+    def __init__(self):
+        self._storage: dict[str, Order] = {}
+
+    def save(self, order: Order) -&gt; None:
+        self._storage[order.id] = order
+
+    def get_by_id(self, order_id: str) -&gt; Optional[Order]:
+        return self._storage.get(order_id)
+</code></pre>
+</div>
+
+</div>
+</div>
+
+<blockquote>
+<p>Beide Adapter erfüllen das <code>OrderRepository</code>-Protocol – einer schreibt auf die Festplatte, der andere arbeitet im Arbeitsspeicher!</p>
+</blockquote>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-26">
+            <div class="slide-badge">Folie 26 / 29</div>
+            <div class="slide-content">
+                <h2>8. Composition Root: Alles zusammenfügen (<code>main.py</code>)</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was ist die Composition Root?</h3>
+<ul>
+<li>Der <strong>einzige Ort</strong> in der gesamten Anwendung, an dem konkrete Adapter instanziiert und dem Service übergeben werden.</li>
+<li><strong>Separation of Concerns:</strong> Trennung von <em>Objekterzeugung</em> (hier in <code>main.py</code>) und <em>Objektverwendung</em> (im Service).</li>
+</ul>
+<div class="col-card" style="margin-top: 12px;">
+
+<h4>Vorher vs. Nachher:</h4>
+<ul>
+<li>❌ <strong>Vorher:</strong> Service ruft <code>sqlite3.connect()</code> selbst auf $\to$ Feste Kopplung!</li>
+<li>✅ <strong>Nachher (DI):</strong> Service erhält <code>repo</code> von außen $\to$ Adapter austauschbar!</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<pre><code class="language-python"># main.py - Der Einstiegspunkt
+import os
+from bestellung.services.place_order import (
+    PlaceOrderService
+)
+from bestellung.adapters.sqlite_repo import (
+    SqliteOrderRepository
+)
+from bestellung.adapters.stripe_adapter import (
+    StripePaymentAdapter
+)
+
+def bootstrap() -&gt; PlaceOrderService:
+    # 1. Konkrete Adapter erzeugen
+    repo = SqliteOrderRepository(db_path=&quot;shop.db&quot;)
+    payment = StripePaymentAdapter(
+        api_key=os.getenv(&quot;STRIPE_KEY&quot;, &quot;sk_test&quot;)
+    )
+    
+    # 2. Dependency Injection
+    return PlaceOrderService(repo=repo, payment=payment)
+
+if __name__ == &quot;__main__&quot;:
+    app_service = bootstrap()
+    print(&quot;Ada&#39;s Blumenladen betriebsbereit!&quot;)
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-27">
+            <div class="slide-badge">Folie 27 / 29</div>
+            <div class="slide-content">
+                <h2>Warum sich der Aufwand lohnt: Triviales Unit-Testing!</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Der Praxis-Gewinn:</h3>
+<ul>
+<li><strong>Ausführungszeit: &lt; 5 ms</strong> direkt im RAM!</li>
+<li>Keine Datenbankinstallation nötig, keine Dateisystemsperren, kein Internet für Stripe.</li>
+<li>Zuverlässig in jeder CI/CD-Pipeline.</li>
+</ul>
+<div class="col-card" style="margin-top: 12px;">
+
+<h4>🧠 Thinking Points:</h4>
+<ol>
+<li><strong>Technologiewechsel:</strong> Wenn Ada von SQLite zu DynamoDB wechselt, müssen wir <strong>nur einen neuen Adapter</strong> schreiben – Domäne und Use Case bleiben zu 100% unberührt!</li>
+<li><strong>Kapselung:</strong> Warum darf die Domäne niemals Exceptions von Drittanbieter-Bibliotheken werfen?</li>
+</ol>
+</div>
+
+</div>
+<div class="col">
+
+<pre><code class="language-python"># tests/test_order_service.py
+class FakePaymentGateway:
+    def __init__(self, succeed: bool = True):
+        self.succeed = succeed
+        self.last_charge = None
+
+    def charge(self, kunde_id: str, betrag: Money):
+        self.last_charge = betrag
+        return self.succeed
+
+def test_erfolgreiche_bestellung():
+    # 1. Arrange: Test-Doppelgänger instanziieren
+    repo = InMemoryOrderRepository()
+    payment = FakePaymentGateway(succeed=True)
+    service = PlaceOrderService(repo=repo, payment=payment)
+    
+    order = Order(id=&quot;ORD-1&quot;, kunde_id=&quot;KUNDE-42&quot;)
+    order.items.append(OrderItem(&quot;ROSE&quot;, 2, Money(15.0)))
+
+    # 2. Act
+    erfolg = service.execute(order)
+
+    # 3. Assert: Fachliche Korrektheit prüfen
+    assert erfolg is True
+    assert order.bezahlt is True
+    assert repo.get_by_id(&quot;ORD-1&quot;) is not None
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-28">
+            <div class="slide-badge">Folie 28 / 29</div>
+            <div class="slide-content">
+                <h2>Zusammenfassung &amp; Best-Practice-Checkliste</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Die 5 goldenen Regeln für Modulentwurf:</h3>
+<ol>
+<li><strong>Eine Datei = Ein logisches Modul:</strong>
+Vermeiden Sie God-Dateien. Mehr als 300 Zeilen sind ein Warnsignal.</li>
+<li><strong>High Cohesion, Low Coupling:</strong>
+Was fachlich zusammengehört, bleibt zusammen. Interaktion nur über schlanke Protokolle.</li>
+<li><strong>Zirkuläre Importe sofort stoppen:</strong>
+Entkoppeln Sie über IDs oder nutzen Sie <code>typing.TYPE_CHECKING</code>.</li>
+<li><strong>Dependency Rule respektieren:</strong>
+Die Domänenlogik darf <strong>niemals</strong> von Frameworks oder Datenbanken abhängen!</li>
+<li><strong>Dependency Injection nutzen:</strong>
+Übergeben Sie Abhängigkeiten über den Konstruktor.</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="mermaid">
+mindmap
+  root((Modulare\nArchitektur))
+    Bounded Contexts
+      Katalog
+      Bestellung
+      Zahlung
+      Benachrichtigung
+    Hexagonal Core
+      Reine Entities
+      Value Objects
+      Use Cases
+    Ports & Adapters
+      Protocols als Verträge
+      In-Memory für Tests
+      Postgres für Prod
+    Entkopplung
+      Dependency Injection
+      Composition Root
+      Keine Zirkulären Imports
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-29">
+            <div class="slide-badge">Folie 29 / 29</div>
+            <div class="slide-content">
+                <h2>Ausblick auf Modul 4</h2>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was wir bisher erreicht haben:</h3>
+<ul>
+<li><strong>Modul 1:</strong> Objektorientierung &amp; SOLID-Prinzipien</li>
+<li><strong>Modul 2:</strong> Objektorientierte Analyse (OOA) &amp; der Übergang zum Entwurf</li>
+<li><strong>Modul 3:</strong> Code-Modularisierung &amp; Hexagonale Architektur</li>
+</ul>
+<h3>Was uns in Modul 4 erwartet:</h3>
+<ul>
+<li>Wie behandeln wir <strong>querschneidende Belange</strong> (Logging, Caching, Retry), ohne sauberen Modulcode wieder zu verschmutzen?</li>
+<li><strong>Aspektorientierte Programmierung &amp; Python-Dekoratoren</strong></li>
+<li>Fortgeschrittene <strong>Entwurfsmuster (GoF)</strong></li>
+<li><strong>Funktionale Programmierung</strong> in Python</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M3 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+    style M4 fill:#9b59b6,stroke:#8e44ad,color:#fff
+</div>
+<blockquote>
+<p><strong>Frage zum Weiterdenken:</strong> Wo platzieren wir Logging und Caching in unserer Hexagonalen Architektur? In der Domäne, im Service oder im Adapter? Das klären wir in Modul 4!</p>
+</blockquote>
+</div>
+</div>
+
+            </div>
+        </article>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontFamily: '"Inter", system-ui, sans-serif'
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Clean up any mermaid blocks if needed
+            document.querySelectorAll('.mermaid').forEach((el) => {
+                let text = el.textContent || '';
+                text = text.replace(/&amp;/g, '&')
+                           .replace(/--&gt;/g, '-->')
+                           .replace(/&gt;/g, '>')
+                           .replace(/&lt;/g, '<')
+                           .replace(/&quot;/g, '"');
+                el.textContent = text.trim();
+            });
+
+            const nodes = document.querySelectorAll('.mermaid');
+            for (const node of nodes) {
+                try {
+                    await mermaid.run({ nodes: [node] });
+                } catch (err) {
+                    console.warn('Mermaid render issue:', err);
+                }
+            }
+
+            // Highlight all code blocks
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

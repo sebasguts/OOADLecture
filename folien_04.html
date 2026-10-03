@@ -148,7 +148,7 @@
 </head>
 <body>
     <div class="nav-home">
-        <a href="index.html">← Zur Übersicht</a> | Modul 4: Aspekte, Muster & FP
+        <a href="index.html">← Zur Übersicht</a> | <a href="skript_04.html">Alle Folien auf einer Seite 📄</a> | Modul 4: Aspekte, Muster & FP
     </div>
     <div class="reveal">
         <div class="slides">
@@ -848,7 +848,7 @@ Neben dem Produkt zweier Typen gibt es zwei weitere grundlegende Typkonstruktion
 ```python
 from dataclasses import dataclass
 
-# Union-Typen mit modernem Pipe-Operator (|):
+# Python 3.12+ (PEP 695 Type-Alias-Statement):
 @dataclass(frozen=True)
 class Bar: pass
 
@@ -860,9 +860,10 @@ class Karte:
 class Rechnung:
     iban: str
 
+# Summen-Typ (Union): Genau EINE dieser Ausprägungen!
 type Zahlungsart = Bar | Karte | Rechnung
 
-# Listen-Typ: Warenkorb als Liste von Positionen
+# Listen-Typ: Homogene Sequenz beliebiger Länge
 type Warenkorb = list[BestellPosition]
 
 bestellung: Warenkorb = [

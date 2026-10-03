@@ -1,0 +1,2384 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Modul 1: Moderne Objektorientierung & Softwaredesign – Alle Folien</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #1e8449;
+            --secondary: #1e293b;
+            --text: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 24px 24px 60px;
+        }
+        .container {
+            max-width: 1680px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        /* Top Header */
+        .page-header {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+            transition: background 0.15s, color 0.15s;
+        }
+        .nav-link:hover {
+            background: #d1f2eb;
+        }
+        .header-title h1 {
+            font-size: 1.45rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .header-title p {
+            font-size: 0.92rem;
+            color: var(--text-light);
+        }
+        .print-btn {
+            background: var(--secondary);
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .print-btn:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* Slide Cards */
+        .slide-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px 36px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            position: relative;
+        }
+        .slide-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Typography inside slides */
+        .slide-content h1, .slide-content h2, .slide-content h3, .slide-content h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        .slide-content h1 { font-size: 1.8rem; }
+        .slide-content h2 { font-size: 1.4rem; color: var(--primary); }
+        .slide-content h3 { font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .slide-content h4 { font-size: 1.05rem; color: var(--primary-dark); margin-top: 14px; margin-bottom: 8px; }
+        .slide-content p, .slide-content li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .slide-content ul, .slide-content ol {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+        .slide-content li {
+            margin-bottom: 6px;
+        }
+        .slide-content strong {
+            color: #0f172a;
+        }
+
+        /* Two-Column Layout */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 14px;
+        }
+        .col { min-width: 0; }
+        .col-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .col-card h4 {
+            margin-top: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        tr:nth-child(even) td {
+            background: #fafbfc;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        p code, li code, td code {
+            background: #f1f5f9;
+            color: #b91c1c;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 18px 0;
+            min-height: 180px;
+            overflow: auto;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .mermaid svg {
+            max-height: 480px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            body { padding: 15px 12px; }
+            .slide-card { padding: 22px 18px; }
+            .two-cols, .two-cols-wide-left, .two-cols-wide-right {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container { max-width: 100% !important; width: 100% !important; }
+            .no-print { display: none !important; }
+            .slide-card {
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                box-shadow: none;
+                margin-bottom: 25px;
+                padding: 20px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .slide-badge {
+                border-color: #94a3b8;
+                color: #334155;
+                background: #f1f5f9;
+            }
+            pre {
+                background: #f8fafc !important;
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1;
+                font-size: 0.78rem;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+            pre code {
+                color: #0f172a !important;
+            }
+            .col-card {
+                border: 1px solid #cbd5e1;
+                background: #f8fafc;
+            }
+            .mermaid svg {
+                max-height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header no-print">
+            <div>
+                <div class="header-nav">
+                    <a href="index.html" class="nav-link">← Zur Kursübersicht</a>
+                    <a href="folien_01.html" class="nav-link" target="_blank">🖥 Folien präsentieren ↗</a>
+                </div>
+                <div class="header-title" style="margin-top: 12px;">
+                    <h1>Modul 1: Moderne Objektorientierung & Softwaredesign</h1>
+                    <p>Alle 44 Folien auf einer Seite – Zum Lesen, Lernen und als PDF drucken</p>
+                </div>
+            </div>
+            <div>
+                <button onclick="window.print()" class="print-btn">🖨️ Drucken / PDF speichern</button>
+            </div>
+        </header>
+
+        <main>
+            
+        <article class="slide-card" id="folie-1">
+            <div class="slide-badge">Folie 1 / 44</div>
+            <div class="slide-content">
+                <h1>Objektorientierte Analyse &amp; Design</h1>
+<h2>Modul 1: Moderne Objektorientierung &amp; Softwaredesign</h2>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-2">
+            <div class="slide-badge">Folie 2 / 44</div>
+            <div class="slide-content">
+                <h3>Präzise Lernziele</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Nach aktiver Erarbeitung dieses Moduls können Sie:</p>
+<ol>
+<li><strong>Den Kern der Objektorientierung erklären:</strong> Zustand, Verhalten und Identität voneinander abgrenzen und den Mehrwert gegenüber unstrukturierten Datenstrukturen begründen.</li>
+<li><strong>Datenkapselung praktisch anwenden:</strong> Attribute mit Zugriffsrechten schützen und Datenklassen (<code>@dataclass(slots=True)</code>) in Python 3.12+ implementieren.</li>
+<li><strong>UML-Klassendiagramme formal lesen und zeichnen:</strong> Sichtbarkeiten, Methoden und die Beziehungstypen (Assoziation, Aggregation, Komposition, Vererbung) korrekt notieren und interpretieren.</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Weiterführende Entwurfsziele:</h4>
+<ol start="4">
+<li><strong>Das Prinzip <em>Composition over Inheritance</em> begründen:</strong> Die Risiken tiefer Vererbungshierarchien analysieren und flexiblere Kompositionsmodelle entwerfen.</li>
+<li><strong>Die SOLID-Prinzipien im Detail verstehen:</strong> Code-Smells identifizieren und Softwaresysteme nach SRP, OCP, LSP, ISP und DIP refaktorisieren.</li>
+<li><strong>Entwurfsmuster gezielt einsetzen:</strong> Das <em>Strategy Pattern</em> und das <em>Factory Pattern</em> in modernem Python mit <code>typing.Protocol</code> realisieren.</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-3">
+            <div class="slide-badge">Folie 3 / 44</div>
+            <div class="slide-content">
+                <h3>Agenda</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Teil 1: Grundlagen, Typisierung &amp; Modellierung</h4>
+<ol>
+<li><strong>Das Problem ohne OO:</strong> Datenchaos mit Dictionaries</li>
+<li><strong>Grundbegriffe:</strong> Zustand, Verhalten, Identität &amp; Kapselung</li>
+<li><strong>Typisierung in Python:</strong> Type Hints, PEP 484 &amp; Mypy</li>
+<li><strong>Moderne Klassen:</strong> Dataclasses, Slots &amp; Properties</li>
+<li><strong>Objektbeziehungen:</strong> Assoziation, Aggregation, Komposition</li>
+<li><strong>Vererbung verstehen:</strong> <code>super()</code>, Überschreiben &amp; Interfaces (<code>Protocol</code>)</li>
+</ol>
+</div>
+<div class="col">
+
+<h4>Teil 2: Softwarearchitektur &amp; Entwurfsmuster</h4>
+<ol start="7">
+<li><strong>Die Tücken der Vererbung:</strong> Klassenexplosion &amp; Fragile Base Class</li>
+<li><strong>Composition over Inheritance:</strong> Flexibilität zur Laufzeit</li>
+<li><strong>Die SOLID-Prinzipien im Detail:</strong> SRP, OCP, LSP, ISP, DIP</li>
+<li><strong>Entwurfsmuster:</strong> Strategy Pattern &amp; Fabrikmethode (GoF)</li>
+<li><strong>Zusammenfassung &amp; Reflexionsfragen</strong></li>
+</ol>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-4">
+            <div class="slide-badge">Folie 4 / 44</div>
+            <div class="slide-content">
+                <h3>Das Problem ohne OO: Datenchaos mit Dictionaries</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Anfänger beginnen oft mit simplen Dictionaries.<br><strong>Warum führt das in echten Projekten schnell zur Katastrophe?</strong></p>
+<ul>
+<li><strong>Keine Typprüfung:</strong> Man kann versehentlich Strings statt Zahlen übergeben.</li>
+<li><strong>Tippfehler in Schlüsseln:</strong> <code>&quot;pries&quot;</code> statt <code>&quot;preis&quot;</code> legt stillschweigend einen neuen Key an – ein stiller Logikfehler.</li>
+<li><strong>Fehlende Kapselung:</strong> Jeder Programmteil kann den Zustand manipulieren (z. B. negativer Preis).</li>
+<li><strong>Verhalten und Daten sind getrennt:</strong> Funktionen liegen lose verstreut herum.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ❌ Schlechter, unstrukturierter Code:
+pflanze_1 = {
+    &quot;name&quot;: &quot;Monstera Deliciosa&quot;,
+    &quot;preis&quot;: 29.99,
+    &quot;feuchtigkeit&quot;: 45
+}
+
+# Typischer Bug: Schreibfehler im Key!
+pflanze_1[&quot;pries&quot;] = -50.0  # Kein Fehler zur Laufzeit!
+
+def giesse_pflanze(p: dict, menge: int):
+    # Keine Garantie, dass die Keys existieren
+    p[&quot;feuchtigkeit&quot;] += menge
+
+giesse_pflanze(pflanze_1, 20)
+print(pflanze_1[&quot;feuchtigkeit&quot;])  # 65
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-5">
+            <div class="slide-badge">Folie 5 / 44</div>
+            <div class="slide-content">
+                <h3>Was ist Objektorientierung?</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>Objektorientierung (OO)</strong> ist die Modellierung eines Softwaresystems durch kooperierende Objekte, die <strong>Zustand (Daten)</strong> und <strong>Verhalten (Methoden)</strong> zu einer Einheit bündeln.</p>
+</blockquote>
+<ul>
+<li><strong>Zustand (State):</strong> Die internen Daten eines Objekts zu einem bestimmten Zeitpunkt (z. B. Wasserstand = 45%, Preis = 29.99 €).</li>
+<li><strong>Verhalten (Behavior):</strong> Was das Objekt tun kann (z. B. <code>bewaessern()</code>, <code>berechne_endpreis()</code>).</li>
+<li><strong>Identität (Identity):</strong> Jedes Objekt ist eindeutig unterscheidbar, selbst wenn alle Attribute identisch sind (im Speicher an unterschiedlichen Adressen).</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Alltagsanalogie: <em>Zimmerpflanze im Topf</em></h4>
+<ul>
+<li><strong>Zustand:</strong><ul>
+<li>Art: Monstera</li>
+<li>Erdfeuchtigkeit: 30 %</li>
+<li>Standort: Halbschatten</li>
+</ul>
+</li>
+<li><strong>Verhalten:</strong><ul>
+<li>Verbraucht Wasser über Zeit</li>
+<li>Nimmt Wasser beim Gießen auf</li>
+<li>Zeigt Welkesymptome bei &lt; 20 %</li>
+</ul>
+</li>
+<li><strong>Identität:</strong><ul>
+<li>Zwei Töpfe mit identischer Monstera nebeneinander sind trotzdem <strong>zwei verschiedene Pflanzen</strong>!</li>
+<li>Im Code: <code>p1 == p2</code> (Wertegleichheit via <code>__eq__</code>) vs. <code>p1 is p2</code> (Identität / Speicheradresse <code>id(p)</code>).</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-6">
+            <div class="slide-badge">Folie 6 / 44</div>
+            <div class="slide-content">
+                <h3>Klassen vs. Instanzen</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Klasse = Der Bauplan</h4>
+<ul>
+<li>Definiert, welche Attribute und Methoden Objekte dieses Typs besitzen.</li>
+<li>Existiert im Quellcode als Schablone.</li>
+<li><em>Analogie:</em> <strong>Die Ausstechform</strong> für Plätzchen oder der Bauplan eines Hauses.</li>
+</ul>
+<h4>Instanz / Objekt = Das konkrete Exemplar</h4>
+<ul>
+<li>Wird zur Laufzeit im Arbeitsspeicher nach dem Bauplan erzeugt.</li>
+<li>Besitzt konkrete Werte für die Attribute.</li>
+<li><em>Analogie:</em> <strong>Das fertige Plätzchen</strong> oder das gebaute Haus in einer Straße.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># Die KLASSE (Der Bauplan):
+class Pflanze:
+    def __init__(self, name: str, preis: float):
+        self.name = name          # Attribut
+        self.preis = preis        # Attribut
+
+    def beschreibe(self) -&gt; str: # Methode
+        return f&quot;{self.name} für {self.preis:.2f} €&quot;
+
+# INSTANZEN (Konkrete Objekte im Speicher):
+monstera = Pflanze(&quot;Monstera Deliciosa&quot;, 29.99)
+ficus = Pflanze(&quot;Ficus Benjamini&quot;, 19.95)
+
+print(monstera.beschreibe())
+# -&gt; Monstera Deliciosa für 29.99 €
+print(ficus.beschreibe())
+# -&gt; Ficus Benjamini für 19.95 €
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-7">
+            <div class="slide-badge">Folie 7 / 44</div>
+            <div class="slide-content">
+                <h3>Kapselung (Encapsulation) &amp; Properties</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>Kapselung</strong> verbirgt interne Datenstrukturen vor Außenstehenden und erlaubt Zugriff nur über kontrollierte Schnittstellen.</p>
+</blockquote>
+<ul>
+<li><strong>Schutz vor Inkonsistenz:</strong> Niemand darf den Preis auf null oder einen negativen Betrag setzen!</li>
+<li><strong>Verstecken von Komplexität:</strong> Der Aufrufer muss nicht wissen, wie der Wert intern gespeichert wird.</li>
+<li><strong>In Python:</strong> Nicht-öffentliche Attribute per Konvention mit führendem Unterstrich (<code>_preis</code>, PEP 8: <em>„internal use“</em>) und Absicherung über <code>@property</code>. Doppelter Unterstrich (<code>__preis</code>) aktiviert <em>Name Mangling</em> – ist aber ebenfalls kein echter Zugriffsschutz.</li>
+<li><strong>Philosophie:</strong> Python erzwingt keine Zugriffsbeschränkung zur Laufzeit (<em>&quot;We are all consenting adults here&quot;</em>). Der Unterstrich signalisiert: <em>Internes Detail, nicht von außen zugreifen!</em></li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">class Topfpflanze:
+    def __init__(self, name: str, preis: float):
+        self.name = name
+        self.preis = preis  # Ruft Setter auf!
+
+    @property
+    def preis(self) -&gt; float:
+        &quot;&quot;&quot;Öffentlicher Getter&quot;&quot;&quot;
+        return self._preis
+
+    @preis.setter
+    def preis(self, wert: float) -&gt; None:
+        &quot;&quot;&quot;Kontrollierter Setter mit Validierung&quot;&quot;&quot;
+        if wert &lt;= 0:
+            raise ValueError(&quot;Preis muss positiv sein!&quot;)
+        self._preis = wert
+
+p = Topfpflanze(&quot;Orchidee&quot;, 25.0)
+# p.preis = -10.0  # 💥 Löst ValueError aus!
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-8">
+            <div class="slide-badge">Folie 8 / 44</div>
+            <div class="slide-content">
+                <h3>Typisierung in modernem Python: Type Hints &amp; PEP 484</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Klassisches Python ist dynamisch typisiert: Typen werden erst zur Laufzeit interpretiert.<br>Seit <strong>PEP 484 (Python 3.5)</strong> bzw. <strong>PEP 526 (Variablen-Annotationen, Python 3.6)</strong> verfügt Python über offizielle <strong>Type Hints</strong> – das Fundament für professionelles Software-Design!</p>
+<h4>Warum Typisierung in OO unverzichtbar ist:</h4>
+<ul>
+<li><strong>Selbstdokumentation:</strong> Parameter und Rückgabetypen sind auf einen Blick glasklar – Typen müssen nicht mehr im Docstring stehen.</li>
+<li><strong>IntelliSense &amp; Tooling:</strong> IDEs bieten präzise Autovervollständigung und sicheres automatisiertes Refactoring.</li>
+<li><strong>Statische Typprüfung:</strong> Tools wie <strong><code>mypy</code></strong> oder <strong><code>pyright</code></strong> finden Typfehler, falsche Attribute und <code>None</code>-Zugriffe <strong>vor</strong> der Programmausführung!</li>
+<li><strong>Fundament moderner Frameworks:</strong> <code>@dataclass</code>, <code>pydantic</code> und <code>FastAPI</code> basieren auf Type Hints.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># 1. Variablen und Collections (Python 3.9+ Syntax):
+alter: int = 42
+preis: float = 19.99
+pflanzen: list[str] = [&quot;Monstera&quot;, &quot;Ficus&quot;]
+katalog: dict[str, float] = {&quot;Monstera&quot;: 19.99}
+
+# 2. Methoden-Signaturen mit Rückgabetyp:
+class Pflanze:
+    def __init__(self, name: str, bedarf_ml: int) -&gt; None:
+        self.name: str = name
+        self.bedarf_ml: int = bedarf_ml
+        self.wasser_ml: int = 0
+
+    def giesse(self, menge_ml: int) -&gt; None:
+        self.wasser_ml += menge_ml
+
+    def ist_durstig(self) -&gt; bool:
+        return self.wasser_ml &lt; self.bedarf_ml
+
+# 3. Optionale Werte und Union-Typen (Python 3.10+):
+def finde_pflanze(name: str) -&gt; Pflanze | None:
+    ...
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-9">
+            <div class="slide-badge">Folie 9 / 44</div>
+            <div class="slide-content">
+                <h3>Modernes Python: Dataclasses &amp; Slots</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Früher erforderte jede Python-Klasse mühsamen Boilerplate-Code für <code>__init__</code>, <code>__repr__</code> und <code>__eq__</code>.</p>
+<ul>
+<li><strong><code>@dataclass</code> (seit Python 3.7):</strong><br>Generiert Konstruktor, lesbare Ausgabe und Wertevergleich automatisch anhand von Type Hints.</li>
+<li><strong><code>slots=True</code> (Python 3.10+):</strong><br>Verhindert dynamisches Hinzufügen beliebiger Attribute und spart Speicher (kein <code>__dict__</code> pro Objekt) – die Ersparnis hängt von Python-Version und Attributzahl ab.</li>
+<li><strong><code>kw_only=True</code> (Python 3.10+):</strong><br>Erzwingt benannte Parameter beim Aufruf – verhindert Verwechslungen bei vielen Argumenten!</li>
+<li><strong>Best Practice:</strong> Dataclasses ideal für Datenhalter / Value Objects einsetzen; tiefe Vererbungshierarchien mit <code>slots=True</code> vermeiden (Problem mit <code>super()</code> vor Python 3.13).</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from dataclasses import dataclass
+
+@dataclass(slots=True, kw_only=True)
+class SmartPlant:
+    botanischer_name: str
+    preis: float
+    feuchtigkeits_soll: int = 50
+    ist_feuchtigkeit: int = 50
+
+    def muss_gegossen_werden(self) -&gt; bool:
+        return self.ist_feuchtigkeit &lt; self.feuchtigkeits_soll
+
+# Instanziierung erfordert Schlüsselwörter:
+p = SmartPlant(
+    botanischer_name=&quot;Monstera&quot;, 
+    preis=29.99, 
+    ist_feuchtigkeit=35
+)
+
+print(p)
+# -&gt; SmartPlant(botanischer_name=&#39;Monstera&#39;, ...)
+print(p.muss_gegossen_werden())  # True
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-10">
+            <div class="slide-badge">Folie 10 / 44</div>
+            <div class="slide-content">
+                <h3>UML-Klassendiagramme: Die Grundlagen</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<p>Die <strong>Unified Modeling Language (UML)</strong> ist die Weltsprache für Softwareentwurf.</p>
+<h4>Aufbau einer Klasse in UML:</h4>
+<p>Ein Kasten mit drei Abschnitten:</p>
+<ol>
+<li><strong>Klassenname:</strong> Zentriert, fett (kursiv = abstrakt).</li>
+<li><strong>Attribute:</strong> <code>[Sichtbarkeit] name : Typ</code></li>
+<li><strong>Methoden:</strong> <code>[Sichtbarkeit] name(Parameter) : Rückgabetyp</code></li>
+</ol>
+<h4>Sichtbarkeitsmodifikatoren (Visibilities):</h4>
+<ul>
+<li><code>+</code> <strong>Public:</strong> Überall sichtbar und aufrufbar.</li>
+<li><code>-</code> <strong>Private:</strong> Nur innerhalb dieser Klasse sichtbar.</li>
+<li><code>#</code> <strong>Protected:</strong> In der Klasse und ihren Subklassen sichtbar.</li>
+<li><code>~</code> <strong>Package:</strong> Nur innerhalb des Moduls/Pakets sichtbar.</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Pflanze {
+        +botanischerName : String
+        -einkaufspreis : float
+        #feuchtigkeitsBedarf : int
+        +pruefeBedarf(aktuell : int) bool
+        +setzePreis(neu : float)
+        -berechneMarge() float
+    }
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-11">
+            <div class="slide-badge">Folie 11 / 44</div>
+            <div class="slide-content">
+                <h3>Objektbeziehungen: Wie Klassen miteinander interagieren</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>In einer professionellen Softwarearchitektur steht keine Klasse isoliert für sich allein. Reale Geschäftslogik entsteht erst durch das <strong>Zusammenspiel kooperierender Objekte</strong>.</p>
+<h4>Die 3 Leitfragen zur Modellierung:</h4>
+<ol>
+<li><strong>Wer kennt wen? (Sichtbarkeit &amp; Kopplung):</strong><br>Hält Objekt A eine Referenz auf Objekt B? Weiß B von A (bidirektional) oder nur A von B (unidirektional)?</li>
+<li><strong>Wer besitzt wen? (Lebenszyklus &amp; Existenz):</strong><br>Kann das Teil ohne das übergeordnete Ganze weiter existieren, oder stirbt es mit ihm?</li>
+<li><strong>Wer ist was? (Generalisierung &amp; Verträge):</strong><br>Ist Klasse B eine spezielle Variante von A (<em>is-a</em>) oder erfüllt B einen definierten Vertrag (<em>can-do</em>)?</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Beziehungsarten nach Kopplungsstärke:</h4>
+<ol>
+<li><strong>Abhängigkeit (sehr lose):</strong><br><em>&quot;Benutzt kurzzeitig&quot;</em> – Nur als Parameter, lokale Variable oder beim Erzeugen (<code>Factory</code> erzeugt <code>Pflanze</code>).</li>
+<li><strong>Assoziation (lose):</strong><br><em>&quot;Nutzt / Kennt&quot;</em> – Unabhängige Lebenszyklen (<code>Kunde</code> kennt <code>Pflanze</code>).</li>
+<li><strong>Aggregation (mittel):</strong><br><em>&quot;Besteht aus&quot;</em> – Schwache Teil-Ganzes-Beziehung. Teile überleben (<code>Blumenstrauß</code> hat <code>Blumen</code>).</li>
+<li><strong>Komposition (stark):</strong><br><em>&quot;Besitzt existenziell&quot;</em> – Strikte Teil-Ganzes-Beziehung. Teile sterben mit (<code>Rechnung</code> besitzt <code>Positionen</code>).</li>
+<li><strong>Vererbung (sehr stark):</strong><br><em>&quot;Ist ein&quot;</em> – Feste Code- und Verhaltenskopplung (<code>Zimmerpflanze</code> ist <code>Pflanze</code>).</li>
+<li><strong>Realisierung (flexibel):</strong><br><em>&quot;Implementiert / Erfüllt Vertrag&quot;</em> – Polymorphe Schnittstelle (<code>Sensor</code> implementiert <code>Messbar</code>).</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-12">
+            <div class="slide-badge">Folie 12 / 44</div>
+            <div class="slide-content">
+                <h3>Beziehung 1: Assoziation (Kunde kennt Pflanze)</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Assoziation</strong> ist eine lose Beziehung zwischen zwei unabhängigen Klassen. Beide Objekte besitzen ihren <strong>eigenen, unabhängigen Lebenszyklus</strong>.</p>
+</blockquote>
+<ul>
+<li>Ein Kunde schaut sich Pflanzen an oder legt sie in den Merkzettel.</li>
+<li>Stirbt der Kunde oder löscht sein Konto, existiert die Pflanze im Laden weiter.</li>
+<li>Wird die Pflanze verkauft, existiert der Kunde weiter.</li>
+<li><strong>UML:</strong> Einfache Linie oder gerichteter Pfeil (<code>--&gt;</code>).</li>
+</ul>
+<pre><code class="language-python">class Kunde:
+    def __init__(self, name: str) -&gt; None:
+        self.name = name
+        self.merkzettel: list[Pflanze] = []
+
+    def merke(self, p: Pflanze) -&gt; None:
+        # Assoziation: Kunde referenziert Pflanze
+        self.merkzettel.append(p)
+</code></pre>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Kunde {
+        +name : String
+        +merke(p : Pflanze)
+    }
+    class Pflanze {
+        +name : String
+        +preis : float
+    }
+    Kunde "0..*" --> "0..*" Pflanze : merkt sich
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-13">
+            <div class="slide-badge">Folie 13 / 44</div>
+            <div class="slide-content">
+                <h3>Beziehung 2: Aggregation (Blumenstrauß &amp; Blumen)</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Aggregation</strong> ist eine &quot;Teil-Ganzes-Beziehung&quot; (<em>has-a</em>), bei der die Teile auch <strong>ohne das Ganze existieren können</strong>.</p>
+</blockquote>
+<ul>
+<li>Ein <code>Blumenstrauss</code> besteht aus mehreren <code>Blume</code>-Objekten.</li>
+<li>Löst man den Strauß auf, existieren die einzelnen Blumen weiter und können in einen neuen Strauß gebunden werden.</li>
+<li>Die Blumen werden von <strong>außen übergeben</strong> (sie existieren unabhängig vom Strauß).</li>
+<li><strong>UML-Symbol:</strong> Eine <strong>ungefüllte (weiße) Raute</strong> am Ganzen (<code>o--</code>).</li>
+<li><em>Hinweis:</em> Die UML 2 lässt die Semantik der Aggregation bewusst offen – in der Praxis wird sie unterschiedlich streng ausgelegt.</li>
+</ul>
+<pre><code class="language-python">class Blumenstrauss:
+    def __init__(self, blumen: list[Blume]) -&gt; None:
+        # Die Blumen existieren bereits und werden übergeben:
+        self.blumen = blumen
+
+    def berechne_preis(self) -&gt; float:
+        return sum(b.einzelpreis for b in self.blumen)
+</code></pre>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Blumenstrauss {
+        +anlass : String
+        +berechnePreis() float
+    }
+    class Blume {
+        +art : String
+        +einzelpreis : float
+    }
+    Blumenstrauss "0..1" o-- "1..*" Blume : besteht aus
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-14">
+            <div class="slide-badge">Folie 14 / 44</div>
+            <div class="slide-content">
+                <h3>Beziehung 3: Komposition (Rechnung &amp; Positionen)</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Komposition</strong> ist eine strenge existenzielle Teil-Ganzes-Beziehung. Die Teile können <strong>nicht ohne das übergeordnete Ganze existieren</strong>.</p>
+</blockquote>
+<ul>
+<li>Eine <code>Rechnung</code> besitzt mehrere <code>RechnungsPosition</code>-Einträge.</li>
+<li>Wird die Rechnung im System storniert oder gelöscht, verlieren die Positionen jegliche Existenzberechtigung und werden mitgelöscht.</li>
+<li>Die Teile werden üblicherweise <strong>im Ganzen erzeugt</strong>.</li>
+<li><strong>UML-Symbol:</strong> Eine <strong>ausgefüllte (schwarze) Raute</strong> am Ganzen (<code>*--</code>).</li>
+</ul>
+<pre><code class="language-python">class Rechnung:
+    def __init__(self, nr: str) -&gt; None:
+        self.nr = nr
+        self._positionen: list[RechnungsPosition] = []
+
+    def fuege_position_hinzu(self, text: str, betrag: float) -&gt; None:
+        # Das Ganze erzeugt und besitzt seine Teile existenziell:
+        pos = RechnungsPosition(text, betrag)
+        self._positionen.append(pos)
+</code></pre>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Rechnung {
+        +nr : String
+        +fuegePositionHinzu(text : String, betrag : float)
+    }
+    class RechnungsPosition {
+        +text : String
+        +betrag : float
+    }
+    Rechnung "1" *-- "0..*" RechnungsPosition : besitzt existenziell
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-15">
+            <div class="slide-badge">Folie 15 / 44</div>
+            <div class="slide-content">
+                <h3>Beziehung 4: Vererbung / Generalisierung (Pflanze &amp; Zimmerpflanze)</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Vererbung</strong> (<em>Generalisierung / Spezialisierung</em>) modelliert eine <strong>&quot;Ist-Ein&quot;-Beziehung</strong> (<em>is-a</em>). Eine Subklasse erbt Attribute und Verhalten der Basisklasse.</p>
+</blockquote>
+<ul>
+<li>Eine <code>Zimmerpflanze</code> <strong>ist eine</strong> <code>Pflanze</code> mit zusätzlichen Attributen (z. B. <code>topf_cm</code>).</li>
+<li>Änderungen an der Basisklasse wirken sich direkt auf alle Subklassen aus (starke strukturelle Kopplung).</li>
+<li><strong>UML-Symbol:</strong> Ein <strong>geschlossener, weißer Dreieckspfeil</strong> (<code>&lt;\|--</code>), der zur Basisklasse zeigt.</li>
+</ul>
+<pre><code class="language-python">class Pflanze:
+    def __init__(self, name: str, preis: float) -&gt; None:
+        self.name = name
+        self.preis = preis
+
+class Zimmerpflanze(Pflanze):  # Erbt von Pflanze
+    def __init__(self, name: str, preis: float, topf_cm: int) -&gt; None:
+        super().__init__(name, preis)
+        self.topf_cm = topf_cm
+</code></pre>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Pflanze {
+        +name : String
+        +preis : float
+        +beschreibe() String
+    }
+    class Zimmerpflanze {
+        +topfCm : int
+        +giesse(ml : int)
+    }
+    class WinterhartePflanze {
+        +frostHaerteGrad : int
+    }
+    Pflanze <|-- Zimmerpflanze : ist eine
+    Pflanze <|-- WinterhartePflanze : ist eine
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-16">
+            <div class="slide-badge">Folie 16 / 44</div>
+            <div class="slide-content">
+                <h3>Beziehung 5: Realisierung / Interface-Implementierung</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Realisierung</strong> (<em>Interface-Implementierung</em>) bedeutet, dass eine Klasse einen formalen <strong>Vertrag erfüllt</strong> (<em>can-do</em>), ohne Implementierungsdetails von einer Basisklasse zu erben.</p>
+</blockquote>
+<ul>
+<li>Ein Interface definiert, <strong>was</strong> getan werden kann, nicht <strong>wie</strong>.</li>
+<li>Mehrere völlig unterschiedliche Klassen können dasselbe Interface erfüllen (Polymorphie).</li>
+<li>In modernem Python realisiert über <strong><code>typing.Protocol</code></strong> (Duck Typing) oder <strong><code>abc.ABC</code></strong>.</li>
+<li><strong>UML-Symbol:</strong> Eine <strong>gestrichelte Linie mit weißem Dreieckspfeil</strong> (<code>&lt;\|..</code>), der zum Interface zeigt.</li>
+</ul>
+<pre><code class="language-python">from typing import Protocol
+
+class Messbar(Protocol):
+    def lese_wert(self) -&gt; float: ...
+
+class FeuchtigkeitsSensor:  # Realisiert &#39;Messbar&#39;
+    def lese_wert(self) -&gt; float:
+        return 42.5
+
+class TemperaturSensor:    # Realisiert &#39;Messbar&#39;
+    def lese_wert(self) -&gt; float:
+        return 21.0
+</code></pre>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Messbar {
+        <<interface>>
+        +leseWert() float
+    }
+    class FeuchtigkeitsSensor {
+        +leseWert() float
+    }
+    class TemperaturSensor {
+        +leseWert() float
+    }
+    Messbar <|.. FeuchtigkeitsSensor : implementiert
+    Messbar <|.. TemperaturSensor : implementiert
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-17">
+            <div class="slide-badge">Folie 17 / 44</div>
+            <div class="slide-content">
+                <h3>UML-Beziehungen: Pfeile &amp; Symbole im Überblick</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Objekte arbeiten nicht isoliert, sondern stehen in präzisen Beziehungen zueinander.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Mermaid-Syntax</th>
+<th align="left">Beziehung</th>
+<th align="center">Kopplung</th>
+<th align="left">Bedeutung &amp; Faustregel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>..&gt;</code></td>
+<td align="left"><strong>Abhängigkeit</strong></td>
+<td align="center">Sehr lose</td>
+<td align="left">&quot;Benutzt kurzzeitig&quot; (Parameter, lokale Variable, erzeugt)</td>
+</tr>
+<tr>
+<td align="center"><code>--&gt;</code></td>
+<td align="left"><strong>Assoziation</strong></td>
+<td align="center">Lose</td>
+<td align="left">&quot;Nutzt / Kennt&quot; (unabhängige Lebenszyklen)</td>
+</tr>
+<tr>
+<td align="center"><code>o--</code></td>
+<td align="left"><strong>Aggregation</strong></td>
+<td align="center">Mittel</td>
+<td align="left">&quot;Besteht aus&quot; (Teile überleben das Ganze)</td>
+</tr>
+<tr>
+<td align="center"><code>*--</code></td>
+<td align="left"><strong>Komposition</strong></td>
+<td align="center">Hoch</td>
+<td align="left">&quot;Besitzt existenziell&quot; (Teile sterben mit dem Ganzen)</td>
+</tr>
+<tr>
+<td align="center"><code>&lt;|--</code></td>
+<td align="left"><strong>Vererbung</strong></td>
+<td align="center">Sehr hoch</td>
+<td align="left">&quot;Ist ein / Generalisierung&quot; (starr zur Entwurfszeit)</td>
+</tr>
+<tr>
+<td align="center"><code>&lt;|..</code></td>
+<td align="left"><strong>Realisierung</strong></td>
+<td align="center">Minimal</td>
+<td align="left">&quot;Erfüllt Vertrag / Interface&quot; (Polymorphie)</td>
+</tr>
+</tbody></table>
+<p><em>UML-Symbole:</em> gestrichelter offener Pfeil · Linie (opt. offene Pfeilspitze = Navigierbarkeit) · weiße Raute · schwarze Raute · weißes Dreieck · gestrichelt + weißes Dreieck.</p>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Multiplizitäten (Kardinalitäten)</h4>
+<p>Stehen an den Enden der Verbindungslinien:</p>
+<ul>
+<li><code>1</code> : Genau eins</li>
+<li><code>0..1</code> : Optional (null oder eins)</li>
+<li><code>*</code> oder <code>0..*</code> : Beliebig viele (null bis unendlich)</li>
+<li><code>1..*</code> : Mindestens eins bis unendlich</li>
+<li><code>2..5</code> : Fester Bereich von 2 bis 5</li>
+</ul>
+<h4>Leserichtung &amp; Rollen</h4>
+<p>Ein Pfeil mit Beschriftung zeigt an, wer wen wie nutzt:<br><code>Kunde &quot;1&quot; --&gt; &quot;0..*&quot; Bestellung : gibt auf</code></p>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-18">
+            <div class="slide-badge">Folie 18 / 44</div>
+            <div class="slide-content">
+                <h3>Vererbung verstehen (1/4): Das mentale Modell (&quot;Ist-Ein&quot;)</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Vererbung ist eines der bekanntesten Konzepte der OO – wird aber von Einsteigern oft missverstanden.</p>
+<h4>Was bedeutet Vererbung wirklich?</h4>
+<ul>
+<li><strong>Generalisierung (Basisklasse / Superklasse):</strong><br>Gemeinsame Eigenschaften aller Pflanzen (z. B. <code>name</code>, <code>preis</code>) werden <strong>einmal zentral</strong> in <code>Pflanze</code> definiert.</li>
+<li><strong>Spezialisierung (Subklasse / Kindklasse):</strong><br>Eine <code>Zimmerpflanze</code> oder <code>Gartenblume</code> übernimmt automatisch alle Felder und Methoden der <code>Pflanze</code> und fügt nur ihre speziellen Besonderheiten hinzu.</li>
+</ul>
+<blockquote>
+<p><strong>Die &quot;Ist-Ein&quot;-Regel (Is-A):</strong><br>Vererbung darf <strong>nur</strong> verwendet werden, wenn die Kindklasse logisch immer und überall ein vollwertiger Ersatz für die Elternklasse ist!<br>✅ <em>Eine Zimmerpflanze ist eine Pflanze.</em><br>❌ <em>Ein Blumentopf ist keine Pflanze – er enthält eine (→ Aggregation, die Pflanze überlebt das Umtopfen).</em></p>
+</blockquote>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Pflanze {
+        +name : String
+        +preis : float
+        +basisInfo() String
+    }
+    class Zimmerpflanze {
+        +topfCm : int
+        +topfInfo() String
+    }
+    class Gartenstrauch {
+        +winterhart : bool
+    }
+    Pflanze <|-- Zimmerpflanze
+    Pflanze <|-- Gartenstrauch
+</div>
+
+<div class="col-card">
+
+<h4>Die Vokabeln im Überblick:</h4>
+<ul>
+<li><strong>Basisklasse (Elternklasse / Superklasse):</strong> Die allgemeinere Klasse oben in der Hierarchie.</li>
+<li><strong>Abgeleitete Klasse (Kindklasse / Subklasse):</strong> Die speziellere Klasse, die erbt und erweitert.</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-19">
+            <div class="slide-badge">Folie 19 / 44</div>
+            <div class="slide-content">
+                <h3>Vererbung verstehen (2/4): Attribute &amp; der Konstruktor mit <code>super()</code></h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Wie übernimmt die Kindklasse die Attribute der Basisklasse?<br>Hier lauert die <strong>häufigste Fehlerquelle für Python-Einsteiger</strong>!</p>
+<h4>Die goldene Regel für <code>__init__</code>:</h4>
+<p>Wenn eine Subklasse eine eigene <code>__init__</code>-Methode definiert, wird die <code>__init__</code>-Methode der Elternklasse <strong>nicht automatisch aufgerufen</strong>!</p>
+<ul>
+<li>Ruft man <code>super().__init__(...)</code> <strong>nicht</strong> auf, existieren die Elternattribute im Kindobjekt schlichtweg nicht!</li>
+<li>Zugriff auf <code>self.name</code> führt dann zur Laufzeit unweigerlich zum Absturz:<br><code>AttributeError: &#39;Zimmerpflanze&#39; object has no attribute &#39;name&#39;</code>!</li>
+</ul>
+<blockquote>
+<p><strong>Merksatz:</strong><br>In der Regel ruft man <code>super().__init__(...)</code> gleich zu Beginn des Kind-Konstruktors auf, um die Basis-Attribute sauber zu initialisieren. (Python erzwingt die Position nicht – vorher dürfen z. B. Argumente aufbereitet werden.)</p>
+</blockquote>
+</div>
+<div class="col">
+
+<pre><code class="language-python">class Pflanze:
+    def __init__(self, name: str, preis: float) -&gt; None:
+        self.name: str = name
+        self.preis: float = preis
+
+class Zimmerpflanze(Pflanze):
+    def __init__(self, name: str, preis: float, topf_cm: int) -&gt; None:
+        # 1. Eltern-Konstruktor explizit aufrufen:
+        super().__init__(name, preis)
+        
+        # 2. Eigene Attribute initialisieren:
+        self.topf_cm: int = topf_cm
+
+# Test:
+zp = Zimmerpflanze(&quot;Monstera&quot;, 29.99, 19)
+print(zp.name)     # &quot;Monstera&quot; (von Pflanze geerbt!)
+print(zp.preis)    # 29.99 (von Pflanze geerbt!)
+print(zp.topf_cm)  # 19 (aus Zimmerpflanze)
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-20">
+            <div class="slide-badge">Folie 20 / 44</div>
+            <div class="slide-content">
+                <h3>Vererbung verstehen (3/4): Methoden erben &amp; überschreiben (Overriding)</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Subklassen erben nicht nur Daten, sondern auch das Verhalten (Methoden) der Basisklasse.</p>
+<h4>1. Methoden direkt nutzen:</h4>
+<ul>
+<li>Alle Methoden der Basisklasse stehen der Subklasse automatisch zur Verfügung, ohne eine einzige Zeile Code zu schreiben.</li>
+</ul>
+<h4>2. Methoden überschreiben (Method Overriding):</h4>
+<ul>
+<li>Wenn eine Subklasse ein spezifischeres Verhalten benötigt, definiert sie eine Methode mit <strong>demselben Namen</strong> wie in der Basisklasse.</li>
+<li>Python führt dann automatisch die Version der Subklasse aus.</li>
+</ul>
+<h4>3. Verhalten erweitern mit <code>super().methode()</code>:</h4>
+<ul>
+<li>Oft will man die Elternlogik nicht komplett ersetzen, sondern nur anreichern.  </li>
+<li><code>super().methode()</code> ruft die Original-Logik der Elternklasse auf.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">class Pflanze:
+    def __init__(self, name: str, preis: float) -&gt; None:
+        self.name = name
+        self.preis = preis
+
+    def etikett(self) -&gt; str:
+        return f&quot;{self.name} ({self.preis:.2f} €)&quot;
+
+class Zimmerpflanze(Pflanze):
+    def __init__(self, name: str, preis: float, topf_cm: int) -&gt; None:
+        super().__init__(name, preis)
+        self.topf_cm = topf_cm
+
+    # Überschreibt etikett() und erweitert es:
+    def etikett(self) -&gt; str:
+        basis = super().etikett()  # Elternmethode!
+        return f&quot;{basis} - Topf: {self.topf_cm}cm&quot;
+
+p = Pflanze(&quot;Rose&quot;, 4.50)
+zp = Zimmerpflanze(&quot;Ficus&quot;, 18.00, 15)
+
+print(p.etikett())   # &quot;Rose (4.50 €)&quot;
+print(zp.etikett())  # &quot;Ficus (18.00 €) - Topf: 15cm&quot;
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-21">
+            <div class="slide-badge">Folie 21 / 44</div>
+            <div class="slide-content">
+                <h3>Vererbung verstehen (4/4): Wann Vererbung hilft – und wann sie schadet</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Vererbung klingt verlockend: <em>&quot;Ich spare mir Tipparbeit, indem ich von einer bestehenden Klasse erbe!&quot;</em><br>Doch genau hier beginnt der schleichende Architektur-Verfall.</p>
+<h4>Wann Vererbung sinnvoll ist:</h4>
+<ul>
+<li>Es liegt eine echte, unveränderliche <strong>&quot;Ist-Ein&quot;-Beziehung</strong> vor.</li>
+<li>Die Subklasse kann an <strong>jeder</strong> Stelle im Programm für die Basisklasse eingesetzt werden (Liskov-Substitutionsprinzip).</li>
+<li>Die Hierarchie ist flach (maximal 1–2 Ebenen).</li>
+</ul>
+<h4>Wann Vererbung schadet:</h4>
+<ul>
+<li><strong>Statisch &amp; starr:</strong> Die Vererbungshierarchie wird zur Entwurfszeit festgelegt. Ein Wechsel der Elternklasse zur Laufzeit ist nicht vorgesehen!</li>
+<li><strong>White-Box-Wiederverwendung:</strong> Die Subklasse hängt von internen Details der Elternklasse ab.</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die typischen Anfänger-Fallen:</h4>
+<ol>
+<li><strong>&quot;Code Reuse&quot;-Falle:</strong><br><em>&quot;Ich brauche nur die Methode <code>speichern()</code> aus <code>DatenbankHandler</code>, also erbe ich davon!&quot;</em><br>❌ <strong>Falsch:</strong> Eine <code>Pflanze</code> ist kein <code>DatenbankHandler</code>! Nutze Komposition!</li>
+<li><strong>Klassenexplosion:</strong><br>Sobald Objekte in mehreren Dimensionen variieren (Art, Topf, Sensor), explodiert die Anzahl der Klassen.</li>
+<li><strong>Fragile Base Class:</strong><br>Eine winzige interne Optimierung in der Basisklasse bringt unbemerkt Subklassen zum Einsturz.</li>
+</ol>
+<blockquote>
+<p><strong>Design-Leitsatz:</strong><br><em>&quot;Favor object composition over class inheritance.&quot;</em> (GoF)</p>
+</blockquote>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-22">
+            <div class="slide-badge">Folie 22 / 44</div>
+            <div class="slide-content">
+                <h3>Interfaces in Python: <code>abc.ABC</code> vs. <code>typing.Protocol</code></h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Ein <strong>Interface (Schnittstelle)</strong> ist ein formaler Vertrag: Es legt fest, welche Methoden ein Objekt anbieten muss, ohne die Implementierung vorzugeben.</p>
+<p>Python bietet zwei Wege, Schnittstellen zu definieren:</p>
+<h4>1. <code>abc.ABC</code> (Nominales Subtyping)</h4>
+<ul>
+<li>Explizite Vererbung: <code>class StammkundenRabatt(RabattStrategie):</code></li>
+<li><em>&quot;Ich erfülle den Vertrag, weil ich explizit davon erbe.&quot;</em></li>
+<li><strong>Nachteil:</strong> Starke Kopplung, Modul-Abhängigkeit.</li>
+</ul>
+<h4>2. <code>typing.Protocol</code> (Strukturelles Subtyping)</h4>
+<ul>
+<li>Eingeführt in PEP 544 (Python 3.8): <strong>&quot;Statisches Duck Typing&quot;</strong>.</li>
+<li><em>&quot;Wenn es wie eine Ente quakt und schwimmt, ist es eine Ente!&quot;</em></li>
+<li>Eine Klasse erfüllt das Protocol <strong>automatisch</strong>, sobald sie die Signaturen besitzt – <strong>völlig ohne Vererbung</strong>!</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from typing import Protocol
+
+# 1. Vertrag als Protocol definieren:
+class RabattStrategie(Protocol):
+    def berechne(self, basis: float) -&gt; float: ...
+
+# 2. Implementierung (KEIN &#39;class ...(RabattStrategie)&#39;!):
+# Die Klasse weiß überhaupt nichts vom Protocol!
+class StammkundenRabatt:
+    def berechne(self, basis: float) -&gt; float:
+        return basis * 0.85
+
+# 3. Client nutzt das Protocol als Typ-Annotation:
+def erstelle_rechnung(preis: float, r: RabattStrategie) -&gt; None:
+    endpreis = r.berechne(preis)
+    print(f&quot;Endpreis: {endpreis:.2f} €&quot;)
+
+# ✅ Mypy und IDEs bestätigen: Passt perfekt!
+erstelle_rechnung(100.0, StammkundenRabatt())
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-23">
+            <div class="slide-badge">Folie 23 / 44</div>
+            <div class="slide-content">
+                <h3>Einsatzbereiche und Architekturvorteile von <code>typing.Protocol</code></h3>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>1. Zero Coupling (Vollständige Entkopplung)</h4>
+<ul>
+<li>Die implementierende Klasse muss das Interface-Modul <strong>nicht importieren</strong>.</li>
+<li>Hilft, zirkuläre Importe zwischen Modulen zu vermeiden.</li>
+</ul>
+<h4>2. Fremdbibliotheken integrieren</h4>
+<ul>
+<li>Klassen aus externen Paketen (<code>requests</code>, <code>pandas</code>, <code>SQLAlchemy</code>) können deine Protocols erfüllen, ohne deren Quellcode ändern zu müssen.</li>
+<li>Bei <code>abc.ABC</code> nur über <code>MeinABC.register(FremdeKlasse)</code> möglich – und diese Registrierung erkennen statische Typchecker wie mypy nicht.</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>3. Müheloses Mocking &amp; Unit-Testing</h4>
+<ul>
+<li>Für Tests genügt ein minimales Dummy-Objekt mit den geforderten Methoden.</li>
+<li>Kein Zwang zu komplexen Mocking-Frameworks oder riesigen Vererbungshierarchien.</li>
+</ul>
+<h4>4. Consumer-Driven Interfaces (ISP)</h4>
+<ul>
+<li>Nicht der <em>Anbieter</em> bestimmt ein überladenes Riesen-Interface, sondern der <em>Konsument</em> fordert genau das Minimum an Methoden:</li>
+</ul>
+<pre><code class="language-python">class HatFeuchtigkeit(Protocol):
+    feuchtigkeit: int
+
+def alarm_pruefen(sensor: HatFeuchtigkeit) -&gt; bool:
+    return sensor.feuchtigkeit &lt; 20
+</code></pre>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-24">
+            <div class="slide-badge">Folie 24 / 44</div>
+            <div class="slide-content">
+                <h3>⚠️ Wichtige Warnung: Keine Runtime-Checks in Python!</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Wer von Sprachen wie Java, C# oder TypeScript kommt, erlebt in Python oft eine gefährliche Überraschung:</p>
+<h4>Python prüft Type Hints &amp; Protocols NICHT zur Laufzeit!</h4>
+<ul>
+<li>Der Standard-Python-Interpreter (CPython) <strong>prüft</strong> Typ-Annotationen während der Programmausführung <strong>nicht</strong>! (Er speichert sie lediglich in <code>__annotations__</code> – z. B. für <code>@dataclass</code>.)</li>
+<li>Übergibst du an <code>def erstelle_rechnung(preis: float, r: RabattStrategie)</code> einen String oder ein falsches Objekt, akzeptiert Python das beim Aufruf anstandslos!</li>
+<li>Der Absturz erfolgt erst mitten in der Funktion:<br><code>AttributeError: &#39;str&#39; object has no attribute &#39;berechne&#39;</code>!</li>
+</ul>
+<blockquote>
+<p><strong>Klartext:</strong><br>Type Hints und <code>Protocol</code> sind Werkzeuge für die <strong>statische Code-Analyse</strong> (vor der Ausführung) – sie sind <strong>keine Sicherheitsgarantie</strong> zur Laufzeit!</p>
+</blockquote>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Wie schützt man sich professionell?</h4>
+<ol>
+<li><p><strong>Statische Analyse in der CI/CD-Pipeline (Pflicht!):</strong></p>
+<pre><code class="language-bash">mypy src/ --strict
+</code></pre>
+<p><em>Mypy</em> prüft dein gesamtes Projekt vor dem Deployment und bricht bei Typfehlern den Build ab.</p>
+</li>
+<li><p><strong>Laufzeit-Validierung an Systemgrenzen:</strong><br>Kommen Daten von außen (HTTP-Requests, JSON-Dateien, Datenbanken)?<br>Nutze <strong><code>Pydantic</code></strong>! Pydantic erzwingt Typ-Validierung zur Laufzeit und wirft verständliche Fehler.</p>
+</li>
+<li><p><strong><code>isinstance()</code> bei Protocols (nur mit <code>@runtime_checkable</code>):</strong></p>
+<pre><code class="language-python">from typing import Protocol, runtime_checkable
+
+@runtime_checkable
+class RabattStrategie(Protocol): ...
+
+# Nun funktioniert: isinstance(obj, RabattStrategie)
+</code></pre>
+<p>⚠️ Prüft nur, <strong>ob</strong> die Methoden existieren – nicht deren Signaturen oder Typen!</p>
+</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-25">
+            <div class="slide-badge">Folie 25 / 44</div>
+            <div class="slide-content">
+                <h3>Gefahr 1 der Vererbung: Die Klassenexplosion (Class Explosion)</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Vererbung wird von Anfängern oft als Allzweckwaffe genutzt.<br><strong>Das Problem:</strong> Reale Objekte besitzen viele voneinander unabhängige Eigenschaften (Dimensionen):</p>
+<ul>
+<li><strong>Dimension 1 (Pflanzenart):</strong> Zimmerpflanze, Balkonblume, Nutzpflanze (3 Varianten)</li>
+<li><strong>Dimension 2 (Gefäß):</strong> Keramiktopf, Tontopf, Pflanzbeutel (3 Varianten)</li>
+<li><strong>Dimension 3 (Sensorik):</strong> Mit IoT-Sensor, Ohne Sensor (2 Varianten)</li>
+</ul>
+<p>Versucht man, diese Varianten durch Vererbung (<em>is-a</em>) abzubilden, multiplizieren sich die Möglichkeiten:<br><strong>3 × 3 × 2 = 18 Klassen!</strong><br>Kommt eine 4. Eigenschaft hinzu (z. B. B2B-Rabatt: ja/nein), sind es sofort <strong>36 Klassen</strong>!</p>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Kombinationsfalle im Klassendiagramm</h4>
+<pre><code>Pflanze
+ ├── Zimmerpflanze
+ │    ├── ZimmerpflanzeMitSensor
+ │    │    ├── ZimmerpflanzeSensorKeramik
+ │    │    └── ZimmerpflanzeSensorTon
+ │    └── ZimmerpflanzeOhneSensor ...
+ └── Balkonblume
+      ├── BalkonblumeMitSensor ...
+      └── BalkonblumeOhneSensor ...
+</code></pre>
+<blockquote>
+<p><strong>Das Fazit:</strong> Vererbung ist <strong>eindimensional hierarchisch</strong>. Unabhängige Eigenschaften führen unweigerlich zur <strong>Klassenexplosion</strong> und redundantem Code!</p>
+</blockquote>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-26">
+            <div class="slide-badge">Folie 26 / 44</div>
+            <div class="slide-content">
+                <h3>Gefahr 2 der Vererbung: Das Fragile Base Class Problem</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Das <strong>Fragile Base Class Problem</strong> ist eine der tückischsten Schwachstellen der Objektorientierung.</p>
+<h4>Was bedeutet &quot;Fragile&quot; (zerbrechlich)?</h4>
+<ul>
+<li>Eine Subklasse hängt nicht nur von den <em>Methodennamen</em> der Basisklasse ab, sondern von deren <strong>interner Implementierung</strong>!</li>
+<li>Eine scheinbar völlig unschuldige Optimierung oder Änderung in der Basisklasse <strong>bricht unbemerkt das Verhalten der Subklassen</strong>, obwohl alle Signaturen gleich bleiben!</li>
+</ul>
+<blockquote>
+<p><strong>Kernaussage:</strong><br><em>&quot;Inheritance breaks encapsulation!&quot;</em> (Vererbung durchbricht die Kapselung – Snyder 1986, aufgegriffen von der GoF).</p>
+</blockquote>
+<p>Subklassen sind keine echten Black-Boxes, sondern eng an die interne Aufrufhierarchie der Elternklasse gekoppelt.</p>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Wie entsteht die Falle? (Der Selbstaufruf)</h4>
+<ol>
+<li>Die Basisklasse hat zwei Methoden:  <ul>
+<li><code>hinzufuegen(element)</code></li>
+<li><code>alle_hinzufuegen(liste)</code></li>
+</ul>
+</li>
+<li>Intern ruft die Basisklasse <code>alle_hinzufuegen()</code> auf, indem sie in einer Schleife <code>self.hinzufuegen()</code> aufruft (<em>Selbstaufruf</em>).</li>
+<li>Eine Subklasse überschreibt nun beide Methoden, um Elemente zu zählen...</li>
+</ol>
+<p>👉 <em>Auf der nächsten Folie sehen wir, was nun Katastrophales passiert!</em></p>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-27">
+            <div class="slide-badge">Folie 27 / 44</div>
+            <div class="slide-content">
+                <h3>Die Selbstaufruf-Falle: Codebeispiel</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Was Ada vorhatte:</h4>
+<p><em>(Klassisches Lehrbeispiel nach Joshua Bloch, Effective Java)</em><br>Ada möchte einen <code>GezaehlterKatalog</code> bauen, der stets mitzählt, wie viele Pflanzen jemals in den Katalog eingefügt wurden.</p>
+<ul>
+<li>Sie überschreibt <code>hinzufuegen()</code>: <code>gesamt += 1</code></li>
+<li>Sie überschreibt <code>alle_hinzufuegen()</code>: <code>gesamt += len(liste)</code></li>
+<li>Danach ruft sie jeweils <code>super()</code> auf.</li>
+</ul>
+<h4>Das böse Erwachen:</h4>
+<ul>
+<li>Sie ruft <code>alle_hinzufuegen([&quot;Monstera&quot;, &quot;Ficus&quot;, &quot;Farne&quot;])</code> mit <strong>3 Pflanzen</strong> auf.</li>
+<li>Der Zähler steht am Ende auf <strong>6</strong>!</li>
+<li><strong>Warum?</strong> <code>super().alle_hinzufuegen()</code> ruft intern 3-mal <code>self.hinzufuegen()</code> auf – und das landet in Adas überschriebener Methode! Jedes Element wurde <strong>doppelt gezählt</strong>!</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">class PflanzenKatalog:
+    def __init__(self):
+        self._pflanzen: list[str] = []
+
+    def hinzufuegen(self, p: str):
+        self._pflanzen.append(p)
+
+    def alle_hinzufuegen(self, liste: list[str]):
+        for p in liste:
+            self.hinzufuegen(p)  # ⚠️ Interner Selbstaufruf!
+
+class GezaehlterKatalog(PflanzenKatalog):
+    def __init__(self):
+        super().__init__()
+        self.gesamt = 0
+
+    def hinzufuegen(self, p: str):
+        self.gesamt += 1
+        super().hinzufuegen(p)
+
+    def alle_hinzufuegen(self, liste: list[str]):
+        self.gesamt += len(liste)  # +3
+        super().alle_hinzufuegen(liste) # Ruft 3x hinzufuegen()!
+
+k = GezaehlterKatalog()
+k.alle_hinzufuegen([&quot;Monstera&quot;, &quot;Ficus&quot;, &quot;Farne&quot;])
+print(k.gesamt)  # 💥 6 statt 3!
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-28">
+            <div class="slide-badge">Folie 28 / 44</div>
+            <div class="slide-content">
+                <h3>Vererbung vs. Komposition: White-Box vs. Black-Box</h3>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>❌ Vererbung = White-Box-Reuse</h4>
+<ul>
+<li>Die Subklasse muss die internen Selbstaufrufe und privaten Details der Basisklasse kennen.</li>
+<li><strong>Tight Coupling (Starke Kopplung):</strong> Ändert der Autor der Basisklasse später seine Implementierung (z. B. Verzicht auf die Hilfsmethode), bricht die Subklasse still und leise!</li>
+<li><strong>Starr zur Entwurfszeit:</strong> Die Elternklasse steht mit der Klassendefinition fest; ein Wechsel zur Laufzeit ist nicht vorgesehen.</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>✅ Komposition = Black-Box-Reuse</h4>
+<ul>
+<li>Klassen interagieren <strong>ausschließlich über die öffentliche Schnittstelle</strong>.</li>
+<li>Wie die andere Klasse intern arbeitet, ist völlig egal – keine Selbstaufruf-Fallen!</li>
+<li><strong>Lose Kopplung:</strong> Änderungen an Implementierungsdetails bleiben streng isoliert.</li>
+<li><strong>Flexibel zur Laufzeit:</strong> Bausteine können jederzeit dynamisch ausgetauscht oder gewrappt werden.</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+<div style="margin-top: 15px; text-align: center; font-weight: 600; color: #1e293b;">
+    Deshalb lautet das wichtigste Entwurfsprinzip der Gang of Four (GoF):  
+    👉 <span style="color: #2563eb;">"Favor object composition over class inheritance!"</span>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-29">
+            <div class="slide-badge">Folie 29 / 44</div>
+            <div class="slide-content">
+                <h3>Das Lösungsprinzip: Composition over Inheritance &amp; Delegation</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><em>&quot;Favor object composition over class inheritance.&quot;</em><br>(GoF, Design Patterns 1994)</p>
+</blockquote>
+<h4>Wie funktioniert Komposition in der Praxis?</h4>
+<ul>
+<li><strong>&quot;Has-A&quot; statt &quot;Is-A&quot;:</strong> Die Klasse erbt kein Verhalten, sondern besitzt eine Referenz auf ein eigenständiges Hilfsobjekt.</li>
+<li><strong>Delegation:</strong> Fachliche Methoden leiten Anfragen gezielt an das Komponentenobjekt weiter (<code>self.sensor.ist_trocken()</code>).</li>
+<li><strong>Echte Kapselung (Black-Box):</strong> Keine Selbstaufruf-Fallen oder Abhängigkeiten von Eltern-Interna!</li>
+<li><strong>Laufzeit-Flexibilität:</strong> Komponenten können im laufenden Betrieb beliebig ausgetauscht oder erweitert werden.</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ Achtung Begriff:</strong> „Composition“ im GoF-Prinzip meint allgemein <em>Objektkomposition</em> (Zusammensetzen aus Teilobjekten). Das ist <strong>nicht</strong> identisch mit der UML-Komposition (schwarze Raute)! Der austauschbare Sensor im Beispiel wäre in UML eine <strong>Aggregation</strong>.</p>
+</blockquote>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class BodenSensor:
+    feuchtigkeit_prozent: int
+    def ist_trocken(self) -&gt; bool:
+        return self.feuchtigkeit_prozent &lt; 30
+
+class Pflanze:
+    def __init__(self, name: str, sensor: BodenSensor | None = None):
+        self.name = name
+        # Komposition: Pflanze BESITZT einen Sensor (has-a)
+        self.sensor = sensor
+
+    def muss_gegossen_werden(self) -&gt; bool:
+        if self.sensor is None:
+            return False
+        # DELEGATION: Leitet die Arbeit an die Komponente weiter!
+        return self.sensor.ist_trocken()
+
+# Laufzeit-Flexibilität ohne neue Klassen:
+monstera = Pflanze(&quot;Monstera&quot;, sensor=BodenSensor(20))
+print(monstera.muss_gegossen_werden())  # True (delegiert!)
+
+# Sensor zur Laufzeit wechseln:
+monstera.sensor = BodenSensor(55)
+print(monstera.muss_gegossen_werden())  # False
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-30">
+            <div class="slide-badge">Folie 30 / 44</div>
+            <div class="slide-content">
+                <h3>Die SOLID-Prinzipien: Warum Softwaredesign?</h3>
+<div class="two-cols">
+<div class="col">
+
+<p>Die <strong>SOLID-Prinzipien</strong> wurden von Robert C. Martin (&quot;Uncle Bob&quot;) um 2000 zusammengestellt; das Akronym prägte Michael Feathers. Einzelne Prinzipien sind älter: <strong>OCP</strong> stammt von Bertrand Meyer (1988), <strong>LSP</strong> von Barbara Liskov (1987).<br>Sie sind der weltweite Standard für wartbaren, sauberen Objektentwurf.</p>
+<ul>
+<li><strong>S</strong> – <strong>S</strong>ingle Responsibility Principle (SRP)</li>
+<li><strong>O</strong> – <strong>O</strong>pen/Closed Principle (OCP)</li>
+<li><strong>L</strong> – <strong>L</strong>iskov Substitution Principle (LSP)</li>
+<li><strong>I</strong> – <strong>I</strong>nterface Segregation Principle (ISP)</li>
+<li><strong>D</strong> – <strong>D</strong>ependency Inversion Principle (DIP)</li>
+</ul>
+<p><strong>Ziel:</strong> Software soll gegen Anforderungen von morgen resistent sein, ohne dass bei jeder Änderung das Fundament einstürzt.</p>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Symptome schlechter Software (nach R. C. Martin):</h4>
+<ol>
+<li><strong>Rigidity (Starrheit):</strong> Eine kleine Änderung zieht eine Kaskade weiterer Änderungen nach sich.</li>
+<li><strong>Fragility (Zerbrechlichkeit):</strong> Eine Änderung an Modul A zerstört unbemerkt Funktionalität in Modul B.</li>
+<li><strong>Immobility (Unbeweglichkeit):</strong> Code kann in neuen Teilen des Projekts nicht wiederverwendet werden, weil er zu stark verfilzt ist.</li>
+<li><strong>Viscosity (Zähigkeit):</strong> Der „saubere“ Weg ist mühsamer als ein Hack – also wird gehackt.</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-31">
+            <div class="slide-badge">Folie 31 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 1: Single Responsibility Principle (SRP)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;Eine Klasse sollte genau einen einzigen Grund haben, sich zu ändern.&quot;</strong><br>Präzisere Fassung (R. C. Martin): <em>&quot;Ein Modul sollte gegenüber genau einem Akteur verantwortlich sein.&quot;</em></p>
+</blockquote>
+<h4>Der Fehler: Die &quot;Gott-Klasse&quot;</h4>
+<p>Eine Klasse <code>Pflanze</code>, die:</p>
+<ul>
+<li>Pflanzenzustand speichert,</li>
+<li>den Bruttopreis inkl. Steuern berechnet,</li>
+<li>Quittungen als PDF formatiert,</li>
+<li>und SQL-Queries an die Datenbank schickt!</li>
+</ul>
+<p>Ändert sich die Mehrwertsteuer (Buchhaltung), das PDF-Layout (Marketing) oder der SQL-Treiber (IT-Betrieb) ⇒ Jedes Mal muss <code>pflanze.py</code> editiert werden!</p>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ❌ Verstoß gegen SRP (Gott-Klasse):
+class BadPlant:
+    def berechne_mwst(self): ...
+    def drucke_etikett(self): ...
+    def save_to_sql_database(self): ...
+
+# ✅ Erfüllt SRP (Aufteilung der Aufgaben):
+class Pflanze:
+    &quot;&quot;&quot;Nur für fachliche Zustände zuständig&quot;&quot;&quot;
+    def __init__(self, name: str, preis: float):
+        self.name = name
+        self.preis = preis
+
+class EtikettDrucker:
+    &quot;&quot;&quot;Nur für Darstellung / Formatierung zuständig&quot;&quot;&quot;
+    def drucke(self, p: Pflanze) -&gt; str:
+        return f&quot;*** {p.name}: {p.preis:.2f} € ***&quot;
+
+class PflanzeRepository:
+    &quot;&quot;&quot;Nur für Datenbank-Speicherung zuständig&quot;&quot;&quot;
+    def save(self, p: Pflanze) -&gt; None: ...
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-32">
+            <div class="slide-badge">Folie 32 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 2: Open/Closed Principle (OCP)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;Module sollten offen für Erweiterung, aber geschlossen für Modifikation sein.&quot;</strong><br>(Bertrand Meyer, 1988)</p>
+</blockquote>
+<ul>
+<li><strong>Offen für Erweiterung:</strong> Neues Verhalten kann jederzeit ergänzt werden (z. B. neue Rabattarten).</li>
+<li><strong>Geschlossen für Modifikation:</strong> Bestehender, getesteter Code muss dafür <strong>nicht angefasst</strong> werden!</li>
+</ul>
+<pre><code class="language-python"># ❌ Verstoß gegen OCP (ständiges Reineditieren nötig):
+def berechne_alt(preis: float, typ: str) -&gt; float:
+    if typ == &quot;standard&quot;:
+        return preis
+    elif typ == &quot;b2b&quot;:
+        return preis * 0.80
+    # Jede neue Aktion erfordert Änderungen hier!
+</code></pre>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ✅ Erfüllt OCP: Offen für neue Rabatte, Kerncode bleibt stabil!
+from typing import Protocol
+
+# 1. Gemeinsamer Vertrag (Abstraktion):
+class RabattStrategie(Protocol):
+    def berechne(self, preis: float) -&gt; float: ...
+
+# 2. Konkrete Strategien (beliebig erweiterbar):
+class StandardRabatt:
+    def berechne(self, preis: float) -&gt; float: return preis
+
+class B2BRabatt:
+    def berechne(self, preis: float) -&gt; float: return preis * 0.80
+
+# 3. Client wendet die Strategie an (bleibt unangetastet!):
+def berechne_endpreis(preis: float, rabatt: RabattStrategie) -&gt; float:
+    return rabatt.berechne(preis)
+
+# 4. Anwendung im Programm:
+print(berechne_endpreis(100.0, StandardRabatt()))  # 100.0
+print(berechne_endpreis(100.0, B2BRabatt()))        # 80.0
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-33">
+            <div class="slide-badge">Folie 33 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 3: Liskov Substitution Principle (LSP)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;Subklassen müssen sich so verhalten, dass sie ihre Basisklasse ohne Überraschungen oder Fehler ersetzen können.&quot;</strong></p>
+</blockquote>
+<ul>
+<li>Benannt nach Computer-Pionierin <strong>Barbara Liskov</strong>.</li>
+<li>Wenn ein Programm eine <code>Pflanze</code> erwartet, muss jede abgeleitete Subklasse funktionieren.</li>
+<li><strong>Klassischer Verstoß bei Ada:</strong><ul>
+<li><code>Kunstpflanze</code> erbt von <code>Zimmerpflanze</code>.</li>
+<li>Ruft jemand <code>pflanze.giesse(100)</code> auf, wirft die Kunstpflanze einen <code>RuntimeError(&quot;Ich bin aus Plastik!&quot;)</code>!</li>
+<li>⇒ Das bricht den aufrufenden Code!</li>
+</ul>
+</li>
+<li><strong>Lösung:</strong> Fähigkeiten getrennt modellieren – eine Kunstpflanze ist ein <code>Artikel</code>, aber nicht <code>Giessbar</code>.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ❌ Verstoß gegen LSP:
+class Zimmerpflanze:
+    def giesse(self, ml: int) -&gt; None:
+        self.feuchtigkeit += ml
+
+class Kunstpflanze(Zimmerpflanze):
+    def giesse(self, ml: int) -&gt; None:
+        # Überraschung für den Aufrufer:
+        raise RuntimeError(&quot;Ich bin aus Plastik!&quot;)
+
+# ✅ Erfüllt LSP: Fähigkeiten getrennt modellieren
+class Artikel(Protocol):
+    name: str
+    preis: float
+
+class Giessbar(Protocol):
+    def giesse(self, ml: int) -&gt; None: ...
+
+@dataclass
+class EchtePflanze:      # erfüllt Artikel UND Giessbar
+    name: str
+    preis: float
+    feuchtigkeit: int = 0
+    def giesse(self, ml: int) -&gt; None:
+        self.feuchtigkeit += ml
+
+@dataclass
+class Kunstpflanze:      # erfüllt nur Artikel – kein giesse()
+    name: str
+    preis: float
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-34">
+            <div class="slide-badge">Folie 34 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 4: Interface Segregation Principle (ISP)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;Clients sollten nicht gezwungen sein, von Methoden abzuhängen, die sie gar nicht nutzen.&quot;</strong></p>
+</blockquote>
+<ul>
+<li><strong>Fette Interfaces (&quot;Fat Interfaces&quot;):</strong><br>Eine Schnittstelle, die versucht, alles für jeden bereitzustellen (<code>giessen()</code>, <code>umtopfen()</code>, <code>batterie_wechseln()</code>, <code>bluetooth_koppeln()</code>).</li>
+<li><strong>Lösung:</strong><br>Lieber viele kleine, spezifische Interfaces als ein riesiges Alleskönner-Interface.</li>
+<li>Eine Klasse kann mehrere kleine Interfaces gleichzeitig implementieren!</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ❌ Verstoß gegen ISP:
+class MegaPflanzenSchnittstelle(Protocol):
+    def giesse(self): ...
+    def duenge(self): ...
+    def lese_bodenfeuchte_sensor(self): ... # Nur IoT-Töpfe!
+    def wechsle_batterie(self): ...        # Nur IoT-Töpfe!
+
+# ✅ Erfüllt ISP: Kleine, fokussierte Interfaces:
+class Giessbar(Protocol):
+    def giesse(self, ml: int) -&gt; None: ...
+
+class Sensorfaehig(Protocol):
+    def lese_sensor(self) -&gt; int: ...
+
+# Basilikum erfüllt nur Giessbar (strukturell, ohne Vererbung):
+class Basilikum:
+    def giesse(self, ml: int) -&gt; None: ...
+
+# SmartPot erfüllt beide Protocols:
+class SmartPot:
+    def giesse(self, ml: int) -&gt; None: ...
+    def lese_sensor(self) -&gt; int: ...
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-35">
+            <div class="slide-badge">Folie 35 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 5: Dependency Inversion Principle (DIP)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;High-Level-Module dürfen nicht von Low-Level-Modulen abhängen. Beide müssen von Abstraktionen (Interfaces) abhängen.&quot;</strong><br><strong>&quot;Abstraktionen dürfen nicht von Details abhängen. Details müssen von Abstraktionen abhängen.&quot;</strong></p>
+</blockquote>
+<ul>
+<li><strong>High-Level:</strong> Die Geschäftslogik (<code>BestellService</code> – wie Bestellungen ablaufen).</li>
+<li><strong>Low-Level:</strong> Die technische Infrastruktur (<code>PostgresDatabase</code>, <code>FileStorage</code>).</li>
+<li><strong>Der Fehler:</strong> Der <code>BestellService</code> erzeugt direkt <code>db = PostgresDatabase()</code>.</li>
+<li><strong>Folge:</strong> Man kann keinen schnellen Unit-Test ohne echte PostgreSQL-Datenbank schreiben!</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class BestellService {
+        -repo : BestellSpeicher
+        +bestellungAufgeben(bId : String, betrag : float)
+    }
+    class BestellSpeicher {
+        <<interface>>
+        +speichern(bId : String, betrag : float)
+    }
+    class PostgresRepo {
+        +speichern(bId : String, betrag : float)
+    }
+    class InMemoryFakeRepo {
+        +speichern(bId : String, betrag : float)
+    }
+    BestellService --> BestellSpeicher : nutzt Abstraktion
+    BestellSpeicher <|.. PostgresRepo
+    BestellSpeicher <|.. InMemoryFakeRepo
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-36">
+            <div class="slide-badge">Folie 36 / 44</div>
+            <div class="slide-content">
+                <h3>SOLID 5: DIP in der Praxis (Codebeispiel &amp; Testbarkeit)</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Dependency Injection (DI) als Schlüssel:</h4>
+<p>Statt dass <code>BestellService</code> seine Abhängigkeit intern mit <code>PostgresRepo()</code> selbst instanziiert, wird sie von außen über den Konstruktor hineingereicht (<em>Inversion of Control</em>).</p>
+<pre><code class="language-python"># ❌ Schlecht (harte Kopplung an PostgreSQL):
+class BadBestellService:
+    def __init__(self) -&gt; None:
+        self.repo = PostgresRepo()  # Kaum testbar ohne echte DB!
+</code></pre>
+<h4>Der unschätzbare Vorteil:</h4>
+<ul>
+<li><strong>Entkopplung:</strong> Die Geschäftslogik weiß nichts von Datenbanktreibern oder SQL-Dialekten.</li>
+<li><strong>Mühelose Unit-Tests:</strong> Im Test übergeben wir ein <code>InMemoryFakeRepo</code> – der Test läuft in Millisekunden und ganz ohne Datenbank!</li>
+<li><em>Begriff:</em> Ein <strong>Fake</strong> ist eine vereinfachte, funktionierende Implementierung; ein <strong>Mock</strong> prüft zusätzlich, <em>welche</em> Aufrufe stattfanden (Meszaros, <em>xUnit Test Patterns</em>).</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python"># ✅ Erfüllt DIP: Hängt ausschließlich von der Abstraktion ab!
+from typing import Protocol
+
+# 1. Abstraktion (Vertrag):
+class BestellSpeicher(Protocol):
+    def speichern(self, bestell_id: str, betrag: float) -&gt; None: ...
+
+# 2. High-Level-Modul nutzt Dependency Injection:
+class BestellService:
+    def __init__(self, repo: BestellSpeicher) -&gt; None:
+        self.repo = repo  # Dependency Injection!
+
+    def bestellung_aufgeben(self, b_id: str, betrag: float) -&gt; None:
+        # Fachlogik validieren...
+        self.repo.speichern(b_id, betrag)
+
+# 3. Test-Implementierung (In-Memory-Fake):
+class InMemoryFakeRepo:
+    def __init__(self) -&gt; None:
+        self.gespeichert: dict[str, float] = {}
+    def speichern(self, b_id: str, betrag: float) -&gt; None:
+        self.gespeichert[b_id] = betrag
+
+# ✅ Blitzschneller Unit-Test ohne laufende Datenbank:
+test_repo = InMemoryFakeRepo()
+service = BestellService(repo=test_repo)
+service.bestellung_aufgeben(&quot;B-101&quot;, 49.90)
+assert test_repo.gespeichert[&quot;B-101&quot;] == 49.90  # Test erfolgreich!
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-37">
+            <div class="slide-badge">Folie 37 / 44</div>
+            <div class="slide-content">
+                <h3>Entwurfsmuster: Das Strategy Pattern</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<blockquote>
+<p>Das <strong>Strategy Pattern</strong> kapselt eine Familie austauschbarer Algorithmen in eigenständigen Objekten und macht sie zur Laufzeit beliebig wechselbar.</p>
+</blockquote>
+<h4>Die Akteure:</h4>
+<ol>
+<li><strong>Context (<code>Kunde</code>):</strong> Hält eine Referenz auf eine Strategie und delegiert die Arbeit an sie.</li>
+<li><strong>Strategy (<code>RabattStrategie</code>):</strong> Das gemeinsame Interface.</li>
+<li><strong>Concrete Strategies (<code>StandardRabatt</code>, <code>TreueRabatt</code>):</strong> Die eigentlichen Berechnungsregeln.</li>
+</ol>
+<p>Ada kann dem Kunden zur Laufzeit jederzeit einen Treuerabatt zuweisen, ohne die Kundenklasse anzufassen!</p>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class Kunde {
+        +name : String
+        +berechnePreis(basis : float) float
+    }
+    class RabattStrategie {
+        <<interface>>
+        +berechne(preis : float) float
+    }
+    class StandardRabatt {
+        +berechne(preis : float) float
+    }
+    class TreueRabatt {
+        +berechne(preis : float) float
+    }
+    Kunde --> "1" RabattStrategie : strategie
+    RabattStrategie <|.. StandardRabatt
+    RabattStrategie <|.. TreueRabatt
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-38">
+            <div class="slide-badge">Folie 38 / 44</div>
+            <div class="slide-content">
+                <h3>Strategy Pattern: Codebeispiel &amp; dynamischer Wechsel</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Delegation statt Vererbung:</h4>
+<ul>
+<li>Der <code>Kunde</code> erbt nicht von verschiedenen Rabattklassen (<code>class Stammkunde</code> etc.).</li>
+<li>Er besitzt eine Referenz auf ein Objekt, das <code>RabattStrategie</code> erfüllt (<strong>Composition over Inheritance</strong>).</li>
+<li>In <code>berechne_preis()</code> <strong>delegiert</strong> er die Berechnung an <code>self.strategie.berechne(...)</code>.</li>
+</ul>
+<h4>Dynamischer Wechsel zur Laufzeit:</h4>
+<ul>
+<li>Ein Stammkunde verliert seinen Status oder erhält eine Sonderaktion?</li>
+<li>Einfach <code>k.strategie = TreueRabatt()</code> zuweisen – keine Neuerzeugung des Kundenobjekts, kein Datenverlust, keine starre Vererbung!</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from typing import Protocol
+
+class RabattStrategie(Protocol):
+    def berechne(self, preis: float) -&gt; float: ...
+
+class StandardRabatt:
+    def berechne(self, preis: float) -&gt; float:
+        return preis
+
+class TreueRabatt:
+    def berechne(self, preis: float) -&gt; float:
+        return round(preis * 0.90, 2)  # 10 % Treuerabatt
+
+class Kunde:
+    def __init__(self, name: str, strategie: RabattStrategie) -&gt; None:
+        self.name = name
+        self.strategie = strategie  # Delegation
+
+    def berechne_preis(self, basis: float) -&gt; float:
+        return self.strategie.berechne(basis)
+
+# Anwendung:
+k = Kunde(&quot;Ada&quot;, StandardRabatt())
+print(k.berechne_preis(100.0))  # 100.0
+
+# Strategiewechsel zur Laufzeit:
+k.strategie = TreueRabatt()
+print(k.berechne_preis(100.0))  # 90.0
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-39">
+            <div class="slide-badge">Folie 39 / 44</div>
+            <div class="slide-content">
+                <h3>Entwurfsmuster: Die Fabrikmethode (Factory)</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p>Eine <strong>Fabrik (Factory)</strong> kapselt die Objekterzeugung. Der Aufrufer muss die internen Konstruktionsdetails, Fallbacks und Validierungen nicht kennen.</p>
+</blockquote>
+<h4>Warum Fabrikmethoden in Python unverzichtbar sind:</h4>
+<ol>
+<li><strong>Kein Konstruktor-Überladen:</strong><br>In Python kann es nur <strong>ein einziges <code>__init__</code></strong> geben!</li>
+<li><strong>Aussagekräftige Namen (Named Constructors):</strong><br>Statt unklarer Parameter nutzt man sprechende Namen wie <code>.aus_sensor_daten()</code> oder <code>.aus_katalog_json()</code>.</li>
+<li><strong>Statische Fabrikmethode vs. GoF Factory Method:</strong>  <ul>
+<li><strong>Was bedeutet GoF?</strong> &quot;Gang of Four&quot; (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides) – die Autoren des wegweisenden Standardwerks <em>Design Patterns</em> (1994).</li>
+<li><strong>Statische Fabrikmethode (Static Factory / Named Constructor):</strong> Eine Methode (<code>@staticmethod</code>/<code>@classmethod</code>) oder Funktion zur Objekterzeugung (in Python weit verbreitet – aber <strong>kein</strong> GoF-Muster!).</li>
+<li><strong>Klassisches GoF Factory Method Pattern:</strong> Ein abstraktes Interface zur Objekterzeugung, das von Subklassen polymorph überschrieben wird.</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class SmartPlant {
+        +botanischerName : String
+        +preis : float
+        +istFeuchtigkeit : int
+        +mussGegossenWerden() bool
+    }
+    class PflanzenFactory {
+        <<factory>>
+        +ausSensorDaten(payload : dict) SmartPlant$
+        +ausKatalogJson(json : dict) SmartPlant$
+    }
+    PflanzenFactory ..> SmartPlant : «create»
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-40">
+            <div class="slide-badge">Folie 40 / 44</div>
+            <div class="slide-content">
+                <h3>Statische Fabrikmethode: Codebeispiel</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Erzeugung aus rohen Sensordaten:</h4>
+<ul>
+<li>IoT-Sensordaten kommen als unstrukturierte JSON/Dict-Payloads an (oft mit fehlenden Feldern oder falschen Typen).</li>
+<li>Die <code>PflanzenFactory</code> bereinigt, validiert und setzt Default-Werte.</li>
+<li>Der restliche Anwendungscode arbeitet ausschließlich mit validen <code>SmartPlant</code>-Objekten!</li>
+<li>Der Client ruft einfach <code>PflanzenFactory.aus_sensor_daten(event)</code> auf – sauber, sicher, selbsterklärend.</li>
+<li><strong>Idiomatische Alternative:</strong> Als <code>@classmethod</code> direkt an der Klasse (<code>SmartPlant.aus_sensor_daten(event)</code> mit <code>return cls(...)</code>) – so wie <code>datetime.fromtimestamp()</code> oder <code>dict.fromkeys()</code>.</li>
+</ul>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from typing import Any
+
+class PflanzenFactory:
+    @staticmethod
+    def aus_sensor_daten(payload: dict[str, Any]) -&gt; SmartPlant:
+        &quot;&quot;&quot;Statische Fabrikmethode: Validiert &amp; erzeugt SmartPlant&quot;&quot;&quot;
+        name = payload.get(&quot;device_name&quot;, &quot;Unbekannte Pflanze&quot;)
+        try:
+            feuchte = int(payload.get(&quot;soil_moisture&quot;, 50))
+        except (TypeError, ValueError):
+            raise ValueError(&quot;soil_moisture ist keine Zahl&quot;)
+        if not 0 &lt;= feuchte &lt;= 100:
+            raise ValueError(f&quot;Ungültige Feuchtigkeit: {feuchte} %&quot;)
+        return SmartPlant(
+            botanischer_name=name,
+            preis=0.0,
+            ist_feuchtigkeit=feuchte
+        )
+
+# Nutzung im IoT-Service:
+event = {&quot;device_name&quot;: &quot;Ficus-Laden-1&quot;, &quot;soil_moisture&quot;: 28}
+pflanze = PflanzenFactory.aus_sensor_daten(event)
+print(pflanze.muss_gegossen_werden())  # True
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-41">
+            <div class="slide-badge">Folie 41 / 44</div>
+            <div class="slide-content">
+                <h3>Das GoF Factory Method Pattern: Polymorphe Erzeugung</h3>
+<div class="two-cols">
+<div class="col">
+
+<blockquote>
+<p><strong>&quot;Definiere eine Schnittstelle zur Erzeugung eines Objekts, aber lass Unterklassen entscheiden, welche Klasse instanziiert wird.&quot;</strong><br>(GoF, Design Patterns 1994)</p>
+</blockquote>
+<h4>Unterschied zur statischen Fabrikmethode:</h4>
+<ul>
+<li><strong>Statische Fabrik (<code>@staticmethod</code>):</strong> Eine feste Hilfsmethode entscheidet, welches Objekt gebaut wird (z. B. Parser für JSON).</li>
+<li><strong>GoF Factory Method:</strong> Nutzt <strong>Vererbung &amp; Polymorphie</strong>. Die Basisklasse legt den Arbeitsablauf fest, deklariert die Erzeugungsmethode aber abstrakt (<code>erstelle_sensor()</code>). Konkrete Subklassen entscheiden, welches Produkt erzeugt wird!</li>
+</ul>
+<h4>Anwendungsfall:</h4>
+<p>Frameworks und erweiterbare Architekturen, bei denen der Kern-Ablauf fix ist, Drittentwickler aber eigene Produkt-Typen einhängen dürfen.</p>
+</div>
+<div class="col">
+
+<pre><code class="language-python">from abc import ABC, abstractmethod
+from typing import Protocol
+
+class Sensor(Protocol):
+    def lese_wert(self) -&gt; float: ...
+
+class BodenFeuchtigkeitsSensor:
+    def lese_wert(self) -&gt; float: return 42.5
+
+class LuftTemperaturSensor:
+    def lese_wert(self) -&gt; float: return 21.0
+
+# 1. Abstrakter Erzeuger mit Factory Method:
+class MessStation(ABC):
+    @abstractmethod
+    def erstelle_sensor(self) -&gt; Sensor:
+        &quot;&quot;&quot;Die eigentliche Factory Method!&quot;&quot;&quot;
+        ...
+
+    def erfasse_messung(self) -&gt; float:
+        # Fester Ablauf (Template Method) nutzt das erzeugte Produkt:
+        sensor = self.erstelle_sensor()
+        return sensor.lese_wert()
+
+# 2. Subklassen bestimmen das konkrete Produkt:
+class FeuchtigkeitsStation(MessStation):
+    def erstelle_sensor(self) -&gt; Sensor:
+        return BodenFeuchtigkeitsSensor()
+
+class TemperaturStation(MessStation):
+    def erstelle_sensor(self) -&gt; Sensor:
+        return LuftTemperaturSensor()
+</code></pre>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-42">
+            <div class="slide-badge">Folie 42 / 44</div>
+            <div class="slide-content">
+                <h3>Zusammenfassung Modul 1</h3>
+<div class="two-cols">
+<div class="col">
+
+<ol>
+<li><strong>Objekte = Zustand + Verhalten + Identität.</strong> Verhindert Datenchaos und Tippfehler unstrukturierter Dictionaries.</li>
+<li><strong>Kapselung schützt Konsistenz.</strong> Private Felder und Properties verhindern illegale Zustände.</li>
+<li><strong>Dataclasses &amp; Slots</strong> machen Python-Code kompakt, lesbar und speichereffizient – Typsicherheit entsteht erst durch statische Prüfung (mypy/pyright).</li>
+<li><strong>UML-Notation beherrschen:</strong> Klassenboxen (3 Teile), Sichtbarkeiten (<code>+</code>, <code>-</code>, <code>#</code>) und präzise Beziehungspfeile.</li>
+</ol>
+</div>
+<div class="col">
+
+<ol start="5">
+<li><strong>Composition over Inheritance:</strong> Klassenexplosion (exponentieller Zuwachs) und das Fragile Base Class Problem (Selbstaufruf-Falle) durch lose zusammengesetzte Objekte vermeiden.</li>
+<li><strong>SOLID ist der Goldstandard:</strong> Jede Klasse hat eine Verantwortung (SRP), ist erweiterbar ohne Modifikation (OCP), Subklassen sind ersetzbar (LSP), Interfaces bleiben schlank (ISP) und Abhängigkeiten zeigen auf Abstraktionen (DIP).</li>
+<li><strong>Protocols für lose Kopplung:</strong> Strukturelles Subtyping in Python ermöglicht echte Entkopplung.</li>
+</ol>
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-43">
+            <div class="slide-badge">Folie 43 / 44</div>
+            <div class="slide-content">
+                <h3>Denkpause &amp; Reflexionsfragen</h3>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>Frage 1: Beziehungstypen</h4>
+<p>Ein Auto hat 4 Räder. Ein Auto hat einen Fahrer.  </p>
+<ul>
+<li>Welche Beziehung besteht zwischen Auto und Rädern?  </li>
+<li>Welche Beziehung besteht zwischen Auto und Fahrer?<br><em>(Tipp: Überlege, wer ohne wen überleben kann!)</em></li>
+</ul>
+</div>
+
+<div class="col-card" style="margin-top: 15px;">
+
+<h4>Frage 2: SOLID-Verstoß</h4>
+<p>Ein Entwickler schreibt:<br><code>class PdfRechnung(Rechnung, DatabaseConnection):</code>  </p>
+<ul>
+<li>Welches SOLID-Prinzip wird hier gravierend verletzt und warum?</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Frage 3: Vererbung vs. Komposition</h4>
+<p>Warum ist <code>class RabattierterKunde(Kunde)</code> ein schlechter Entwurf im Vergleich zu <code>kunde.rabatt_strategie = TreueRabatt()</code>?</p>
+<h4>Antworten zur Selbstkontrolle:</h4>
+<ol>
+<li>Räder = <strong>kontextabhängig:</strong> Werkstatt-Software (Räder werden ummontiert) → <strong>Aggregation</strong>; Fahrzeugkonfigurator (Räder nur als Teil eines Autos) → <strong>Komposition</strong>. Fahrer = <strong>Assoziation</strong> (Fahrer lebt ohne Auto weiter).</li>
+<li><strong>SRP</strong> (Druck &amp; DB vermischt) und <strong>DIP</strong> (konkrete DB fest vererbt) – zudem keine echte <em>Ist-Ein</em>-Beziehung (eine Rechnung <em>ist keine</em> Datenbankverbindung).</li>
+<li>Zur Laufzeit kann ein Kunde Stammkunde werden oder seinen Status verlieren; die Vererbungshierarchie ist dagegen zur Entwurfszeit fest vorgegeben.</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-44">
+            <div class="slide-badge">Folie 44 / 44</div>
+            <div class="slide-content">
+                <h3>Ausblick auf Modul 2: Objektorientierte Analyse (OOA)</h3>
+<div class="two-cols">
+<div class="col">
+
+<h3>Was wir in Modul 1 erreicht haben:</h3>
+<ul>
+<li>Klassen, Objekte, Kapselung (<code>@property</code>, <code>@dataclass</code>, <code>slots</code>).</li>
+<li><strong>SOLID-Prinzipien</strong> als Richtschnur für wartbaren Code.</li>
+<li><strong>Protocols</strong> für Duck Typing und echte Entkopplung.</li>
+<li><strong>Strategy &amp; Factory Pattern</strong> zur Vermeidung starrer Vererbung.</li>
+</ul>
+<h3>Die offene Kernfrage für Modul 2:</h3>
+<p>Woher wissen wir eigentlich, <strong>welche Klassen und Methoden</strong> wir programmieren müssen? Wie kommen wir von den Wünschen des Kunden zu einer formalen Spezifikation?</p>
+<blockquote>
+<p><strong>Frage zum Weiterdenken:</strong> Kann ein Entwickler fehlerfreien Code schreiben, wenn der Kunde selbst noch nicht genau weiß, was er will?</p>
+</blockquote>
+</div>
+<div class="col">
+
+<div class="mermaid">
+flowchart TD
+    M1["Modul 1: OO & SOLID"] --> M2["Modul 2: OOA & Analyse"]
+    M2 --> M3["Modul 3: Modularisierung & Architektur"]
+    M3 --> M4["Modul 4: Aspekte, Muster & FP"]
+    M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
+    M5 --> M6["Modul 6: Threat Modeling"]
+    
+    style M1 fill:#4a90e2,stroke:#1565c0,stroke-width:3px,color:#fff
+    style M2 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+</div>
+</div>
+</div>
+
+            </div>
+        </article>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontFamily: '"Inter", system-ui, sans-serif'
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Clean up any mermaid blocks if needed
+            document.querySelectorAll('.mermaid').forEach((el) => {
+                let text = el.textContent || '';
+                text = text.replace(/&amp;/g, '&')
+                           .replace(/--&gt;/g, '-->')
+                           .replace(/&gt;/g, '>')
+                           .replace(/&lt;/g, '<')
+                           .replace(/&quot;/g, '"');
+                el.textContent = text.trim();
+            });
+
+            const nodes = document.querySelectorAll('.mermaid');
+            for (const node of nodes) {
+                try {
+                    await mermaid.run({ nodes: [node] });
+                } catch (err) {
+                    console.warn('Mermaid render issue:', err);
+                }
+            }
+
+            // Highlight all code blocks
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

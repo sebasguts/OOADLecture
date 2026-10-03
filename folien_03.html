@@ -137,7 +137,7 @@
 </head>
 <body>
     <div class="nav-home">
-        <a href="index.html">← Zur Übersicht</a> | Modul 3: Code-Modularisierung & Architektur
+        <a href="index.html">← Zur Übersicht</a> | <a href="skript_03.html">Alle Folien auf einer Seite 📄</a> | Modul 3: Code-Modularisierung & Architektur
     </div>
     <div class="reveal">
         <div class="slides">
@@ -911,11 +911,14 @@ flowchart TD
 
 ### 1. Ports (Schnittstellen / Verträge)
 * Gehören zum **inneren Kern**.
-* In Python als `typing.Protocol` definiert.
+* In Python meist als `typing.Protocol` definiert.
 * Beschreiben **WAS** getan werden muss, nicht *WIE*.
+* **Unterscheidung nach Cockburn (2 Richtungen):**
+  * **Driving Ports (Primär / Eingehend):** Steuern den Kern (z. B. Use-Case-Interfaces, die von Web-API oder CLI aufgerufen werden).
+  * **Driven Ports (Sekundär / Ausgehend):** Werden vom Kern aufgerufen (z. B. Datenbank-Repositories, Payment-Gateways).
 * **Beispiele:**
-  * `OrderRepository`: „Kann eine `Order` speichern und laden.“
-  * `PaymentGateway`: „Kann einen Betrag abbuchen.“
+  * `OrderRepository`: Driven Port – „Kann eine `Order` speichern und laden.“
+  * `PaymentGateway`: Driven Port – „Kann einen Betrag abbuchen.“
 
 </div>
 

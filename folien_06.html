@@ -163,7 +163,7 @@
 </head>
 <body>
     <div class="nav-home">
-        <a href="index.html">← Zur Übersicht</a> | Modul 6: Threat Modeling & AI-Security
+        <a href="index.html">← Zur Übersicht</a> | <a href="skript_06.html">Alle Folien auf einer Seite 📄</a> | Modul 6: Threat Modeling & AI-Security
     </div>
     <div class="reveal">
         <div class="slides">
@@ -996,13 +996,15 @@ def get_finances():
 Nach der STRIDE-Analyse hat ein Team oft eine Liste von 50 potenziellen Bedrohungen.  
 **Welche Lücke muss sofort geschlossen werden und welche kann warten?**
 
-Das **DREAD-Modell** bewertet jede Bedrohung auf einer Skala von 1 (sehr gering) bis 10 (katastrophal):
+Das **DREAD-Modell** (ursprünglich von Microsoft) bewertet jede Bedrohung auf einer Skala von 1 (sehr gering) bis 10 (katastrophal):
 
 * **D – Damage Potential:** Wie hoch ist der finanzielle oder rechtliche Schaden?
-* **R – Reproducibility:** Wie zuverlässig gelingt der Exploit? (10 = Klappt bei jedem Klick).
-* **E – Exploitability:** Wie einfach ist der Angriff? (1 = Nation-State-Hacker, 10 = Laie im Browser).
+* **R – Reproducibility:** Wie zuverlässig gelingt der Exploit? (10 = Klappt immer).
+* **E – Exploitability:** Wie einfach ist der Angriff? (10 = Jeder Laie mit F12).
 * **A – Affected Users:** Welcher Anteil der Nutzer ist betroffen? (10 = Alle Kunden).
-* **D – Discoverability:** Wie leicht ist die Lücke zu finden? (10 = Liegt offen im Quellcode).
+* **D – Discoverability:** Wie leicht ist die Lücke zu finden?
+
+> **Praxis-Hinweis:** DREAD ist ein hervorragendes, intuitives Denkwerkzeug für die Lehre. Microsoft und die Industrie haben es später durch **CVSS (Common Vulnerability Scoring System)** und qualitative **Bug Bars** ersetzt, da *Discoverability* zu subjektiv ist und zu *"Security through Obscurity"* verleitet.
 
 </div>
 <div class="col">
