@@ -146,6 +146,27 @@
             width: auto !important;
             max-width: 100% !important;
         }
+
+        /* Tables in Slides */
+        .reveal table {
+            font-size: 0.65em !important;
+            width: 100% !important;
+            margin: 6px 0 !important;
+            border-collapse: collapse;
+        }
+        .reveal table th, .reveal table td {
+            padding: 5px 8px !important;
+            border: 1px solid var(--border) !important;
+            text-align: left;
+        }
+        .reveal table th {
+            background: #f1f5f9;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        .reveal table tr:nth-child(even) td {
+            background: #fafbfc;
+        }
     </style>
 </head>
 <body>
@@ -789,21 +810,19 @@ classDiagram
 
 ### UML-Beziehungen: Pfeile & Symbole im Überblick
 
-<div class="two-cols">
+<div class="two-cols-wide-left">
 <div class="col">
 
-Objekte arbeiten nicht isoliert, sondern stehen in präzisen Beziehungen zueinander.
+Objekte stehen in präzisen, typisierten Beziehungen zueinander:
 
-| Mermaid-Syntax | Beziehung | Kopplung | Bedeutung & Faustregel |
+| Syntax | Beziehung | Kopplung | Bedeutung & Faustregel |
 | :---: | :--- | :---: | :--- |
-| `..>` | **Abhängigkeit** | Sehr lose | "Benutzt kurzzeitig" (Parameter, lokale Variable, erzeugt) |
-| `-->` | **Assoziation** | Lose | "Nutzt / Kennt" (unabhängige Lebenszyklen) |
+| `..>` | **Abhängigkeit** | Sehr lose | Temporäre Nutzung (z. B. Methodenparameter) |
+| `-->` | **Assoziation** | Lose | Dauerhafte Kenntnis (unabhängige Lebenszyklen) |
 | `o--` | **Aggregation** | Mittel | "Besteht aus" (Teile überleben das Ganze) |
-| `*--` | **Komposition** | Hoch | "Besitzt existenziell" (Teile sterben mit dem Ganzen) |
-| `<\|--` | **Vererbung** | Sehr hoch | "Ist ein / Generalisierung" (starr zur Entwurfszeit) |
-| `<\|..` | **Realisierung** | Minimal | "Erfüllt Vertrag / Interface" (Polymorphie) |
-
-*UML-Symbole:* gestrichelter offener Pfeil · Linie (opt. offene Pfeilspitze = Navigierbarkeit) · weiße Raute · schwarze Raute · weißes Dreieck · gestrichelt + weißes Dreieck.
+| `*--` | **Komposition** | Hoch | "Besitzt existenziell" (Teile sterben mit Ganzem) |
+| <code>&lt;&#124;--</code> | **Vererbung** | Sehr hoch | "Ist ein" (starre Generalisierung zur Entwurfszeit) |
+| <code>&lt;&#124;..</code> | **Realisierung** | Minimal | "Erfüllt Vertrag" (Interface / Polymorphie) |
 
 </div>
 <div class="col">
@@ -814,12 +833,10 @@ Objekte arbeiten nicht isoliert, sondern stehen in präzisen Beziehungen zueinan
 Stehen an den Enden der Verbindungslinien:
 * `1` : Genau eins
 * `0..1` : Optional (null oder eins)
-* `*` oder `0..*` : Beliebig viele (null bis unendlich)
+* `*` : Beliebig viele (`0..*`)
 * `1..*` : Mindestens eins bis unendlich
-* `2..5` : Fester Bereich von 2 bis 5
 
 #### Leserichtung & Rollen
-Ein Pfeil mit Beschriftung zeigt an, wer wen wie nutzt:  
 `Kunde "1" --> "0..*" Bestellung : gibt auf`
 
 </div>
