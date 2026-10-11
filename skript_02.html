@@ -326,7 +326,7 @@
                 </div>
                 <div class="header-title" style="margin-top: 12px;">
                     <h1>Modul 2: Objektorientierte Analyse & Übergang zum Design</h1>
-                    <p>Alle 33 Folien auf einer Seite – Zum Lesen, Lernen und als PDF drucken</p>
+                    <p>Alle 36 Folien auf einer Seite – Zum Lesen, Lernen und als PDF drucken</p>
                 </div>
             </div>
             <div>
@@ -337,7 +337,7 @@
         <main>
             
         <article class="slide-card" id="folie-1">
-            <div class="slide-badge">Folie 1 / 33</div>
+            <div class="slide-badge">Folie 1 / 36</div>
             <div class="slide-content">
                 <h1>Objektorientierte Analyse &amp; Design</h1>
 <h2>Modul 2: Objektorientierte Analyse (OOA)</h2>
@@ -345,7 +345,7 @@
             </div>
         </article>
         <article class="slide-card" id="folie-2">
-            <div class="slide-badge">Folie 2 / 33</div>
+            <div class="slide-badge">Folie 2 / 36</div>
             <div class="slide-content">
                 <h3>Präzise Lernziele</h3>
 <div class="two-cols">
@@ -377,7 +377,7 @@
             </div>
         </article>
         <article class="slide-card" id="folie-3">
-            <div class="slide-badge">Folie 3 / 33</div>
+            <div class="slide-badge">Folie 3 / 36</div>
             <div class="slide-content">
                 <h3>Agenda</h3>
 <div class="two-cols">
@@ -421,7 +421,7 @@
             </div>
         </article>
         <article class="slide-card" id="folie-4">
-            <div class="slide-badge">Folie 4 / 33</div>
+            <div class="slide-badge">Folie 4 / 36</div>
             <div class="slide-content">
                 <h3>Einordnung in die Vorlesung: Von den Grundlagen zur Analyse</h3>
 <div class="two-cols">
@@ -464,7 +464,7 @@ flowchart TD
             </div>
         </article>
         <article class="slide-card" id="folie-5">
-            <div class="slide-badge">Folie 5 / 33</div>
+            <div class="slide-badge">Folie 5 / 36</div>
             <div class="slide-content">
                 <h3>Warum scheitern Softwareprojekte?</h3>
 <div class="two-cols">
@@ -514,7 +514,7 @@ flowchart TD
             </div>
         </article>
         <article class="slide-card" id="folie-6">
-            <div class="slide-badge">Folie 6 / 33</div>
+            <div class="slide-badge">Folie 6 / 36</div>
             <div class="slide-content">
                 <h3>Lastenheft vs. Pflichtenheft</h3>
 <div class="two-cols">
@@ -522,7 +522,7 @@ flowchart TD
 
 <h4>Das Lastenheft (Auftraggebersicht)</h4>
 <ul>
-<li><strong>Wer schreibt es?</strong> Der Kunde / Auftraggeber (z. B. Ada).</li>
+<li><strong>Wer schreibt es?</strong> Der Kunde / Auftraggeber.</li>
 <li><strong>Inhalt:</strong> <em>Was</em> soll das System können? Welche fachlichen Ziele werden verfolgt?</li>
 <li><strong>Sprache:</strong> Reine Fachsprache der Domäne, <strong>kein</strong> technischer Jargon.</li>
 </ul>
@@ -556,7 +556,60 @@ flowchart TD
             </div>
         </article>
         <article class="slide-card" id="folie-7">
-            <div class="slide-badge">Folie 7 / 33</div>
+            <div class="slide-badge">Folie 7 / 36</div>
+            <div class="slide-content">
+                <h3>Die Fallstudie: Ada&#39;s Botanical Innovations</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Ausgangssituation &amp; Geschäftsmodell:</h4>
+<ul>
+<li><strong>Ada Lovelace</strong> betreibt einen erfolgreichen Fachhandel für exotische Pflanzen, Pflanzgefäße und sensorbasierte Pflegesysteme.</li>
+<li><strong>Bisheriger Zustand:</strong><ul>
+<li>Reiner Vor-Ort-Verkauf im Ladengeschäft mit einer einfachen Kasse.</li>
+<li>Keine Anbindung an ein zentrales Lager- oder Liefersystem.</li>
+<li>Hoher manueller Aufwand und Dateninkonsistenzen.</li>
+</ul>
+</li>
+</ul>
+<h4>Die Vision: Die moderne Plattform</h4>
+<p>Ada beauftragt uns mit der Analyse und dem Entwurf einer integrierten Plattform für <strong>drei Vertriebswege</strong>:</p>
+<ol>
+<li>🛒 <strong>B2C-Webshop:</strong> Endkunden bestellen online mit Express-Option.</li>
+<li>🏢 <strong>B2B-Portal:</strong> Firmenkunden kaufen auf Rechnung mit Kreditlimit.</li>
+<li>💼 <strong>Point-of-Sale (POS):</strong> Ladenpersonal bedient Kunden an der Kasse.</li>
+</ol>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Kernanforderungen für die Analyse:</h4>
+<ul>
+<li><strong>Vielfältige Akteure:</strong> Endkunden, Geschäftskunden, Kassenpersonal und externe Dienstleister (Kurier, Payment) müssen harmonisch zusammenspielen.</li>
+<li><strong>Getrennte Fachbereiche:</strong><ul>
+<li>Eine <em>Pflanze</em> im Webshop benötigt Fotos und Marketingtexte.</li>
+<li>Dieselbe <em>Pflanze</em> im Lager benötigt Regalplätze und IoT-Sensordaten.</li>
+</ul>
+</li>
+<li><strong>Defensive Geschäftsregeln:</strong><ul>
+<li>Express-Lieferung nur bei lokalem Lagerbestand und unter 15 km Distanz.</li>
+<li>B2B-Kauf auf Rechnung nur bei verifiziertem Kreditlimit.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Roter Faden:</strong> Dieses System begleitet uns durch die gesamte Anforderungsanalyse und den Übergang zum Code!</p>
+</blockquote>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-8">
+            <div class="slide-badge">Folie 8 / 36</div>
             <div class="slide-content">
                 <h3>Akteure (Actors): Rolle vs. Person</h3>
 <div class="two-cols-wide-left">
@@ -618,8 +671,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-8">
-            <div class="slide-badge">Folie 8 / 33</div>
+        <article class="slide-card" id="folie-9">
+            <div class="slide-badge">Folie 9 / 36</div>
             <div class="slide-content">
                 <h3>Anwendungsfälle (Use Cases): Das Blackbox-Prinzip</h3>
 <div class="two-cols">
@@ -659,8 +712,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-9">
-            <div class="slide-badge">Folie 9 / 33</div>
+        <article class="slide-card" id="folie-10">
+            <div class="slide-badge">Folie 10 / 36</div>
             <div class="slide-content">
                 <h3>Use-Case-Diagramm: <em>Ada&#39;s Botanical Platform</em></h3>
 <div class="two-cols-wide-left">
@@ -700,8 +753,8 @@ flowchart LR
 
             </div>
         </article>
-        <article class="slide-card" id="folie-10">
-            <div class="slide-badge">Folie 10 / 33</div>
+        <article class="slide-card" id="folie-11">
+            <div class="slide-badge">Folie 11 / 36</div>
             <div class="slide-content">
                 <h3>Beziehung 1: <code>«include»</code> (Zwingend erforderlich)</h3>
 <div class="two-cols-wide-left">
@@ -716,6 +769,7 @@ flowchart LR
 <li><strong>Wann nutzen?</strong><ul>
 <li>Um gemeinsame Teilabläufe auszulagern, die in mehreren Use Cases identisch vorkommen.</li>
 <li>Beispiel: Sowohl <em>&quot;Online bestellen&quot;</em> als auch <em>&quot;Im Laden kaufen&quot;</em> schließen die <em>&quot;Zahlung abwickeln&quot;</em> zwingend ein.</li>
+<li><strong>Direkter Aufruf durch Akteure:</strong> Ein inkludierter Use Case kann oft auch eigenständig von einem Akteur gestartet werden (z. B. wenn <em>&quot;Zahlung abwickeln&quot;</em> auch separat zum Begleichen einer offenen Monatsrechnung aufgerufen werden darf).</li>
 </ul>
 </li>
 <li><strong>Pfeilrichtung:</strong><br>Vom Basisfall <strong>hin</strong> zum inkludierten Fall:<br><code>Basisfall -.-&gt;|include| InkludierterFall</code></li>
@@ -739,8 +793,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-11">
-            <div class="slide-badge">Folie 11 / 33</div>
+        <article class="slide-card" id="folie-12">
+            <div class="slide-badge">Folie 12 / 36</div>
             <div class="slide-content">
                 <h3>Beziehung 2: <code>«extend»</code> (Optional / Bedingt)</h3>
 <div class="two-cols-wide-left">
@@ -757,7 +811,7 @@ flowchart TD
 <li>Beispiel: Beim Blumenkauf kann der Kunde <em>optional</em> eine handschriftliche Grußkarte beilegen lassen oder Expresslieferung wählen.</li>
 </ul>
 </li>
-<li><strong>Pfeilrichtung (Achtung, häufiger Prüfungsfehler!):</strong><br>Der Pfeil zeigt <strong>von der optionalen Erweiterung ZUR Basis</strong>:<br><code>Erweiterung -.-&gt;|extend| Basisfall</code></li>
+<li><strong>Pfeilrichtung (Achtung, häufiger Denkfehler!):</strong><br>Der Pfeil zeigt <strong>von der optionalen Erweiterung ZUR Basis</strong>:<br><code>Erweiterung -.-&gt;|extend| Basisfall</code></li>
 </ul>
 </div>
 
@@ -778,8 +832,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-12">
-            <div class="slide-badge">Folie 12 / 33</div>
+        <article class="slide-card" id="folie-13">
+            <div class="slide-badge">Folie 13 / 36</div>
             <div class="slide-content">
                 <h3><code>&lt;&lt;include&gt;&gt;</code> vs. <code>&lt;&lt;extend&gt;&gt;</code>: Der direkte Vergleich</h3>
 <div class="two-cols">
@@ -815,8 +869,77 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-13">
-            <div class="slide-badge">Folie 13 / 33</div>
+        <article class="slide-card" id="folie-14">
+            <div class="slide-badge">Folie 14 / 36</div>
+            <div class="slide-content">
+                <h3>Großes Use-Case-Diagramm: Das Gesamtsystem bei Ada</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="mermaid">
+flowchart LR
+    Kunde["👤 Endkunde"]
+    B2B["🏢 B2B-Kunde"]
+    Verkaeufer["💼 Verkäufer"]
+    Kurier["🚚 Kurierdienst"]
+
+    subgraph System["Ada&#39;s Botanical Platform"]
+        UC_Order(["Bestellung aufgeben"])
+        UC_BuyStore(["Im Laden einkaufen"])
+        UC_Pay(["Zahlung abwickeln"])
+        UC_CheckStock(["Lagerbestand prüfen"])
+        UC_Gift(["Grußkarte beilegen"])
+        UC_Express(["Expresslieferung buchen"])
+    end
+
+    Kunde --> UC_Order
+    B2B --> UC_Order
+    Verkaeufer --> UC_BuyStore
+
+    %% Inclusions (zwingend)
+    UC_Order -.->|include| UC_CheckStock
+    UC_Order -.->|include| UC_Pay
+    UC_BuyStore -.->|include| UC_Pay
+
+    %% Extensions (optional)
+    UC_Gift -.->|extend| UC_Order
+    UC_Express -.->|extend| UC_Order
+
+    %% Direkte Trigger
+    Kurier --> UC_Express
+    Kunde -.->|Rechnung zahlen| UC_Pay
+</div>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Das Zusammenspiel im Überblick:</h4>
+<ul>
+<li><strong><code>«include»</code> (Zwingend erforderlich):</strong>  <ul>
+<li><em>&quot;Bestellung aufgeben&quot;</em> und <em>&quot;Im Laden einkaufen&quot;</em> binden beide <em>&quot;Zahlung abwickeln&quot;</em> ein.</li>
+<li>Ohne Bestandsprüfung und Zahlung kann kein Kauf erfolgreich abschließen.</li>
+</ul>
+</li>
+<li><strong><code>«extend»</code> (Optional / Bedingt):</strong>  <ul>
+<li><em>&quot;Grußkarte beilegen&quot;</em> erweitert die Bestellung nur auf Kundenwunsch.</li>
+<li><em>&quot;Expresslieferung buchen&quot;</em> greift nur, wenn Eilzustellung ausgewählt wird.</li>
+</ul>
+</li>
+<li><strong>Teilabläufe direkt getriggert:</strong>  <ul>
+<li><em>&quot;Zahlung abwickeln&quot;</em> kann auch direkt vom Kunden aufgerufen werden (z. B. Ausgleich offener Rechnungen).</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-15">
+            <div class="slide-badge">Folie 15 / 36</div>
             <div class="slide-content">
                 <h3>Die Szenario-Tabelle: Das Fundament der OOA</h3>
 <div class="two-cols">
@@ -862,8 +985,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-14">
-            <div class="slide-badge">Folie 14 / 33</div>
+        <article class="slide-card" id="folie-16">
+            <div class="slide-badge">Folie 16 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Felder 1 &amp; 2 (Name &amp; Kurzbeschreibung)</h3>
 <div class="two-cols">
@@ -906,8 +1029,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-15">
-            <div class="slide-badge">Folie 15 / 33</div>
+        <article class="slide-card" id="folie-17">
+            <div class="slide-badge">Folie 17 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Felder 3 &amp; 4 (Akteure &amp; Vorbedingungen)</h3>
 <div class="two-cols">
@@ -958,8 +1081,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-16">
-            <div class="slide-badge">Folie 16 / 33</div>
+        <article class="slide-card" id="folie-18">
+            <div class="slide-badge">Folie 18 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Felder 5 &amp; 6 (Nachbedingungen &amp; Trigger)</h3>
 <div class="two-cols">
@@ -1009,8 +1132,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-17">
-            <div class="slide-badge">Folie 17 / 33</div>
+        <article class="slide-card" id="folie-19">
+            <div class="slide-badge">Folie 19 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Feld 7 (Das Standardszenario / Happy Path)</h3>
 <div class="two-cols">
@@ -1050,8 +1173,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-18">
-            <div class="slide-badge">Folie 18 / 33</div>
+        <article class="slide-card" id="folie-20">
+            <div class="slide-badge">Folie 20 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Felder 8 &amp; 9 (Alternative Pfade &amp; Fehler)</h3>
 <div class="two-cols">
@@ -1093,8 +1216,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-19">
-            <div class="slide-badge">Folie 19 / 33</div>
+        <article class="slide-card" id="folie-21">
+            <div class="slide-badge">Folie 21 / 36</div>
             <div class="slide-content">
                 <h3>Szenariotabelle: Die Gesamtreferenz (Expresslieferung)</h3>
 <div class="two-cols">
@@ -1158,8 +1281,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-20">
-            <div class="slide-badge">Folie 20 / 33</div>
+        <article class="slide-card" id="folie-22">
+            <div class="slide-badge">Folie 22 / 36</div>
             <div class="slide-content">
                 <h3>Agile Spezifikation: User Stories &amp; BDD</h3>
 <div class="two-cols">
@@ -1201,8 +1324,175 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-21">
-            <div class="slide-badge">Folie 21 / 33</div>
+        <article class="slide-card" id="folie-23">
+            <div class="slide-badge">Folie 23 / 36</div>
+            <div class="slide-content">
+                <h3>BDD &amp; Gherkin: Syntax &amp; Warum es unverzichtbar ist</h3>
+<div class="two-cols">
+<div class="col">
+
+<h4>Die kanonische Gherkin-Struktur:</h4>
+<p>Gherkin folgt dem Dreischritt <strong>Given – When – Then</strong>:</p>
+<ul>
+<li><strong><code>Given</code> (Gegeben sei... / Ausgangslage):</strong><br>Beschreibt den Zustand und die Vorbedingungen des Systems, bevor die Aktion startet (z. B. <em>&quot;Kunde ist verifiziert, Kreditlimit beträgt 1.000 €&quot;</em>).</li>
+<li><strong><code>When</code> (Wenn... / Aktion):</strong><br>Das auslösende Ereignis oder die Benutzerinteraktion (z. B. <em>&quot;Kunde bestellt Pflanzen im Wert von 350 €&quot;</em>).</li>
+<li><strong><code>Then</code> (Dann... / Erwartetes Ergebnis):</strong><br>Das beobachtbare, überprüfbare Resultat (z. B. <em>&quot;Bestellung wird bestätigt, neues Limit ist 650 €&quot;</em>).</li>
+<li><strong><code>And</code> / <code>But</code>:</strong><br>Verbindet logisch weitere Vor- oder Nachbedingungen.</li>
+</ul>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Warum ist BDD &amp; Gherkin so wertvoll?</h4>
+<ol>
+<li><strong>Gemeinsame Sprache (Ubiquitous Language):</strong><br>Schließt die Kluft zwischen Fachexperten (Ada), Product Ownern, Entwicklern und Testern – ganz ohne technischen Jargon.</li>
+<li><strong>Ausführbare Spezifikation (Executable Specs):</strong><br>Mit Frameworks (<code>pytest-bdd</code>, <code>behave</code>, <code>Cucumber</code>) wird genau dieser Text <strong>automatisiert als Testsuite ausgeführt</strong>!</li>
+<li><strong>Living Documentation:</strong><br>Die Dokumentation verstaubt nicht in PDFs: Ändert sich das Geschäftsverhalten, schlägt der Test in CI/CD fehl.</li>
+<li><strong>Klärt Randfälle vor dem Coden:</strong><br>Zwingt das Team dazu, negative Pfade (<em>&quot;Was passiert bei 0 € Limit?&quot;</em>) vor der ersten Codezeile festzulegen.</li>
+</ol>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-24">
+            <div class="slide-badge">Folie 24 / 36</div>
+            <div class="slide-content">
+                <h3>Defensive UI: Fehler im Keim ersticken</h3>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<blockquote>
+<p><em>&quot;Gutes Softwaredesign macht Fehlbedienung durch den Anwender unmöglich!&quot;</em></p>
+</blockquote>
+<h4>Defensive UI-Prinzipien im Pflichtenheft:</h4>
+<ul>
+<li><strong>Deaktivieren statt Fehlermeldung:</strong><br>Ist eine Pflanze ausverkauft oder die Distanz zu groß, wird der Express-Button <strong>ausgegraut / disabled</strong>. Der Anwender kann gar nicht erst in den Fehlerzustand geraten!</li>
+<li><strong>Sofortige Inline-Validierung:</strong><br>Postleitzahlen und Lieferadressen werden direkt bei der Eingabe geprüft (z. B. <em>&quot;Außerhalb unseres 15-km-Liefergebiets&quot;</em>), nicht erst nach Absenden des gesamten Formulars.</li>
+<li><strong>Rollenbasierte Sichten:</strong><br>Ein Verkäufer an der Kasse sieht keine B2B-Kreditlimits; ein B2B-Kunde sieht sofort seine Netto-Preise und das verfügbare Kreditlimit.</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Pflichtbestandteile der UI-Spezifikation:</h4>
+<ol>
+<li><strong>Mockup / Wireframe:</strong> Visuelle Skizze der Oberfläche mit allen Zuständen.</li>
+<li><strong>Feldtabelle:</strong> Name, Datentyp, Pflichtfeld (Ja/Nein), Validierungsregel.</li>
+<li><strong>Zustandsmatrix:</strong> Wann ist welches Element aktiv (<code>enabled</code>), inaktiv (<code>disabled</code>) oder unsichtbar (<code>hidden</code>)?</li>
+</ol>
+<p><strong>Zustandsmatrix für Ada&#39;s Express-Kauf:</strong></p>
+<ul>
+<li><code>Bestand &gt; 0 &amp;&amp; Distanz ≤ 15 km</code> ⇒ Button <code>[Express (2h)]</code> aktiv.</li>
+<li><code>Bestand == 0</code> ⇒ Button deaktiviert + Badge: <em>&quot;Ausverkauft&quot;</em>.</li>
+<li><code>Distanz &gt; 15 km</code> ⇒ Express deaktiviert + Inline-Hinweis.</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-25">
+            <div class="slide-badge">Folie 25 / 36</div>
+            <div class="slide-content">
+                <h3>UI-Spezifikation: Defensive UI in der Praxis</h3>
+<div class="two-cols">
+<div class="col">
+
+<!-- Visual UI Mockup Card 1: Available Product & In-Radius -->
+<div class="col-card" style="border: 2px solid #27ae60; background: #f8fafc;">
+
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; margin-bottom: 10px; font-size: 0.82em;">
+    <span>🌿 <strong>Ada's Botanical Shop</strong></span>
+    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 12px; color: #1e293b;">👤 <strong>Maria Muster</strong> (Privatkunde)</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between;">
+        <strong>🪴 Monstera Deliciosa</strong>
+        <span style="color: #27ae60; font-weight: bold;">29,99 €</span>
+    </div>
+    <div style="font-size: 0.75em; color: #16a34a; margin: 3px 0;">
+        🟢 12 Stück auf Lager
+    </div>
+    <div style="margin-top: 6px; font-size: 0.75em;">
+        <strong>Lieferadresse:</strong> Torstraße 44, 10119 Berlin<br>
+        <span style="color: #16a34a; font-weight: 600;">🟢 Im Liefergebiet (3.8 km ≤ 15 km) &bull; Kurier bereit</span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <button style="background: #27ae60; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">🛒 In den Warenkorb</button>
+        <button style="background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">⚡ Express (2h) [+5,90 €]</button>
+    </div>
+</div>
+
+<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #e2e8f0; padding-top: 6px;">
+    <strong>Happy Path (Alle Vorbedingungen erfüllt):</strong>
+    <ul style="margin: 3px 0 0 16px; padding: 0;">
+        <li>Ware vorrätig und Adresse im 15-km-Radius.</li>
+        <li>Sowohl Standard- als auch Express-Kauf sind aktiv und sofort wählbar.</li>
+    </ul>
+</div>
+
+</div>
+
+</div>
+<div class="col">
+
+<!-- Visual UI Mockup Card 2: Out-of-stock & Out-of-radius (Defensive UI) -->
+<div class="col-card" style="border: 2px solid #dc2626; background: #fff5f5;">
+
+<div style="font-size: 0.82em; font-weight: bold; color: #dc2626; border-bottom: 1px solid #fecaca; padding-bottom: 6px; margin-bottom: 8px;">
+    🛡️ Defensive UI in Aktion (Fehlerausschluss):
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; opacity: 0.95;">
+    <div style="display: flex; justify-content: space-between;">
+        <strong style="color: #64748b;">🌵 Euphorbia Ingens</strong>
+        <span style="color: #64748b; font-weight: bold;">49,99 €</span>
+    </div>
+    <div style="font-size: 0.75em; color: #dc2626; margin: 3px 0; font-weight: 600;">
+        🔴 0 Stück im Stadtlager (Ausverkauft)
+    </div>
+    <div style="margin-top: 6px; font-size: 0.75em;">
+        <strong>Lieferadresse:</strong> Hauptstraße 1, 14467 Potsdam<br>
+        <span style="color: #dc2626; font-weight: 600;">🔴 Außerhalb Liefergebiet (26 km &gt; 15 km)</span>
+    </div>
+    <div style="display: flex; gap: 6px; margin-top: 8px;">
+        <button disabled style="background: #cbd5e1; color: #64748b; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: not-allowed;">⚡ Express (2h)</button>
+        <button style="background: #475569; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: pointer;">📦 Standardversand (DHL)</button>
+    </div>
+    <div style="margin-top: 6px; background: #fee2e2; border-left: 3px solid #dc2626; padding: 4px 6px; font-size: 0.7em; color: #991b1b;">
+        ⚠️ Express deaktiviert: Entfernung zu groß und lokaler Bestand erschöpft.
+    </div>
+</div>
+
+<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #fecaca; padding-top: 6px;">
+    <strong>Fehlerprävention durch Design:</strong>
+    <ul style="margin: 3px 0 0 16px; padding: 0;">
+        <li>Vorbedingung verletzt (Distanz 26 km &gt; 15 km).</li>
+        <li>Button ist <em>deaktiviert</em>; DHL-Versand wird als Alternative angeboten.</li>
+    </ul>
+</div>
+
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-26">
+            <div class="slide-badge">Folie 26 / 36</div>
             <div class="slide-content">
                 <h3>Ablaufmodellierung: Aktivitätsdiagramme</h3>
 <div class="two-cols-wide-left">
@@ -1241,8 +1531,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-22">
-            <div class="slide-badge">Folie 22 / 33</div>
+        <article class="slide-card" id="folie-27">
+            <div class="slide-badge">Folie 27 / 36</div>
             <div class="slide-content">
                 <h3>Bounded Contexts (Domain-Driven Design)</h3>
 <div class="two-cols-wide-left">
@@ -1284,203 +1574,8 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-23">
-            <div class="slide-badge">Folie 23 / 33</div>
-            <div class="slide-content">
-                <h3>Defensive UI: Fehler im Keim ersticken</h3>
-<div class="two-cols">
-<div class="col">
-
-<div class="col-card">
-
-<blockquote>
-<p><em>&quot;Gutes Softwaredesign macht Fehlbedienung durch den Anwender unmöglich!&quot;</em></p>
-</blockquote>
-<h4>Defensive UI-Prinzipien im Pflichtenheft:</h4>
-<ul>
-<li><strong>Deaktivieren statt Fehlermeldung:</strong><br>Ist eine Pflanze ausverkauft, wird der &quot;Express-Kauf&quot;-Button <strong>ausgegraut / disabled</strong>. Der Anwender kann gar nicht erst in den Fehlerzustand geraten!</li>
-<li><strong>Sofortige Inline-Validierung:</strong><br>Postleitzahlen werden bei der Eingabe geprüft (z. B. <em>&quot;Außerhalb unseres 15-km-Liefergebiets&quot;</em>), nicht erst nach Absenden des gesamten Formulars.</li>
-<li><strong>Rollenbasierte Sichten:</strong><br>Ein Verkäufer sieht an der Kasse keine Buchhaltungs-Exportfunktionen; ein B2B-Kunde sieht sofort seine Netto-Preise und das verbleibende Kreditlimit.</li>
-</ul>
-</div>
-
-</div>
-<div class="col">
-
-<div class="col-card">
-
-<h4>Pflichtbestandteile der UI-Spezifikation:</h4>
-<ol>
-<li><strong>Mockup / Wireframe:</strong> Visuelle Skizze der Oberfläche mit allen Zuständen.</li>
-<li><strong>Feldtabelle:</strong> Name, Datentyp, Pflichtfeld (Ja/Nein), Validierungsregel.</li>
-<li><strong>Zustandsübergänge:</strong> Wann ist welcher Button aktiv (<code>enabled</code>), inaktiv (<code>disabled</code>) oder unsichtbar (<code>hidden</code>)?</li>
-</ol>
-<p><strong>Beispiel Zustandsmatrix:</strong></p>
-<ul>
-<li><code>Bestand &gt; 0 &amp;&amp; Kurier_verfügbar</code> ⇒ Button <code>[Express (2h)]</code> aktiv (blau).</li>
-<li><code>Bestand == 0</code> ⇒ Button <code>[Express (2h)]</code> deaktiviert (grau) + Badge: <em>&quot;Ausverkauft&quot;</em>.</li>
-<li><code>Lieferadresse &gt; 15 km</code> ⇒ Warnmeldung inline + Button deaktiviert.</li>
-</ul>
-</div>
-
-</div>
-</div>
-
-            </div>
-        </article>
-        <article class="slide-card" id="folie-24">
-            <div class="slide-badge">Folie 24 / 33</div>
-            <div class="slide-content">
-                <h3>UI-Mockup 1: Webshop &amp; Defensive Adressprüfung</h3>
-<div class="two-cols">
-<div class="col">
-
-<!-- Visual UI Mockup Card 1: Available Product & In-Radius -->
-<div class="col-card" style="border: 2px solid #27ae60; background: #f8fafc;">
-
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; margin-bottom: 10px; font-size: 0.82em;">
-    <span>🌿 <strong>Ada's Botanical Shop</strong></span>
-    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 12px; color: #1e293b;">👤 <strong>Maria Muster</strong> (Privatkunde)</span>
-</div>
-
-<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
-    <div style="display: flex; justify-content: space-between;">
-        <strong>🪴 Monstera Deliciosa</strong>
-        <span style="color: #27ae60; font-weight: bold;">29,99 €</span>
-    </div>
-    <div style="font-size: 0.75em; color: #16a34a; margin: 3px 0;">
-        🟢 12 Stück auf Lager
-    </div>
-    <div style="margin-top: 6px; font-size: 0.75em;">
-        <strong>Lieferadresse:</strong> Torstraße 44, 10119 Berlin<br>
-        <span style="color: #16a34a; font-weight: 600;">🟢 Im Liefergebiet (3.8 km ≤ 15 km) &bull; Kurier bereit</span>
-    </div>
-    <div style="display: flex; gap: 8px; margin-top: 8px;">
-        <button style="background: #27ae60; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">🛒 In den Warenkorb</button>
-        <button style="background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.75em; cursor: pointer;">⚡ Express (2h) [+5,90 €]</button>
-    </div>
-</div>
-
-<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #e2e8f0; padding-top: 6px;">
-    <strong>Was man links sieht (Happy Path / Normalfall):</strong>
-    <ul style="margin: 3px 0 0 16px; padding: 0;">
-        <li><strong>Erfüllte Vorbedingungen:</strong> Ware ist im Stadtlager vorrätig (12 Stk.) und Adresse liegt im Liefergebiet (3.8 km ≤ 15 km).</li>
-        <li><strong>Freigeschaltete Aktionen:</strong> Sowohl Standardversand als auch Expresslieferung (2h) sind aktiv und sofort anwählbar.</li>
-    </ul>
-</div>
-
-</div>
-
-</div>
-<div class="col">
-
-<!-- Visual UI Mockup Card 2: Out-of-stock & Out-of-radius (Defensive UI) -->
-<div class="col-card" style="border: 2px solid #dc2626; background: #fff5f5;">
-
-<div style="font-size: 0.82em; font-weight: bold; color: #dc2626; border-bottom: 1px solid #fecaca; padding-bottom: 6px; margin-bottom: 8px;">
-    🛡️ Defensive UI in Aktion (Fehlerausschluss):
-</div>
-
-<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; opacity: 0.95;">
-    <div style="display: flex; justify-content: space-between;">
-        <strong style="color: #64748b;">🌵 Euphorbia Ingens</strong>
-        <span style="color: #64748b; font-weight: bold;">49,99 €</span>
-    </div>
-    <div style="font-size: 0.75em; color: #dc2626; margin: 3px 0; font-weight: 600;">
-        🔴 0 Stück im Stadtlager (Ausverkauft)
-    </div>
-    <div style="margin-top: 6px; font-size: 0.75em;">
-        <strong>Lieferadresse:</strong> Hauptstraße 1, 14467 Potsdam<br>
-        <span style="color: #dc2626; font-weight: 600;">🔴 Außerhalb Liefergebiet (26 km &gt; 15 km)</span>
-    </div>
-    <div style="display: flex; gap: 6px; margin-top: 8px;">
-        <button disabled style="background: #cbd5e1; color: #64748b; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: not-allowed;">⚡ Express (2h)</button>
-        <button style="background: #475569; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 0.72em; cursor: pointer;">📦 Standardversand (DHL)</button>
-    </div>
-    <div style="margin-top: 6px; background: #fee2e2; border-left: 3px solid #dc2626; padding: 4px 6px; font-size: 0.7em; color: #991b1b;">
-        ⚠️ Express deaktiviert: Entfernung zu groß und lokaler Bestand erschöpft.
-    </div>
-</div>
-
-<div style="font-size: 0.74em; color: #334155; line-height: 1.4; border-top: 1px solid #fecaca; padding-top: 6px;">
-    <strong>Was man rechts sieht (Defensive UI / Fehlerprävention):</strong>
-    <ul style="margin: 3px 0 0 16px; padding: 0;">
-        <li><strong>Verletzte Vorbedingungen:</strong> Lokaler Bestand = 0 und Adresse außerhalb des Radius (26 km &gt; 15 km).</li>
-        <li><strong>Fehlerprävention durch Design:</strong> Der Express-Button ist <em>deaktiviert</em>, DHL-Versand wird als Alternative angeboten, und ein Banner erklärt die Ursache transparent.</li>
-    </ul>
-</div>
-
-</div>
-
-</div>
-</div>
-
-            </div>
-        </article>
-        <article class="slide-card" id="folie-25">
-            <div class="slide-badge">Folie 25 / 33</div>
-            <div class="slide-content">
-                <h3>UI-Mockup 2: Rollenbasierte Sichten (Kasse vs. B2B)</h3>
-<div class="two-cols">
-<div class="col">
-
-<!-- View 1: POS Cashier Terminal -->
-<div class="col-card" style="border: 2px solid #0284c7; background: #f0f9ff;">
-
-<div style="border-bottom: 1px solid #bae6fd; padding-bottom: 6px; margin-bottom: 10px; font-size: 0.82em;">
-    <strong>💼 Sicht: Verkäufer (POS-Kassenterminal im Laden)</strong>
-</div>
-
-<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 0.78em;">
-    <div style="background: #0f172a; color: #38bdf8; font-family: monospace; padding: 6px 10px; border-radius: 4px; margin-bottom: 8px;">
-        SCAN: [ 4012345678901 ] &bull; Bonsumme: 29,99 €
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px;">
-        <button style="background: #16a34a; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">💶 Barzahlung</button>
-        <button style="background: #0284c7; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">💳 Kartenzahlung</button>
-    </div>
-    <div style="margin-top: 8px; font-size: 0.72em; color: #64748b;">
-        🔒 Keine Einsicht in B2B-Kreditlimits, Einkaufspreise oder Lieferantenverträge.
-    </div>
-</div>
-
-</div>
-
-</div>
-<div class="col">
-
-<!-- View 2: B2B Procurement Portal -->
-<div class="col-card" style="border: 2px solid #8b5cf6; background: #faf5ff;">
-
-<div style="border-bottom: 1px solid #e9d5ff; padding-bottom: 6px; margin-bottom: 10px; font-size: 0.82em;">
-    <strong>🏢 Sicht: B2B-Kunde (Firmen-Beschaffungsportal)</strong>
-</div>
-
-<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 0.78em;">
-    <div style="margin-bottom: 8px;">
-        <strong>Kreditlimit-Status (GreenOffice GmbH):</strong>
-        <div style="background: #e2e8f0; border-radius: 8px; height: 12px; width: 100%; margin-top: 4px; overflow: hidden;">
-            <div style="background: #8b5cf6; width: 65%; height: 100%;"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: #64748b; margin-top: 2px;">
-            <span>Verbraucht: 350 €</span>
-            <span>Verfügbar: <strong>650 € / 1.000 €</strong></span>
-        </div>
-    </div>
-    <div style="margin-top: 8px; background: #f3e8ff; padding: 6px; border-radius: 4px; font-size: 0.72em; color: #6b21a8;">
-        ✅ Zahlungsart: <strong>Kauf auf Rechnung</strong> (14 Tage Zahlungsziel aktiv).
-    </div>
-    <button style="margin-top: 8px; width: 100%; background: #8b5cf6; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer;">
-        📄 Sammelbestellung auf Rechnung freigeben
-    </button>
-</div>
-
-</div>
-
-            </div>
-        </article>
-        <article class="slide-card" id="folie-26">
-            <div class="slide-badge">Folie 26 / 33</div>
+        <article class="slide-card" id="folie-28">
+            <div class="slide-badge">Folie 28 / 36</div>
             <div class="slide-content">
                 <h3>Der Übergang: Vom Problemraum (OOA) zum Lösungsraum (OOD)</h3>
 <div class="two-cols">
@@ -1513,33 +1608,39 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-27">
-            <div class="slide-badge">Folie 27 / 33</div>
+        <article class="slide-card" id="folie-29">
+            <div class="slide-badge">Folie 29 / 36</div>
             <div class="slide-content">
                 <h3>Die Abbott-Methode (Substantiv-Verb-Analyse)</h3>
 <div class="two-cols">
 <div class="col">
 
-<p>Eine bewährte, intuitive Technik von Russell J. Abbott (1983) zur Ableitung von Klassen und Methoden direkt aus den Anforderungstexten und Szenariotabellen:</p>
-<h4>Die grammatikalische Zuordnungsregel:</h4>
+<p>Eine bewährte, intuitive Technik von Russell J. Abbott (1983) zur systematischen Ableitung von Objektmodellen aus Anforderungstexten und Szenariotabellen:</p>
+<h4>Die grammatikalische Übersetzungsmatrix:</h4>
 <ul>
-<li><strong>Substantive (Nomen) → Klassen &amp; Datentypen:</strong><br>Dinge, Personen, Rollen oder Dokumente in der Domäne.</li>
-<li><strong>Verben (Tätigkeitswörter) → Methoden &amp; Operationen:</strong><br>Aktionen, Berechnungen oder Statusänderungen.</li>
-<li><strong>Adjektive &amp; Beschreibungen → Attribute &amp; Datentypen:</strong><br>Eigenschaften, Maße, Preise oder Zustände.</li>
+<li><strong>Substantive (Nomen) → Klassen oder Attribute:</strong>  <ul>
+<li>Eigenständige Dinge/Konzepte → <strong>Klassen</strong> (<code>Kunde</code>, <code>Bestellung</code>, <code>Pflanze</code>).</li>
+<li>Einfache Werte/Eigenschaften → <strong>Attribute</strong> (<code>preis</code>, <code>adresse</code>, <code>email</code>).</li>
+</ul>
+</li>
+<li><strong>Vollverben → Methoden &amp; Operationen:</strong><br>Aktionen, Berechnungen oder Statusänderungen (<code>bezahlen()</code>, <code>reservieren()</code>).</li>
+<li><strong>Haben-Verben (&quot;besitzt&quot;, &quot;enthält&quot;) → Assoziation / Komposition:</strong><br>Beziehungen zwischen Objekten (<code>Warenkorb</code> <em>enthält</em> <code>Positionen</code>).</li>
+<li><strong>Sein-Verben (&quot;ist ein&quot;) → Vererbung / Generalisierung:</strong><br>Klassenhierarchien (<code>Zimmerpflanze</code> <em>ist eine</em> <code>Pflanze</code>).</li>
+<li><strong>Adjektive → Attribute, Flags oder Enums:</strong><br>Zustände oder Ausprägungen (<code>is_express: bool</code>, <code>status: StatusEnum</code>).</li>
 </ul>
 </div>
 <div class="col">
 
 <div class="col-card">
 
-<h4>Fallstudie: Analyse eines Szenario-Texts bei Ada</h4>
+<h4>Grundbeispiel: Webshop-Bestellung</h4>
 <blockquote>
 <p><em>&quot;Der <strong>Kunde</strong> wählt eine <strong>Pflanze</strong> aus und legt sie in den <strong>Warenkorb</strong>. Er <strong>bezahlt</strong> die <strong>Bestellung</strong> mit einer <strong>Kreditkarte</strong>. Das System <strong>reserviert</strong> den <strong>Bestand</strong> und <strong>beauftragt</strong> einen <strong>Kurier</strong>.&quot;</em></p>
 </blockquote>
 <h4>Ableitung in den Entwurf:</h4>
 <ul>
-<li><strong>Klassen / Entitäten:</strong> <code>Kunde</code>, <code>Pflanze</code>, <code>Warenkorb</code>, <code>Bestellung</code>, <code>Kreditkarte</code>, <code>Kurier</code>.</li>
-<li><strong>Methoden:</strong>  <ul>
+<li><strong>Klassen &amp; Entitäten:</strong><br><code>Kunde</code>, <code>Pflanze</code>, <code>Warenkorb</code>, <code>Bestellung</code>, <code>Kreditkarte</code>, <code>Kurier</code>.</li>
+<li><strong>Methoden &amp; Verantwortlichkeiten:</strong>  <ul>
 <li><code>Warenkorb.fuege_hinzu(pflanze, menge)</code></li>
 <li><code>ZahlungsService.buche_ab(karte, betrag)</code></li>
 <li><code>LagerService.reserviere_bestand(pflanze, menge)</code></li>
@@ -1554,86 +1655,131 @@ flowchart TD
 
             </div>
         </article>
-        <article class="slide-card" id="folie-28">
-            <div class="slide-badge">Folie 28 / 33</div>
+        <article class="slide-card" id="folie-30">
+            <div class="slide-badge">Folie 30 / 36</div>
             <div class="slide-content">
-                <h3>Vom Szenario zum Klassen- &amp; Methodenentwurf</h3>
+                <h3>Abbott-Methode in der Praxis: 3 weitere Fallbeispiele bei Ada</h3>
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+<h4>Beispiel 1: Ladenkasse (POS-Verkauf)</h4>
+<blockquote>
+<p><em>&quot;Der <strong>Verkäufer</strong> <strong>scannt</strong> den <strong>Barcode</strong> der Pflanze. Die <strong>Kasse</strong> <strong>berechnet</strong> den <strong>Gesamtbetrag</strong>, <strong>verbucht</strong> die <strong>Barzahlung</strong> und <strong>druckt</strong> den <strong>Kassenbon</strong>.&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>Klassen &amp; Attribute:</strong>  <ul>
+<li><code>Kasse</code>, <code>Kassenbon</code> (Klassen)</li>
+<li><code>barcode: str</code>, <code>gesamtbetrag: float</code> (Attribute)</li>
+</ul>
+</li>
+<li><strong>Methoden:</strong>  <ul>
+<li><code>Kasse.scanne_artikel(barcode)</code></li>
+<li><code>Kasse.berechne_summe()</code></li>
+<li><code>Kasse.buche_barzahlung(betrag)</code></li>
+<li><code>BonDrucker.drucke(kassenbon)</code></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="col-card" style="margin-top: 12px;">
+
+<h4>Beispiel 2: B2B-Kauf auf Rechnung</h4>
+<blockquote>
+<p><em>&quot;Ein <strong>B2B-Kunde</strong> <strong>besitzt</strong> ein <strong>Kreditlimit</strong>. Wenn er auf Rechnung <strong>bestellt</strong>, <strong>prüft</strong> das System die <strong>Deckung</strong> und <strong>reduziert</strong> das Limit.&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>Haben-Beziehung:</strong> <code>B2BKunde</code> hat Attribut <code>kreditlimit: float</code>.</li>
+<li><strong>Methoden:</strong> <code>Kunde.bestelle_auf_rechnung()</code>, <code>KreditPruefer.pruefe_deckung()</code>.</li>
+</ul>
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Beispiel 3: IoT-Pflanzenpflege &amp; Lager</h4>
+<blockquote>
+<p><em>&quot;Ein <strong>BodenSensor</strong> <strong>misst</strong> stündlich die <strong>Bodenfeuchte</strong> einer Topfpflanze. Wenn der Wert den <strong>Grenzwert</strong> <strong>unterschreitet</strong>, <strong>alarmiert</strong> das System den Gärtner.&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>Klassen &amp; Entitäten:</strong>  <ul>
+<li><code>BodenSensor</code>, <code>TopfPflanze</code>, <code>AlarmNotification</code></li>
+</ul>
+</li>
+<li><strong>Attribute &amp; Werte:</strong>  <ul>
+<li><code>feuchte_prozent: float</code>, <code>min_grenzwert: float</code></li>
+</ul>
+</li>
+<li><strong>Methoden &amp; Logik:</strong>  <ul>
+<li><code>BodenSensor.lese_feuchte() -&gt; float</code></li>
+<li><code>PflanzenMonitor.pruefe_grenzwert(sensor, wert)</code></li>
+<li><code>AlertService.sende_giess_alarm(gaertner_id)</code></li>
+</ul>
+</li>
+</ul>
+<h4>Didaktischer Praxistipp:</h4>
+<p>Nicht jedes Nomen wird eine Klasse! Unterscheide stets:</p>
+<ul>
+<li>Ist es ein <strong>eigenständiger Begriff mit Verhalten</strong>? → Klasse!</li>
+<li>Ist es nur eine <strong>messbare Eigenschaft</strong>? → Attribut!</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-31">
+            <div class="slide-badge">Folie 31 / 36</div>
+            <div class="slide-content">
+                <h3>Responsibility-Driven Design: Vom Szenarioschritt zur Methode</h3>
 <div class="two-cols-wide-left">
 <div class="col">
 
 <div class="col-card">
 
-<h4>Aus Feld 7 der Szenariotabelle (Happy Path):</h4>
-<pre><code>1. Kunde sendet Warenkorb ab.
-2. System prüft Kreditlimit (B2B) oder bucht Zahlung ab (B2C).
-3. System reduziert Lagerbestand um die Bestellmenge.
-4. System generiert Auftragsbestätigung und sendet E-Mail.
-</code></pre>
-<h4>Zuweisung von Verantwortlichkeiten (GRASP):</h4>
+<h4>Das Leitprinzip: Information Expert (GRASP)</h4>
 <ul>
-<li>Wer koordiniert den Gesamtprozess? → Ein <strong>Application Service</strong> (<code>BestellAbwicklungService</code>).</li>
-<li>Wer kennt das Kreditlimit? → Das <strong>Information Expert</strong>-Objekt (<code>B2BKunde</code>).</li>
-<li>Wer verändert den Lagerbestand? → Das <code>LagerRepository</code>.</li>
-<li>Wer versendet die E-Mail? → Ein <code>EmailNotificationAdapter</code>.</li>
+<li><strong>Die zentrale Entwurfsfrage:</strong><br><em>Welche Klasse soll eine bestimmte Methode / Verantwortung erhalten?</em></li>
+<li><strong>Die goldene Regel:</strong><br>Weise die Verantwortung der Klasse zu, die über die <strong>notwendigen Daten verfügt</strong>, um sie zu erfüllen!</li>
+</ul>
+<h4>Ableitung aus Schritt 2 der Szenariotabelle:</h4>
+<blockquote>
+<p><em>&quot;Schritt 2: Das System prüft das Kreditlimit des B2B-Kunden...&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>Falscher Entwurf (Anfängerfalle):</strong><br>Eine externe Klasse holt mit Gettern alle Zahlen und rechnet selbst:<br><code>if kunde.get_limit() - kunde.get_verbrauch() &gt;= preis: ...</code><br>❌ Zerstört Datenkapselung (<em>Feature Envy</em>)!</li>
+<li><strong>Richtiger Entwurf (Information Expert):</strong><br><code>B2BKunde</code> kennt sein eigenes Limit und prüft selbst:<br><code>kunde.hat_ausreichend_deckung(preis) -&gt; bool</code><br>✅ Perfekte Kapselung von Zustand und Verhalten!</li>
 </ul>
 </div>
 
-</div>
-<div class="col">
-
-<div class="mermaid">
-classDiagram
-    class BestellAbwicklungService {
-        -LagerService lager
-        -ZahlungsService zahlung
-        -NotificationService notify
-        +fuehreBestellungAus(Kunde k, Warenkorb w) OrderResult
-    }
-    class B2BKunde {
-        -float kreditlimit
-        -float verbrauchterBetrag
-        +pruefeDeckung(float betrag) bool
-    }
-    BestellAbwicklungService --> B2BKunde : nutzt
-</div>
-</div>
-</div>
-
-            </div>
-        </article>
-        <article class="slide-card" id="folie-29">
-            <div class="slide-badge">Folie 29 / 33</div>
-            <div class="slide-content">
-                <h3>Vom Bounded Context zur Modul- &amp; Package-Struktur</h3>
-<div class="two-cols">
-<div class="col">
-
-<p>In der OOA haben wir gelernt, dass eine einzige, riesige <code>Pflanze</code>-Klasse für das gesamte Unternehmen scheitert (<strong>Bounded Contexts</strong>).<br><strong>Wie wird dieser fachliche Schnitt im Design umgesetzt?</strong></p>
-<h4>Die Übertragung in Softwarepakete:</h4>
-<p>Jeder Bounded Context wird zu einem <strong>eigenständigen Modul / Package</strong> mit eigenem Domänenmodell:</p>
-<ul>
-<li><strong>Modul 1: <code>sales</code> (Verkauf / Webshop)</strong><br>Enthält <code>Pflanze</code> mit <code>name</code>, <code>katalog_preis</code>, <code>fotos</code>, <code>kategorie</code>.</li>
-<li><strong>Modul 2: <code>inventory</code> (Lager &amp; IoT)</strong><br>Enthält <code>Pflanze</code> mit <code>topf_id</code>, <code>bodenfeuchte</code>, <code>giess_intervall</code>, <code>sensor_uid</code>.</li>
-</ul>
 </div>
 <div class="col">
 
 <div class="col-card">
 
-<h4>Die Paketstruktur im Projekt:</h4>
-<pre><code>adas_botanical/
-├── sales/              # Bounded Context: Verkauf
-│   ├── models.py       # Webshop-Pflanze &amp; Warenkorb
-│   └── service.py      # Checkout &amp; Katalog
-├── inventory/          # Bounded Context: Lager &amp; IoT
-│   ├── models.py       # Topf, Bodenfeuchte, Sensor
-│   └── service.py      # Bewässerung &amp; Disposition
-└── shipping/           # Bounded Context: Logistik
-    ├── models.py       # KurierRoute, Lieferadresse
-    └── service.py      # Tour-Optimierung
-</code></pre>
+<h4>Koordination durch Application Services:</h4>
 <ul>
-<li><strong>Vorteil:</strong> Änderungen an IoT-Bodenfeuchtesensoren können <strong>niemals</strong> den Webshop-Checkout zerstören!</li>
+<li>Eine Fach-Entität (<code>B2BKunde</code>) verwaltet nur ihre <strong>eigenen Daten</strong>.</li>
+<li>Wer steuert aber den <strong>Gesamtablauf</strong> über mehrere Entitäten hinweg (Kunde, Warenkorb, Lager, Kurier)?</li>
+<li><strong>Die Antwort:</strong> Ein <strong>Application Service</strong> (<code>BestellAbwicklungService</code>).</li>
+</ul>
+<div class="mermaid">
+flowchart TD
+    Service["BestellAbwicklungService<br><i>(Koordinator / Use Case)</i>"]
+    Kunde["B2BKunde<br><i>(Information Expert: Limit)</i>"]
+    Lager["Lagerbestand<br><i>(Information Expert: Stückzahl)</i>"]
+    
+    Service -->|1. hat_deckung?| Kunde
+    Service -->|2. reserviere_bestand()| Lager
+</div>
+<ul>
+<li>Der Service besitzt <strong>keinen eigenen Zustand</strong>, sondern orchestriert die Fachklassen!</li>
 </ul>
 </div>
 
@@ -1642,8 +1788,91 @@ classDiagram
 
             </div>
         </article>
-        <article class="slide-card" id="folie-30">
-            <div class="slide-badge">Folie 30 / 33</div>
+        <article class="slide-card" id="folie-32">
+            <div class="slide-badge">Folie 32 / 36</div>
+            <div class="slide-content">
+                <h3>Das Domänenmodell für Ada: Klassen &amp; Beziehungen im UML-Diagramm</h3>
+<div class="two-cols-wide-left">
+<div class="col">
+
+<div class="mermaid">
+classDiagram
+    class BestellAbwicklungService {
+        +fuehreBestellungAus(kunde, warenkorb) OrderResult
+    }
+
+    class Kunde {
+        +kunde_id : String
+        +name : String
+        +email : String
+    }
+
+    class B2BKunde {
+        -kreditlimit : float
+        -verbrauchtes_limit : float
+        +hat_ausreichend_deckung(betrag : float) bool
+        +belaste_limit(betrag : float)
+    }
+
+    class Bestellung {
+        +bestell_nr : String
+        +datum : DateTime
+        +status : BestellStatus
+        +berechne_gesamtsumme() float
+    }
+
+    class BestellPosition {
+        +menge : int
+        +einzelpreis : float
+        +berechne_zeilensumme() float
+    }
+
+    class Pflanze {
+        +art_id : String
+        +botanischer_name : String
+        +katalog_preis : float
+    }
+
+    Kunde <|-- B2BKunde : ist ein
+    BestellAbwicklungService --> Kunde : bedient
+    BestellAbwicklungService --> Bestellung : erzeugt
+    Bestellung "1" *-- "1..*" BestellPosition : besitzt existenziell
+    BestellPosition --> Pflanze : referenziert
+</div>
+</div>
+<div class="col">
+
+<div class="col-card">
+
+<h4>Die Struktur des Analyse-Entwurfs:</h4>
+<ol>
+<li><strong>Klare Rollenverteilung:</strong><ul>
+<li><code>Kunde</code> und <code>B2BKunde</code> kapseln Stammdaten und Kreditwürdigkeit.</li>
+<li><code>Bestellung</code> und <code>BestellPosition</code> bilden eine <strong>Komposition</strong> (Positionen existieren nie ohne Bestellung).</li>
+<li><code>Pflanze</code> ist die geteilte Referenz im Katalog.</li>
+</ul>
+</li>
+<li><strong>Orchestrierung:</strong><ul>
+<li><code>BestellAbwicklungService</code> realisiert genau den Use Case <em>&quot;Bestellung aufgeben&quot;</em>.</li>
+</ul>
+</li>
+<li><strong>Konzeptionelle Reinheit:</strong><ul>
+<li>Dieses Diagramm ist <strong>100 % technologie-unabhängig</strong>: Kein SQL, kein ORM, keine HTTP-Header.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Das ist das fertige Analysemodell!</strong></p>
+</blockquote>
+</div>
+
+</div>
+</div>
+
+            </div>
+        </article>
+        <article class="slide-card" id="folie-33">
+            <div class="slide-badge">Folie 33 / 36</div>
             <div class="slide-content">
                 <h3>Die kanonische OOA-zu-OOD-Übergangsmatrix</h3>
 <div class="two-cols" style="grid-template-columns: 1.35fr 0.85fr; gap: 20px;">
@@ -1712,8 +1941,8 @@ classDiagram
 
             </div>
         </article>
-        <article class="slide-card" id="folie-31">
-            <div class="slide-badge">Folie 31 / 33</div>
+        <article class="slide-card" id="folie-34">
+            <div class="slide-badge">Folie 34 / 36</div>
             <div class="slide-content">
                 <h3>Zusammenfassung Modul 2</h3>
 <div class="two-cols">
@@ -1739,8 +1968,8 @@ classDiagram
 
             </div>
         </article>
-        <article class="slide-card" id="folie-32">
-            <div class="slide-badge">Folie 32 / 33</div>
+        <article class="slide-card" id="folie-35">
+            <div class="slide-badge">Folie 35 / 36</div>
             <div class="slide-content">
                 <h3>Denkpause &amp; Reflexionsfragen</h3>
 <div class="two-cols">
@@ -1781,8 +2010,8 @@ classDiagram
 
             </div>
         </article>
-        <article class="slide-card" id="folie-33">
-            <div class="slide-badge">Folie 33 / 33</div>
+        <article class="slide-card" id="folie-36">
+            <div class="slide-badge">Folie 36 / 36</div>
             <div class="slide-content">
                 <h3>Ausblick auf Modul 3: Code-Modularisierung &amp; Softwarearchitektur</h3>
 <div class="two-cols">

@@ -185,7 +185,7 @@ flowchart LR
     B --> C["3. Kohäsion & Kopplung"]
     C --> D["4. Packages & Kapselung"]
     D --> E["5. Schichten & Hexagonal"]
-    E --> F["6. Praxis: Ada's Blumenladen"]
+    E --> F["6. Praxis: Ada's Botanical Innovations"]
     F --> G["7. Testbarkeit & Best Practices"]
     
     style A fill:#4a90e2,color:#fff
@@ -210,7 +210,7 @@ flowchart LR
 
 5. **Architekturmuster** – Schichten vs. Hexagonal (Ports & Adapters)
 6. **Vom Analysemodell zum Code** – Bounded Contexts strukturieren
-7. **Praxisfall Ada's Blumenladen** – Domain, Ports, Adapters & DI
+7. **Praxisfall Ada's Botanical Innovations** – Domain, Ports, Adapters & DI
 8. **Testbarkeit & Best Practices** – Triviales Unit-Testing im RAM
 
 </div>
@@ -225,14 +225,16 @@ flowchart LR
 <div class="col">
 
 ### Rückblick auf Modul 2:
-* Wir haben Use Cases spezifiziert und vier **Bounded Contexts** abgegrenzt.
+* **Fallstudie Ada's Botanical Innovations:** Wir haben Anforderungen mit Use Cases, Szenarien und BDD analysiert.
+* **Domänenmodell:** Mit der Abbott-Methode und GRASP Information Expert entstand das fachliche Klassendiagramm (`Bestellung`, `BestellPosition`, `BestellService`, `Pflanze`, `B2BKunde`).
+* **Strategisches Design:** Wir haben 3 **Bounded Contexts** abgegrenzt: *Verkauf & Webshop*, *Lager & Bestand* sowie *Logistik & Kurier*.
 
 ### Warum jetzt Modularisierung?
-* Wenn wir alle Bounded Contexts in eine einzige Datei programmieren, kollabiert das System unter kognitiver Last und zirkulären Importen.
+* Wenn wir alle diese Klassen naiv in eine einzige Datei programmieren, kollabiert das System: **Die 2000-Zeilen-God-Datei** und **zirkuläre Importe**!
 * **Ziel dieses Moduls:**
-  * Bounded Contexts in eigenständige Python-Packages übersetzen.
+  * Bounded Contexts in eigenständige Python-Packages überführen.
   * **Hexagonale Architektur (Ports & Adapters)** etablieren: Fachlogik vollständig von Datenbanken und Webframeworks entkoppeln.
-  * Dependency Injection für blitzschnelle Tests.
+  * Dependency Injection für blitzschnelle Tests im RAM.
 
 </div>
 <div class="col">
@@ -324,7 +326,7 @@ graph TD
 graph TD
     subgraph Modular["Modulare Architektur (Kognitiv handhabbar)"]
         subgraph ModA["Modul: Katalog"]
-            A1["Blumenstrauss"]
+            A1["Pflanze"]
             A2["KatalogRepo"]
         end
         subgraph ModB["Modul: Bestellung"]
@@ -384,7 +386,7 @@ def place_order():
     cursor = conn.cursor()
     total = 0.0
     for item in data['items']:
-        cursor.execute("SELECT preis FROM blumen "
+        cursor.execute("SELECT preis FROM pflanzen "
                        "WHERE id = ?", (item['id'],))
         preis = cursor.fetchone()[0]
         if item['menge'] >= 10:
@@ -655,7 +657,7 @@ flowchart TD
 * Zugriff erfolgt explizit über `import`:
   ```python
   import katalog
-  blume = katalog.Blumenstrauss(...)
+  pflanze = katalog.Pflanze(...)
   ```
 * **Best Practice:** 1 Modul = 1 fachlich zusammengehöriges Thema (z. B. `rabatt.py`).
 
@@ -667,7 +669,7 @@ flowchart TD
 * Enthält eine `__init__.py` zur Paket-Initialisierung.
 * Ermöglicht saubere Unterstrukturen:
   ```text
-  blumenladen/
+  adas_botanical/
   ├── __init__.py
   ├── katalog/
   │   ├── __init__.py
@@ -691,20 +693,20 @@ flowchart TD
 3. **Facade-Muster:** Exponiert nur die öffentliche API des Pakets über `__all__`.
 
 ### Der Vorteil für den Aufrufer:
-Nutzer des Pakets müssen nicht wissen, ob `Blumenstrauss` intern in `modelle.py`, `entities.py` oder `schema.py` liegt. Sie importieren einfach aus dem Package!
+Nutzer des Pakets müssen nicht wissen, ob `Pflanze` intern in `modelle.py`, `entities.py` oder `schema.py` liegt. Sie importieren einfach direkt aus dem Package!
 
 </div>
 <div class="col">
 
 ```python
-# blumenladen/katalog/__init__.py
+# adas_botanical/katalog/__init__.py
 # Interne Aufteilung bleibt gekapselt.
 # Wir exponieren nur die öffentliche Schnittstelle:
-from .modelle import Blumenstrauss, Kategorie
+from .modelle import Pflanze, Kategorie
 from .repository import KatalogRepository
 
 __all__ = [
-    'Blumenstrauss', 
+    'Pflanze', 
     'Kategorie', 
     'KatalogRepository'
 ]
@@ -712,9 +714,9 @@ __all__ = [
 
 ```python
 # Verwendung von außen (sauber & entkoppelt):
-from blumenladen.katalog import Blumenstrauss
+from adas_botanical.katalog import Pflanze
 
-strauss = Blumenstrauss(name="Rose", preis=25.0)
+monstera = Pflanze(name="Monstera Deliciosa", preis=29.99)
 ```
 
 </div>
@@ -743,7 +745,7 @@ Python hat kein `private` wie Java. Kapselung beruht auf **Namenskonventionen**:
 <div class="col">
 
 ```python
-# blumenladen/zahlung/service.py
+# adas_botanical/zahlung/service.py
 
 class ZahlungsService:
     def __init__(self, api_key: str):
@@ -953,17 +955,19 @@ flowchart TD
 <div class="col">
 
 ### Die Brücke von der Analyse zum Code
-In Modul 2 haben wir für Ada vier **Bounded Contexts** identifiziert:
-1. **Katalog (Catalog):** Blumensträuße & Kategorien.
-2. **Bestellung (Order):** Warenkorb & Checkout.
-3. **Zahlung (Payment):** Autorisierung & Buchung.
-4. **Benachrichtigung (Notification):** SMS & E-Mail.
+In Modul 2 haben wir für **Ada's Botanical Innovations** drei Bounded Contexts identifiziert:
+* **Verkauf & Webshop:** Katalog, Warenkorb, Bestellung, B2B-Kunden.
+* **Lager & Bestand:** Lagerplätze, Vorratsprüfung.
+* **Logistik & Kurier:** 2h-Expressrouten, Versand.
 
 <div class="col-card" style="margin-top: 14px;">
 
 #### Die fundamentale Architektur-Regel:
 **1 Bounded Context = 1 eigenständiges Package!**  
-Jeder Bounded Context bildet ein eigenes Mini-Hexagon mit eigener Domäne, Ports und Adaptern.
+Für die Implementierung fokussieren wir uns auf das Herzstück **`adas_botanical.bestellung`**:
+* **Reiner Domänenkern:** `Order` (`Bestellung`), `OrderItem` (`BestellPosition`), `Money` (Value Object).
+* **Driven Ports:** Entkoppelte Verträge für Repositories, Payment (Stripe) und Notification (Mail).
+* **Driving Port:** Schnittstelle für Web-Controller, CLI und Tests.
 
 </div>
 
@@ -972,27 +976,41 @@ Jeder Bounded Context bildet ein eigenes Mini-Hexagon mit eigener Domäne, Ports
 
 ```mermaid
 flowchart TD
-    subgraph BC_Katalog["1. Package: katalog"]
-        K1["Blumenstrauss"]
+    subgraph Driving["Driving Adapter (Primär)"]
+        Web["Webshop FastAPI / CLI"]
     end
-    subgraph BC_Bestellung["2. Package: bestellung"]
-        B1["Order & OrderItem"]
+
+    subgraph Hexagon["Bounded Context: adas_botanical.bestellung"]
+        DP["<<Driving Port>>\nPlaceOrderUseCase"]
+        subgraph Core["Reiner Domänenkern"]
+            O["Order (Bestellung)"]
+            OI["OrderItem (Position)"]
+            M["Money (Value Object)"]
+        end
+        P_Repo["<<Driven Port>>\nOrderRepository"]
+        P_Pay["<<Driven Port>>\nPaymentGateway"]
+        P_Notif["<<Driven Port>>\nNotificationService"]
     end
-    subgraph BC_Zahlung["3. Package: zahlung"]
-        Z1["PaymentPort"]
+
+    subgraph Driven["Driven Adapter (Sekundär)"]
+        DB[("PostgreSQL / SQLite")]
+        Stripe["Stripe Payment API"]
+        Mail["SMTP Mail Gateway"]
     end
-    subgraph BC_Notif["4. Package: notif"]
-        N1["NotificationPort"]
-    end
-    
-    BC_Bestellung -->|Preise abfragen| BC_Katalog
-    BC_Bestellung -->|Zahlung triggern| BC_Zahlung
-    BC_Bestellung -->|SMS senden| BC_Notif
-    
-    style BC_Katalog fill:#e3f2fd,stroke:#1565c0
-    style BC_Bestellung fill:#e8f5e9,stroke:#2e7d32
-    style BC_Zahlung fill:#fff3e0,stroke:#e65100
-    style BC_Notif fill:#f3e5f5,stroke:#7b1fa2
+
+    Web -->|ruft auf| DP
+    DP --> Core
+    Core --> P_Repo
+    Core --> P_Pay
+    Core --> P_Notif
+    P_Repo -.-> DB
+    P_Pay -.-> Stripe
+    P_Notif -.-> Mail
+
+    style Hexagon fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+    style Core fill:#d5f5e3,stroke:#2ecc71
+    style Driving fill:#eaf2f8,stroke:#2980b9
+    style Driven fill:#fef9e7,stroke:#f39c12
 ```
 
 </div>
@@ -1000,7 +1018,7 @@ flowchart TD
 
 ---
 
-## Die Projektstruktur für Ada's Blumenladen
+## Die Projektstruktur für Ada's Botanical Innovations
 
 <div class="two-cols">
 <div class="col">
@@ -1009,13 +1027,14 @@ flowchart TD
 
 #### Die Struktur im Bounded Context `bestellung`:
 * 📁 `domain/`: **Reine Fachlogik**  
-  `Order`, `OrderItem`, `Money` – ohne Frameworks!
-* 📁 `ports/`: **Schnittstellenverträge**  
-  `OrderRepository`, `PaymentGateway` (`Protocol`).
+  `Order`, `OrderItem`, `Money` – ohne Frameworks oder SQL!
+* 📁 `ports/`: **Schnittstellenverträge (`typing.Protocol`)**  
+  *Driving:* `PlaceOrderUseCase`  
+  *Driven:* `OrderRepository`, `PaymentGateway`, `NotificationService`.
 * 📁 `services/`: **Application Services (Use Cases)**  
   `PlaceOrderService` (orchestriert den Ablauf).
-* 📁 `adapters/`: **Konkrete Technik**  
-  `SqliteOrderRepo`, `InMemoryOrderRepo`, `StripeAdapter`.
+* 📁 `adapters/`: **Konkrete technische Implementierungen**  
+  `SqliteOrderRepo`, `InMemoryOrderRepo`, `StripeAdapter`, `SmtpMailAdapter`.
 * 📄 `main.py`: **Composition Root**  
   Verdrahtet Adapter und Services via Dependency Injection.
 
@@ -1025,25 +1044,28 @@ flowchart TD
 <div class="col">
 
 ```text
-adas_blumenladen/
+adas_botanical/
 ├── core/
-│   └── money.py                 # Value Object: Money
+│   └── money.py                 # Value Object: Money (Immutability)
 ├── bestellung/
-│   ├── __init__.py              # Öffentliche API
+│   ├── __init__.py              # Öffentliche Facade (__all__)
 │   ├── domain/
-│   │   └── models.py            # Order, OrderItem
+│   │   └── models.py            # Reiner Kern: Order, OrderItem
 │   ├── ports/
-│   │   ├── order_repository.py  # Protocol: save()
-│   │   └── payment_gateway.py   # Protocol: charge()
+│   │   ├── use_cases.py         # Driving Port: PlaceOrderUseCase
+│   │   ├── order_repository.py  # Driven Port: OrderRepository
+│   │   ├── payment_gateway.py   # Driven Port: PaymentGateway
+│   │   └── notification.py      # Driven Port: NotificationService
 │   ├── services/
-│   │   └── place_order.py       # Use Case Service
+│   │   └── place_order.py       # Application Service (Orchestrierung)
 │   └── adapters/
-│       ├── sqlite_repo.py       # SQLite Adapter
+│       ├── sqlite_repo.py       # SQLite Adapter (Produktion)
 │       ├── in_memory_repo.py    # Test Adapter (RAM)
-│       └── stripe_adapter.py    # Stripe API
-├── main.py                      # Composition Root (DI)
+│       ├── stripe_adapter.py    # Stripe API Adapter
+│       └── mail_adapter.py      # SMTP Mail Adapter
+├── main.py                      # Composition Root (Dependency Injection)
 └── tests/
-    └── test_order.py            # Blitzschnelle Tests!
+    └── test_order.py            # Blitzschnelle Tests (< 5 ms)!
 ```
 
 </div>
@@ -1056,19 +1078,19 @@ adas_blumenladen/
 <div class="two-cols">
 <div class="col">
 
-### Die Domänenmodelle
-* **Value Object `OrderItem`:**
-  * Unveränderliche Werte: Artikel-ID, Menge, Einzelpreis.
-  * Berechnet den Positionspreis selbstständig.
-* **Entity `Order`:**
-  * Besitzt eine Identität (`id`).
-  * Fachliche Invarianten: `berechne_gesamtsumme()`.
-  * Statuswechsel: `markiere_als_bezahlt()`.
+### Die Domänenmodelle aus Modul 2
+* **Entity (`Order` / `Bestellung`):**
+  * Besitzt eine eindeutige fachliche Identität (`id`).
+  * Fachliche Invarianten & Statuswechsel (`markiere_als_bezahlt()`).
+* **Value Object (`OrderItem`, `Money`):**
+  * Reine Werteobjekte ohne eigene Identität, **unveränderlich (`frozen=True`)**.
+  * **Warum `Money` statt `float`?**  
+    `0.1 + 0.2 != 0.3` in IEEE-754 Floats! Rundungsfehler im Handel führen zu Verlusten. Ein Value Object schützt vor arithmetischen Bugs.
 
 ```python
-@dataclass
+@dataclass(frozen=True)
 class OrderItem:
-    artikel_id: str
+    pflanze_id: str
     menge: int
     einzelpreis: Money
 
@@ -1080,7 +1102,7 @@ class OrderItem:
 <div class="col">
 
 ```python
-# bestellung/domain/models.py
+# adas_botanical/bestellung/domain/models.py
 from dataclasses import dataclass, field
 from core.money import Money
 
@@ -1092,16 +1114,14 @@ class Order:
     bezahlt: bool = False
 
     def berechne_gesamtsumme(self) -> Money:
-        if not self.items:
-            return Money(0.0)
-        summe = self.items[0].gesamtpreis()
-        for item in self.items[1:]:
+        summe = Money(0.0)
+        for item in self.items:
             summe = summe.add(item.gesamtpreis())
         return summe
 
     def markiere_als_bezahlt(self) -> None:
         if self.bezahlt:
-            raise ValueError("Bereits bezahlt!")
+            raise ValueError("Bestellung ist bereits bezahlt!")
         self.bezahlt = True
 ```
 
@@ -1110,10 +1130,51 @@ class Order:
 
 ---
 
-## Praxisfall Ada: 2. Die Ports (`ports/`)
+## Praxisfall Ada: 2. Die Ports: Driving vs. Driven (`ports/`)
 
 <div class="two-cols">
 <div class="col">
+
+<div class="col-card">
+
+#### 1. Driving Port (Primär / Eingehend):
+Definiert die Schnittstelle für Web-Controller, CLI und Tests:
+
+```python
+# bestellung/ports/use_cases.py
+from typing import Protocol
+from bestellung.domain.models import Order
+
+class PlaceOrderUseCase(Protocol):
+    """Driving Port: Eingehende Schnittstelle."""
+    def execute(self, order: Order, email: str) -> bool:
+        ...
+```
+
+</div>
+
+<div class="col-card" style="margin-top: 8px;">
+
+#### 2. Driven Port: Benachrichtigung
+```python
+# bestellung/ports/notification.py
+from typing import Protocol
+
+class NotificationService(Protocol):
+    """Driven Port für Kundenbenachrichtigung."""
+    def send_confirmation(self, order_id: str, email: str) -> None:
+        ...
+```
+
+</div>
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### 3. Driven Ports: Persistenz & Zahlung
+Werden vom inneren Kern aufgerufen (ausgehend):
 
 ```python
 # bestellung/ports/order_repository.py
@@ -1121,37 +1182,25 @@ from typing import Protocol, Optional
 from bestellung.domain.models import Order
 
 class OrderRepository(Protocol):
-    """Port für Bestellspeicherung."""
-    
-    def save(self, order: Order) -> None:
-        """Speichert die Bestellung."""
-        ...
-        
-    def get_by_id(self, order_id: str) -> Optional[Order]:
-        """Lädt eine Bestellung per ID."""
-        ...
-```
+    """Driven Port für Bestellspeicherung."""
+    def save(self, order: Order) -> None: ...
+    def get_by_id(self, order_id: str) -> Optional[Order]: ...
 
-</div>
-<div class="col">
-
-```python
 # bestellung/ports/payment_gateway.py
 from typing import Protocol
 from core.money import Money
 
 class PaymentGateway(Protocol):
-    """Port für Zahlungsdienstleister."""
-    
-    def charge(self, kunde_id: str, betrag: Money) -> bool:
-        """Bucht Betrag ab. Gibt True bei Erfolg zurück."""
-        ...
+    """Driven Port für Zahlungsabwicklung."""
+    def charge(self, kunde_id: str, betrag: Money) -> bool: ...
 ```
 
 </div>
+
+</div>
 </div>
 
-> **Beachten Sie:** Weder `OrderRepository` noch `PaymentGateway` enthalten Implementierungscode (`...`). Sie sind reine Schnittstellenverträge!
+> **Beachten Sie:** Alle Ports sind reine Verträge (`typing.Protocol`) ohne Implementierung (`...`). Der Core steuert Driven Ports an und wird über Driving Ports gesteuert!
 
 ---
 
@@ -1161,18 +1210,19 @@ class PaymentGateway(Protocol):
 <div class="col">
 
 ### Was macht der Service?
-* Bildet den **Use Case** ab (*„Bestellung aufgeben“*).
-* Kennt **nur die Ports**, keine konkrete Datenbank oder APIs!
+* Implementiert den **Driving Port (`PlaceOrderUseCase`)**.
+* Orchestriert den Geschäftsablauf und kennt **nur die Schnittstellen**, niemals konkrete Datenbanken oder SMTP-Server!
 * **Ablauf im Service:**
-  1. Gesamtsumme fachlich ermitteln.
+  1. Gesamtsumme im Domänenmodell ermitteln.
   2. Zahlung über den Port anfordern.
-  3. Bei Erfolg: Domänenstatus auf `bezahlt` setzen.
+  3. Bei Erfolg: Fachlichen Status `bezahlt` setzen.
   4. Über das Repository persistieren.
+  5. Bestätigung via Notification-Port versenden.
 
-<div class="col-card" style="margin-top: 12px;">
+<div class="col-card" style="margin-top: 10px;">
 
-#### Dependency Injection:
-Repositories und Payment-Gateways werden dem Service im Konstruktor übergeben.
+#### Dependency Injection (DI):
+Alle benötigten Ports (`repo`, `payment`, `notifier`) werden dem Service im Konstruktor von außen übergeben.
 
 </div>
 
@@ -1180,25 +1230,37 @@ Repositories und Payment-Gateways werden dem Service im Konstruktor übergeben.
 <div class="col">
 
 ```python
-# bestellung/services/place_order.py
+# adas_botanical/bestellung/services/place_order.py
+from bestellung.domain.models import Order
+from bestellung.ports.order_repository import OrderRepository
+from bestellung.ports.payment_gateway import PaymentGateway
+from bestellung.ports.notification import NotificationService
+
 class PlaceOrderService:
-    def __init__(self, repo: OrderRepository, 
-                 payment: PaymentGateway):
+    """Implementiert den Use Case via Dependency Injection."""
+    def __init__(
+        self, 
+        repo: OrderRepository, 
+        payment: PaymentGateway,
+        notifier: NotificationService
+    ):
         self._repo = repo
         self._payment = payment
+        self._notifier = notifier
 
-    def execute(self, order: Order) -> bool:
+    def execute(self, order: Order, email: str) -> bool:
         summe = order.berechne_gesamtsumme()
         
-        # 1. Bezahlung via Port
+        # 1. Bezahlung via Driven Port
         if not self._payment.charge(order.kunde_id, summe):
             return False
             
-        # 2. Fachlichen Status setzen
+        # 2. Fachliche Invariante setzen
         order.markiere_als_bezahlt()
         
-        # 3. Speichern via Port
+        # 3. Persistieren & Benachrichtigen via Driven Ports
         self._repo.save(order)
+        self._notifier.send_confirmation(order.id, email)
         return True
 ```
 
@@ -1281,7 +1343,7 @@ class InMemoryOrderRepository:
 
 #### Vorher vs. Nachher:
 * ❌ **Vorher:** Service ruft `sqlite3.connect()` selbst auf $\to$ Feste Kopplung!
-* ✅ **Nachher (DI):** Service erhält `repo` von außen $\to$ Adapter austauschbar!
+* ✅ **Nachher (DI):** Service erhält `repo`, `payment` und `notifier` von außen $\to$ Jeder Adapter austauschbar!
 
 </div>
 
@@ -1289,31 +1351,33 @@ class InMemoryOrderRepository:
 <div class="col">
 
 ```python
-# main.py - Der Einstiegspunkt
+# main.py - Composition Root für Ada's Botanical Innovations
 import os
-from bestellung.services.place_order import (
+from adas_botanical.bestellung.services.place_order import (
     PlaceOrderService
 )
-from bestellung.adapters.sqlite_repo import (
+from adas_botanical.bestellung.adapters.sqlite_repo import (
     SqliteOrderRepository
 )
-from bestellung.adapters.stripe_adapter import (
+from adas_botanical.bestellung.adapters.stripe_adapter import (
     StripePaymentAdapter
+)
+from adas_botanical.bestellung.adapters.mail_adapter import (
+    SmtpNotificationAdapter
 )
 
 def bootstrap() -> PlaceOrderService:
     # 1. Konkrete Adapter erzeugen
     repo = SqliteOrderRepository(db_path="shop.db")
-    payment = StripePaymentAdapter(
-        api_key=os.getenv("STRIPE_KEY", "sk_test")
-    )
+    payment = StripePaymentAdapter(api_key=os.getenv("STRIPE_KEY", "sk_test"))
+    notifier = SmtpNotificationAdapter(host="smtp.mail.de")
     
-    # 2. Dependency Injection
-    return PlaceOrderService(repo=repo, payment=payment)
+    # 2. Dependency Injection: Zusammenbauen
+    return PlaceOrderService(repo=repo, payment=payment, notifier=notifier)
 
 if __name__ == "__main__":
     app_service = bootstrap()
-    print("Ada's Blumenladen betriebsbereit!")
+    print("Ada's Botanical Innovations betriebsbereit!")
 ```
 
 </div>
@@ -1334,7 +1398,7 @@ if __name__ == "__main__":
 <div class="col-card" style="margin-top: 12px;">
 
 #### 🧠 Thinking Points:
-1. **Technologiewechsel:** Wenn Ada von SQLite zu DynamoDB wechselt, müssen wir **nur einen neuen Adapter** schreiben – Domäne und Use Case bleiben zu 100% unberührt!
+1. **Technologiewechsel:** Wenn Ada von SQLite zu PostgreSQL oder DynamoDB wechselt, müssen wir **nur einen neuen Adapter** schreiben – Domäne und Use Case bleiben zu 100% unberührt!
 2. **Kapselung:** Warum darf die Domäne niemals Exceptions von Drittanbieter-Bibliotheken werfen?
 
 </div>
@@ -1347,28 +1411,35 @@ if __name__ == "__main__":
 class FakePaymentGateway:
     def __init__(self, succeed: bool = True):
         self.succeed = succeed
-        self.last_charge = None
 
     def charge(self, kunde_id: str, betrag: Money):
-        self.last_charge = betrag
         return self.succeed
+
+class MockNotificationService:
+    def __init__(self):
+        self.sent_emails: list[tuple[str, str]] = []
+
+    def send_confirmation(self, order_id: str, email: str) -> None:
+        self.sent_emails.append((order_id, email))
 
 def test_erfolgreiche_bestellung():
     # 1. Arrange: Test-Doppelgänger instanziieren
     repo = InMemoryOrderRepository()
     payment = FakePaymentGateway(succeed=True)
-    service = PlaceOrderService(repo=repo, payment=payment)
+    notifier = MockNotificationService()
+    service = PlaceOrderService(repo=repo, payment=payment, notifier=notifier)
     
     order = Order(id="ORD-1", kunde_id="KUNDE-42")
-    order.items.append(OrderItem("ROSE", 2, Money(15.0)))
+    order.items.append(OrderItem("MONSTERA-1", 2, Money(29.99)))
 
     # 2. Act
-    erfolg = service.execute(order)
+    erfolg = service.execute(order, email="kunde@office.de")
 
     # 3. Assert: Fachliche Korrektheit prüfen
     assert erfolg is True
     assert order.bezahlt is True
     assert repo.get_by_id("ORD-1") is not None
+    assert len(notifier.sent_emails) == 1
 ```
 
 </div>
@@ -1394,6 +1465,17 @@ def test_erfolgreiche_bestellung():
 5. **Dependency Injection nutzen:**
    Übergeben Sie Abhängigkeiten über den Konstruktor.
 
+<div class="col-card" style="margin-top: 10px; font-size: 0.85em;">
+
+#### 📚 Vorbereitung für Übungsblatt 3:
+* **Aufgabe 1 (God-File & Millers Law):** Folien 5–7
+* **Aufgabe 2 (Zirkuläre Importe in CPython):** Folien 8–9
+* **Aufgabe 3 (Schichtenarchitektur & DB-Dominanz):** Folien 16–18
+* **Aufgabe 4 (Domäne, Driving & Driven Ports):** Folien 19–23
+* **Aufgabe 5 (Adapter, DI & In-Memory Tests):** Folien 24–27
+
+</div>
+
 </div>
 <div class="col">
 
@@ -1401,22 +1483,21 @@ def test_erfolgreiche_bestellung():
 mindmap
   root((Modulare\nArchitektur))
     Bounded Contexts
-      Katalog
-      Bestellung
-      Zahlung
-      Benachrichtigung
+      Verkauf & Shop
+      Lager & Bestand
+      Logistik & Kurier
     Hexagonal Core
-      Reine Entities
-      Value Objects
-      Use Cases
+      Entity Order
+      Value Object Money
+      Use Case Logik
     Ports & Adapters
-      Protocols als Verträge
+      Driving Ports Web/CLI
+      Driven Ports DB/Pay
       In-Memory für Tests
-      Postgres für Prod
     Entkopplung
       Dependency Injection
       Composition Root
-      Keine Zirkulären Imports
+      Keine Zirkel-Imports
 ```
 
 </div>

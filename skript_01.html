@@ -997,14 +997,14 @@ classDiagram
             <div class="slide-badge">Folie 17 / 44</div>
             <div class="slide-content">
                 <h3>UML-Beziehungen: Pfeile &amp; Symbole im Überblick</h3>
-<div class="two-cols">
+<div class="two-cols-wide-left">
 <div class="col">
 
-<p>Objekte arbeiten nicht isoliert, sondern stehen in präzisen Beziehungen zueinander.</p>
+<p>Objekte stehen in präzisen, typisierten Beziehungen zueinander:</p>
 <table>
 <thead>
 <tr>
-<th align="center">Mermaid-Syntax</th>
+<th align="center">Syntax</th>
 <th align="left">Beziehung</th>
 <th align="center">Kopplung</th>
 <th align="left">Bedeutung &amp; Faustregel</th>
@@ -1014,13 +1014,13 @@ classDiagram
 <td align="center"><code>..&gt;</code></td>
 <td align="left"><strong>Abhängigkeit</strong></td>
 <td align="center">Sehr lose</td>
-<td align="left">&quot;Benutzt kurzzeitig&quot; (Parameter, lokale Variable, erzeugt)</td>
+<td align="left">Temporäre Nutzung (z. B. Methodenparameter)</td>
 </tr>
 <tr>
 <td align="center"><code>--&gt;</code></td>
 <td align="left"><strong>Assoziation</strong></td>
 <td align="center">Lose</td>
-<td align="left">&quot;Nutzt / Kennt&quot; (unabhängige Lebenszyklen)</td>
+<td align="left">Dauerhafte Kenntnis (unabhängige Lebenszyklen)</td>
 </tr>
 <tr>
 <td align="center"><code>o--</code></td>
@@ -1032,22 +1032,21 @@ classDiagram
 <td align="center"><code>*--</code></td>
 <td align="left"><strong>Komposition</strong></td>
 <td align="center">Hoch</td>
-<td align="left">&quot;Besitzt existenziell&quot; (Teile sterben mit dem Ganzen)</td>
+<td align="left">&quot;Besitzt existenziell&quot; (Teile sterben mit Ganzem)</td>
 </tr>
 <tr>
-<td align="center"><code>&lt;|--</code></td>
+<td align="center"><code>&lt;&#124;--</code></td>
 <td align="left"><strong>Vererbung</strong></td>
 <td align="center">Sehr hoch</td>
-<td align="left">&quot;Ist ein / Generalisierung&quot; (starr zur Entwurfszeit)</td>
+<td align="left">&quot;Ist ein&quot; (starre Generalisierung zur Entwurfszeit)</td>
 </tr>
 <tr>
-<td align="center"><code>&lt;|..</code></td>
+<td align="center"><code>&lt;&#124;..</code></td>
 <td align="left"><strong>Realisierung</strong></td>
 <td align="center">Minimal</td>
-<td align="left">&quot;Erfüllt Vertrag / Interface&quot; (Polymorphie)</td>
+<td align="left">&quot;Erfüllt Vertrag&quot; (Interface / Polymorphie)</td>
 </tr>
 </tbody></table>
-<p><em>UML-Symbole:</em> gestrichelter offener Pfeil · Linie (opt. offene Pfeilspitze = Navigierbarkeit) · weiße Raute · schwarze Raute · weißes Dreieck · gestrichelt + weißes Dreieck.</p>
 </div>
 <div class="col">
 
@@ -1058,12 +1057,11 @@ classDiagram
 <ul>
 <li><code>1</code> : Genau eins</li>
 <li><code>0..1</code> : Optional (null oder eins)</li>
-<li><code>*</code> oder <code>0..*</code> : Beliebig viele (null bis unendlich)</li>
+<li><code>*</code> : Beliebig viele (<code>0..*</code>)</li>
 <li><code>1..*</code> : Mindestens eins bis unendlich</li>
-<li><code>2..5</code> : Fester Bereich von 2 bis 5</li>
 </ul>
 <h4>Leserichtung &amp; Rollen</h4>
-<p>Ein Pfeil mit Beschriftung zeigt an, wer wen wie nutzt:<br><code>Kunde &quot;1&quot; --&gt; &quot;0..*&quot; Bestellung : gibt auf</code></p>
+<p><code>Kunde &quot;1&quot; --&gt; &quot;0..*&quot; Bestellung : gibt auf</code></p>
 </div>
 
 </div>
