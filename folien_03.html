@@ -103,6 +103,26 @@
             box-sizing: border-box;
             margin-top: 12px;
         }
+        .two-cols-wide-left {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
+        .two-cols-wide-right {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 12px;
+        }
         .col { min-width: 0; }
         .col-card {
             background: #ffffff;
@@ -133,6 +153,27 @@
             width: auto !important;
             max-width: 100% !important;
         }
+
+        /* Tables in Slides */
+        .reveal table {
+            font-size: 0.65em !important;
+            width: 100% !important;
+            margin: 6px 0 !important;
+            border-collapse: collapse;
+        }
+        .reveal table th, .reveal table td {
+            padding: 5px 8px !important;
+            border: 1px solid var(--border) !important;
+            text-align: left;
+        }
+        .reveal table th {
+            background: #f1f5f9;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        .reveal table tr:nth-child(even) td {
+            background: #fafbfc;
+        }
     </style>
 </head>
 <body>
@@ -144,7 +185,7 @@
             <section data-markdown data-separator="^---$" data-separator-vertical="^--$">
                 <script type="text/template">
 # Modul 3: Code-Modularisierung & Softwarearchitektur
-## Vom Analysemodell zu sauber strukturiertem, wartbarem Code
+## Vom Klassenmodell zu sauber strukturiertem, wartbarem Code
 
 ---
 
@@ -155,10 +196,10 @@
 
 Nach diesem Modul können Sie:
 
-1. **Die Notwendigkeit von Modularisierung** anhand von kognitiver Last, Wartbarkeit und Teamarbeit begründen.
-2. **Typische Anfängerfehler** wie die „God-Datei“ und **zirkuläre Importe in Python** erkennen, verstehen und beheben.
-3. Die Grundprinzipien **Hohe Kohäsion (High Cohesion)** und **Lose Kopplung (Low Coupling)** auf Codeebene anwenden.
-4. Python-Werkzeuge (**Module, Packages, `__init__.py`, `__all__`**) gezielt für Kapselung und Information Hiding einsetzen.
+1. **Die Notwendigkeit von Modularisierung** anhand von kognitiver Last (*Millers Law*), Wartbarkeit und Teamarbeit begründen.
+2. Die Grundprinzipien **Hohe Kohäsion (High Cohesion)** und **Lose Kopplung (Low Coupling)** auf Modul- und Klassenebene erklären und anwenden.
+3. Große Systeme fachlich in **Bounded Contexts (DDD)** und gemeinsame Basis-Bausteine (`common`) aufteilen.
+4. **Detailliertes Modul-Design** mit klaren Schnittstellen, dokumentierten Annahmen und dem Prinzip **„Fail early, fail fast“** erstellen.
 
 </div>
 <div class="col">
@@ -166,9 +207,9 @@ Nach diesem Modul können Sie:
 <div class="col-card">
 
 #### Weiterführende Architekturziele:
-5. **Schichtenarchitektur** und **Hexagonale Architektur (Ports & Adapters / Clean Architecture)** unterscheiden und bewerten.
-6. Die **Bounded Contexts aus Modul 2** in eine saubere Projekt- und Modulstruktur überführen.
-7. **Dependency Injection** in Python implementieren, um Domänenlogik vollständig unabhängig von Datenbanken und Frameworks testbar zu machen.
+5. Python-Werkzeuge (**Module, Packages, `__init__.py`, Information Hiding `_`**) einsetzen und **zirkuläre Importe** gezielt auflösen.
+6. **Technische Alternativen** (In-Memory vs. Datei vs. Datenbank) systematisch abwägen.
+7. **Schichtenarchitektur** und **Hexagonale Architektur (Ports & Adapters)** unterscheiden und **Dependency Injection** für blitzschnelle Unit-Tests nutzen.
 
 </div>
 
@@ -179,62 +220,51 @@ Nach diesem Modul können Sie:
 
 ## Agenda
 
-```mermaid
-flowchart LR
-    A["1. Warum Modularisierung?"] --> B["2. Anfängerfallen in Python"]
-    B --> C["3. Kohäsion & Kopplung"]
-    C --> D["4. Packages & Kapselung"]
-    D --> E["5. Schichten & Hexagonal"]
-    E --> F["6. Praxis: Ada's Botanical Innovations"]
-    F --> G["7. Testbarkeit & Best Practices"]
-    
-    style A fill:#4a90e2,color:#fff
-    style B fill:#e74c3c,color:#fff
-    style C fill:#f39c12,color:#fff
-    style D fill:#2ecc71,color:#fff
-    style E fill:#9b59b6,color:#fff
-    style F fill:#1abc9c,color:#fff
-    style G fill:#34495e,color:#fff
-```
-
 <div class="two-cols">
 <div class="col">
 
-1. **Warum Modularisierung?** – Kognitive Belastung & Wachstum
-2. **Typische Anfängerfallen** – Die God-Datei & Zirkuläre Importe
-3. **Fundamentale Prinzipien** – Hohe Kohäsion & Lose Kopplung
-4. **Python-Bausteine** – Module, Packages & `__init__.py`
+#### Teil 1: Warum Modularisierung?
+1. **Wachstumsschmerzen:** Tag 1 vs. Tag 60 & Kognitive Last (*Millers Law*)
+2. **Anfängerfalle 1:** Die „God-Datei“ (`app.py`)
+3. **Die zwei Grundprinzipien:** Hohe Kohäsion & Lose Kopplung
+
+#### Teil 2: Fachliches Modul-Design (OOD)
+4. **Wie schneidet man Module?** Bounded Contexts & das `common`-Modul
+5. **Ein Modul im Detail entwerfen:** Das `Lagermodul` & seine Klassen
+6. **Design-Entscheidungen & Defensive Logik:** *„Fail early, fail fast“*
 
 </div>
 <div class="col">
 
-5. **Architekturmuster** – Schichten vs. Hexagonal (Ports & Adapters)
-6. **Vom Analysemodell zum Code** – Bounded Contexts strukturieren
-7. **Praxisfall Ada's Botanical Innovations** – Domain, Ports, Adapters & DI
-8. **Testbarkeit & Best Practices** – Triviales Unit-Testing im RAM
+#### Teil 3: Python-Handwerkszeug & Import-Fallen
+7. **Python-Bausteine:** Module (`.py`), Packages & `__init__.py`
+8. **Information Hiding in Python:** Öffentlich vs. Privat (`_`)
+9. **Anfängerfalle 2:** Zirkuläre Importe verstehen & auflösen
+
+#### Teil 4: Softwarearchitektur & Entkopplung
+10. **Architekturentscheidung:** Wo speichern wir Daten? (4 Alternativen)
+11. **Schichtenarchitektur:** Die 3 Schichten & die „Datenbank-Dominanz“
+12. **Ports & Adapters (Hexagonal):** Das Steckdosen-Prinzip
+13. **Dependency Injection & Unit-Tests:**Praxisfall Ada in Python
 
 </div>
 </div>
-
 
 ---
 
-## Einordnung in die Vorlesung: Von der Analyse zur Architektur
+## Einordnung in die Vorlesung: Vom Klassenmodell zur Architektur
 
 <div class="two-cols">
 <div class="col">
 
 ### Rückblick auf Modul 2:
-* **Fallstudie Ada's Botanical Innovations:** Wir haben Anforderungen mit Use Cases, Szenarien und BDD analysiert.
-* **Domänenmodell:** Mit der Abbott-Methode und GRASP Information Expert entstand das fachliche Klassendiagramm (`Bestellung`, `BestellPosition`, `BestellService`, `Pflanze`, `B2BKunde`).
-* **Strategisches Design:** Wir haben 3 **Bounded Contexts** abgegrenzt: *Verkauf & Webshop*, *Lager & Bestand* sowie *Logistik & Kurier*.
+* Wir haben für **Ada's Botanical Innovations** Anforderungen analysiert (Use Cases, 9-Felder-Szenariotabellen, Aktivitätsdiagramme, UI).
+* Mit der **Abbott-Methode** und dem **Information Expert** haben wir unsere ersten Klassen entworfen (`Kunde`, `Bestellung`, `Pflanze`, `Geldbetrag`).
 
-### Warum jetzt Modularisierung?
-* Wenn wir alle diese Klassen naiv in eine einzige Datei programmieren, kollabiert das System: **Die 2000-Zeilen-God-Datei** und **zirkuläre Importe**!
-* **Ziel dieses Moduls:**
-  * Bounded Contexts in eigenständige Python-Packages überführen.
-  * **Hexagonale Architektur (Ports & Adapters)** etablieren: Fachlogik vollständig von Datenbanken und Webframeworks entkoppeln.
-  * Dependency Injection für blitzschnelle Tests im RAM.
+### Warum reicht ein Klassendiagramm noch nicht aus?
+* Wenn wir 30 Klassen in eine einzige Datei `app.py` tippen, entsteht ein unwartbares Monster (**God-Datei**).
+* Wenn wir sie planlos auf Dateien verteilen, stürzt Python mit **zirkulären Import-Fehlern** ab!
+* **Ziel dieses Moduls:** Wie organisieren wir Klassen in **sauberen Modulen, Python-Packages und entkoppelten Architekturschichten**?
 
 </div>
 <div class="col">
@@ -256,21 +286,26 @@ flowchart TD
 
 ---
 
-## 1. Warum Modularisierung? Das Problem des Wachstums
+## Warum Modularisierung? Das Problem des Wachstums
 
 <div class="two-cols">
 <div class="col">
 
-### Tag 1: Das Ein-Datei-Paradies
-* Ein neues Projekt startet: `app.py`.
-* 50 Zeilen Code: Man versteht alles auf einen Blick.
-* Keine Imports zwischen eigenen Dateien nötig.
-* Schneller erster Prototyp („Funktioniert doch!“).
+<div class="col-card">
 
-### Tag 60: Die Realität
+#### Was ist überhaupt ein „Modul“?
+> Ein **Modul** ist ein in sich abgeschlossener Software-Baustein, der eine **klar abgegrenzte fachliche Aufgabe** erfüllt und mit anderen Bausteinen nur über eine **definierte Schnittstelle** kommuniziert.
+
+</div>
+
+#### Tag 1: Start in einer einzelnen Datei (`app.py`)
+* Ein neues Projekt startet mit 50 Zeilen Code in einer Datei.
+* Man überblickt alles sofort, braucht keine `import`-Befehle für eigene Dateien und hat schnell einen ersten Prototyp.
+
+#### Tag 60: Unübersichtlicher Monolith
 * `app.py` ist auf **2.500 Zeilen** angewachsen.
-* Enthält: SQL-Queries, HTML-Rendering, Passwort-Hashing, Rabattberechnung, PDF-Export, E-Mail-Versand.
-* Niemand im Team traut sich mehr, eine Zeile zu ändern.
+* Enthält gleichzeitig: Webseiten-Buttons, Datenbank-SQL, Passwort-Prüfung, Rabattberechnung, Lagermeldungen und E-Mail-Versand.
+* **Folge:** Jede Änderung birgt das Risiko unbeabsichtigter Seiteneffekte.
 
 </div>
 <div class="col">
@@ -278,26 +313,25 @@ flowchart TD
 ```mermaid
 graph TD
     subgraph Spaghetti["Die unmodulare God-Datei (app.py)"]
-        UI["UI / Route Handler"]
-        AUTH["Passwort-Hashing"]
-        DB["SQL Queries"]
-        MAIL["SMTP Mailer"]
-        BIZ["Rabatt-Logik"]
-        PDF["PDF Generator"]
+        UI["Web-Oberfläche"]
+        AUTH["Passwort-Check"]
+        DB["Datenbank-SQL"]
+        MAIL["E-Mail-Versand"]
+        BIZ["Rabatt-Berechnung"]
+        LAGER["Lagerbestand"]
         
         UI <--> AUTH
         UI <--> DB
         UI <--> BIZ
         BIZ <--> DB
         BIZ <--> MAIL
-        AUTH <--> DB
-        BIZ <--> PDF
-        PDF <--> DB
+        LAGER <--> DB
+        BIZ <--> LAGER
     end
     style Spaghetti fill:#ffebee,stroke:#c62828,stroke-width:2px
 ```
 
-> **Die Kernfrage:** Warum bricht dieses Vorgehen zwangsläufig zusammen?
+> **Die Kernfrage:** Warum sind solche großen Einzeldateien für Entwicklerteams so schwer wartbar?
 
 </div>
 </div>
@@ -309,64 +343,95 @@ graph TD
 <div class="two-cols">
 <div class="col">
 
-### Die 7 ± 2 Regel (Miller's Law)
-* Das menschliche Arbeitsgedächtnis kann gleichzeitig nur **etwa 4 bis 7 Informationseinheiten („Chunks“)** aktiv halten.
-* Wenn eine Datei 2000 Zeilen hat und 30 Dinge gleichzeitig tut, übersteigt das die menschliche Auffassungsgabe.
-* **Folge:** Entwickler übersehen Seiteneffekte. Ein Bugfix an Zeile 120 zerstört heimlich eine Funktion in Zeile 1.800.
+<div class="col-card">
 
-### Was Modularisierung bewirkt
-* **Abstraktion:** Wir verstehen ein Modul über seine Schnittstelle, ohne den inneren Code zu kennen.
-* **Isolation:** Änderungen in Modul A können Modul B nicht beschädigen.
-* **Paralleles Arbeiten:** Teams arbeiten ohne ständige Merge-Konflikte.
+#### Die 7 ± 2 Regel (*Miller's Law*)
+* Die Kognitionspsychologie zeigt: Unser menschliches Arbeitsgedächtnis kann gleichzeitig nur **etwa 4 bis 7 Informationseinheiten („Chunks“)** aktiv verarbeiten.
+* Wenn eine Datei 2.000 Zeilen umfasst und viele verschiedene Aufgaben vermischt, steigt die **kognitive Last** stark an.
+* **Die Folge:** Man übersieht Abhängigkeiten. Eine Änderung an der Rabattberechnung in Zeile 120 beeinträchtigt unbemerkt die Lagerverwaltung in Zeile 1.800.
+
+</div>
 
 </div>
 <div class="col">
 
-```mermaid
-graph TD
-    subgraph Modular["Modulare Architektur (Kognitiv handhabbar)"]
-        subgraph ModA["Modul: Katalog"]
-            A1["Pflanze"]
-            A2["KatalogRepo"]
-        end
-        subgraph ModB["Modul: Bestellung"]
-            B1["Order"]
-            B2["OrderService"]
-        end
-        subgraph ModC["Modul: Zahlung"]
-            C1["PaymentGateway"]
-        end
-        
-        ModB -->|nutzt Schnittstelle| ModA
-        ModB -->|nutzt Schnittstelle| ModC
-    end
-    style Modular fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
-```
+<div class="col-card">
 
-> **Leitsatz:** Gute Architektur reduziert die kognitive Last auf das gerade relevante Modul.
+#### Wie Module das Arbeitsgedächtnis entlasten:
+1. **Fokus (Isolation):** Wer am `Lagermodul` arbeitet, betrachtet nur den Code des Lagers – Details des Webshops können ausgeblendet werden.
+2. **Schnittstellen statt Innereien:** Man muss nur wissen, *wie* die Schnittstelle aufgerufen wird, nicht wie das Modul intern implementiert ist.
+3. **Parallele Teamarbeit:** Entwicklerin A arbeitet an `lager.py`, Entwickler B an `verkauf.py` – ohne ständige Merge-Konflikte in derselben Datei.
+
+</div>
+
+> **Leitsatz:** Wir teilen Software nicht für den Computer in Module auf, sondern um die Komplexität für Entwicklerinnen und Entwickler beherrschbar zu halten.
 
 </div>
 </div>
 
 ---
 
-## 2. Anfängerfalle 1: Die „God-Datei“
+## Zielbild: Modulare Architektur statt Einzeldatei
 
 <div class="two-cols">
 <div class="col">
 
-### Der Code-Smell: Alles in `app.py`
-In dieser einzigen Funktion sind **vier völlig unterschiedliche Aufgaben** vermischt:
-1. **HTTP-Routing & Validierung:** Liest JSON und prüft Pflichtfelder.
-2. **Direkte Datenbank-Abfragen:** Führt rohes SQL mit `sqlite3` aus.
-3. **Geschäftsregeln:** Rabattlogik (`preis *= 0.9`) ist hart einprogrammiert.
-4. **Externer Netzwerkaufruf:** Verschickt E-Mails via SMTP.
+### Vom Knäuel zur klaren Struktur
+Statt alle Funktionen direkt miteinander zu verknüpfen, schneiden wir das System in abgegrenzte Verantwortungsbereiche:
+
+* **`Modul: Verkauf`** kümmert sich um Warenkorb und Bestellabwicklung.
+* **`Modul: Lager`** verwaltet Inventar und aktuelle Stückzahlen.
+* **`Modul: Common`** stellt gemeinsame Grunddatentypen (`Artikel`, `Geldbetrag`) bereit, die überall benötigt werden.
+* Zwischen `Verkauf` und `Lager` existiert nur eine **schmale, klar definierte Schnittstelle**.
+
+</div>
+<div class="col">
+
+```mermaid
+graph TD
+    subgraph Modular["Modulare Architektur"]
+        subgraph ModA["Modul: Verkauf"]
+            A1["Bestellung"]
+            A2["Warenkorb"]
+        end
+        subgraph ModB["Modul: Lager"]
+            B1["Inventar"]
+            B2["Bestand"]
+        end
+        subgraph ModC["Modul: Common"]
+            C1["Artikel / Pflanze"]
+            C2["Geldbetrag"]
+        end
+        
+        ModA -->|nutzt definierte Schnittstelle| ModB
+        ModA --> ModC
+        ModB --> ModC
+    end
+    style Modular fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+```
+
+</div>
+</div>
+
+---
+
+## Anfängerfalle 1: Die „God-Datei“ im Code
+
+<div class="two-cols">
+<div class="col">
+
+### Der Code-Smell: Alles in einer Funktion
+Schauen wir uns rechts eine typische Anfänger-Funktion in `app.py` an. Sie vermischt **vier völlig verschiedene Welten**:
+1. **Web-Oberfläche (HTTP/JSON):** Liest Browser-Daten aus.
+2. **Datenbank-Technik (SQL):** Öffnet direkt `sqlite3` und schreibt SQL-Befehle.
+3. **Fachlogik (Geschäftsregel):** Berechnet den 10-%-Mengenrabatt (`preis *= 0.9`).
+4. **Netzwerk-Technik (SMTP):** Verbindet sich mit einem E-Mail-Server.
 
 <div class="col-card" style="margin-top: 12px;">
 
-#### Das fatale Test-Problem:
-Wie schreibt man für die Rabattberechnung einen schnellen Unit-Test?  
-**Gar nicht!** Man braucht zwingend eine SQLite-Datei und einen erreichbaren SMTP-Server.
+#### Warum ist das ein Test-Albtraum?
+Stellen Sie sich vor, Sie wollen testen, ob der **10-%-Rabatt ab 10 Pflanzen** richtig rechnet.  
+Mit diesem Code geht das **nur**, wenn gleichzeitig ein Webserver, eine echte SQLite-Datenbankdatei und ein E-Mail-Server laufen!
 
 </div>
 
@@ -374,14 +439,15 @@ Wie schreibt man für die Rabattberechnung einen schnellen Unit-Test?
 <div class="col">
 
 ```python
-# app.py - ALLES in einer Datei (Anti-Pattern)
+# ❌ app.py - Anti-Pattern: Die "God-Funktion"
 @app.route('/order', methods=['POST'])
 def place_order():
+    # 1. Web-Schicht (HTTP JSON lesen)
     data = request.json
     if not data.get('items'):
-        return jsonify({'error': 'Fehlt'}), 400
+        return jsonify({'error': 'Warenkorb leer'}), 400
     
-    # 1. Datenbank & Rabattlogik vermischt
+    # 2. Datenbank & 3. Fachlogik bunt gemischt!
     conn = sqlite3.connect('shop.db')
     cursor = conn.cursor()
     total = 0.0
@@ -390,16 +456,14 @@ def place_order():
                        "WHERE id = ?", (item['id'],))
         preis = cursor.fetchone()[0]
         if item['menge'] >= 10:
-            preis *= 0.9  # 10% Rabatt hartcodiert!
+            preis *= 0.9  # <-- Fachregel mitten im SQL!
         total += preis * item['menge']
     
-    # 2. Persistenz
-    cursor.execute("INSERT INTO orders VALUES (?)", 
-                   (total,))
+    cursor.execute("INSERT INTO orders VALUES (?)", (total,))
     conn.commit()
     conn.close()
     
-    # 3. Mailversand
+    # 4. E-Mail-Server direkt aufrufen
     smtplib.SMTP('smtp.mail.de').sendmail(...)
     return jsonify({'total': total})
 ```
@@ -409,406 +473,468 @@ def place_order():
 
 ---
 
-## 2. Anfängerfalle 2: Zirkuläre Importe in Python
+## Grundprinzip 1: Hohe Kohäsion (Innere Zusammengehörigkeit)
 
 <div class="two-cols">
 <div class="col">
 
-```python
-# bestellung.py
-from kunde import Kunde  # <--- Importiert Kunde
+<div class="col-card">
 
-class Bestellung:
-    def __init__(self, kunde: Kunde, betrag: float):
-        self.kunde = kunde
-        self.betrag = betrag
-```
+#### Was bedeutet Kohäsion (Cohesion)?
+* **Die Frage:** *„Gehören die Aufgaben, die in diesem Modul stecken, fachlich eng zusammen?“*
+* ❌ **Niedrige Kohäsion (Sammeldatei):**  
+  Eine Datei `hilfsfunktionen.py` enthält Datumsformatierung, Passwort-Checks und Blumen-Rabatte.  
+  *Folge:* Bei verschiedensten Änderungen muss immer wieder dieselbe Datei bearbeitet werden.
+* ✅ **Hohe Kohäsion (Fokussiertes Modul):**  
+  Das Modul `lager.py` kümmert sich **ausschließlich** um den Lagerbestand.
 
-```python
-# kunde.py
-from bestellung import Bestellung  # <--- Zirkulär!
-
-class Kunde:
-    def __init__(self, name: str):
-        self.name = name
-        self.bestellungen: list[Bestellung] = []
-
-    def neue_bestellung(self, betrag: float):
-        b = Bestellung(self, betrag)
-        self.bestellungen.append(b)
-```
+</div>
 
 </div>
 <div class="col">
 
-### Der gefürchtete Python-Fehler:
+```mermaid
+flowchart TD
+    subgraph Bad["Niedrige Kohäsion (Sammeldatei)"]
+        U1["utils.py:<br/>- berechne_mwst()<br/>- sende_email()<br/>- pruefe_bodenfeuchte()"]
+    end
+    subgraph Good["Hohe Kohäsion (Klarer Fokus)"]
+        G1["lager.py:<br/>- gib_bestand()<br/>- lagere_ein()<br/>- nehme_aus_lager()"]
+    end
+    style Bad fill:#ffebee,stroke:#c62828
+    style Good fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+```
+
+> **Merksatz:** Ein Modul hat **hohe Kohäsion**, wenn man seine Aufgabe in einem einzigen kurzen Satz ohne das Wort *„und“* beschreiben kann.
+
+</div>
+</div>
+
+---
+
+## Grundprinzip 2: Lose Kopplung (Äußere Unabhängigkeit)
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Was bedeutet Kopplung (Coupling)?
+* **Die Frage:** *„Wie stark hängen zwei Module voneinander ab? Wenn Modul A intern geändert wird, muss dann auch Modul B angepasst werden?“*
+* ❌ **Enge Kopplung:**  
+  Das `Verkaufsmodul` greift direkt auf die internen Datenstrukturen oder SQL-Tabellen des `Lagermoduls` zu.
+* ✅ **Lose Kopplung:**  
+  Das `Verkaufsmodul` ruft nur die definierte Methode `lager.gib_bestand(artikel)` auf. Wie das Lager intern speichert, bleibt für den Verkauf unsichtbar.
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph Goal["Ziel: Hohe Kohäsion & Lose Kopplung"]
+        subgraph M1["Modul: Verkauf"]
+            V1["Warenkorb & Rabatt"]
+        end
+        subgraph M2["Modul: Lager"]
+            L1["Inventar & Bestand"]
+        end
+        M1 <-->|"Lose Kopplung<br/>(Schmale Schnittstelle)"| M2
+    end
+    style Goal fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+```
+
+> **Architektur-Regel:**  
+> Strebe nach **hoher Kohäsion** (innerhalb eines Moduls gehört alles fachlich zusammen) und **loser Kopplung** (zwischen Modulen gibt es möglichst wenige Berührungspunkte).
+
+</div>
+</div>
+
+---
+
+## Wie schneidet man Module fachlich? Bounded Contexts & `common`
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card" style="font-size: 0.88em;">
+
+Warum ist es in größeren Systemen problematisch, **eine einzige große `Pflanze`-Klasse** für alle Abteilungen zu nutzen?
+
+* **Im Webshop (`verkauf`):** Foto, Beschreibungstext, Verkaufspreis.
+* **Im Gewächshaus (`lager`):** Regalnummer, Mindestbestand, Feuchtesensor.
+* **Beim Kurier (`logistik`):** Gewicht in kg, Karton-Maße, Lieferadresse.
+
+#### Die Lösung: Bounded Contexts & das `common`-Modul
+1. **Fachmodule (Bounded Contexts aus DDD):**  
+   Jede Abteilung (`verkauf`, `lager`, `logistik`) bildet ein **eigenes Modul** mit den für sie relevanten Klassen.
+2. **Das `common`-Modul:**  
+   Grundbausteine, die **in mehreren Modulen identisch** genutzt werden (`Artikel`, `Geldbetrag`, `BenutzerRolle`), liegen zentral in `common`.
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+flowchart TD
+    subgraph UI["Modul: UI / API"]
+        Screen["Webshop & Kassen-Oberfläche"]
+    end
+    subgraph Verkauf["Modul: Verkauf"]
+        V_Pflanze["KatalogArtikel & Bestellung"]
+    end
+    subgraph Lager["Modul: Lager"]
+        L_Pflanze["Inventar & Lagerbestand"]
+    end
+    subgraph Common["Modul: Common (Basis)"]
+        Art["Artikel, Geldbetrag, Rolle"]
+    end
+
+    UI --> Verkauf
+    UI --> Lager
+    Verkauf -->|fragt ab| Lager
+    Verkauf --> Common
+    Lager --> Common
+
+    style Common fill:#fef9e7,stroke:#f39c12,stroke-width:2px
+    style Verkauf fill:#e8f8f5,stroke:#27ae60
+    style Lager fill:#e3f2fd,stroke:#1565c0
+```
+
+</div>
+</div>
+
+---
+
+## Ein Modul im Detail entwerfen: Das `Lagermodul`
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card" style="font-size: 0.88em;">
+
+Im Pflichtenheft wird jedes Modul mit seinen Daten und Methoden spezifiziert:
+
+#### Daten des `Lagermoduls`:
+* **`_inventar`:** Alle Artikel, die grundsätzlich im Sortiment geführt werden.
+* **`_bestand`:** Aktuelle Stückzahl je Artikel im Regal (`dict[str, int]`).
+
+#### Öffentliche Methoden (Modulschnittstelle):
+* `fuege_zum_inventar_hinzu(artikel: Artikel) -> None`
+* `loesche_aus_inventar(artikel: Artikel) -> None`
+* `gib_bestand(artikel: Artikel) -> int`
+* `lagere_artikel_ein(artikel: Artikel, anzahl: int) -> None`
+* `nehme_artikel_aus_lager(artikel: Artikel, anzahl: int = 1) -> None`
+
+</div>
+
+</div>
+<div class="col">
+
+```mermaid
+classDiagram
+    class Artikel {
+        <<Common>>
+        +artikel_nr : str
+        +name : str
+    }
+    class LagerModul {
+        -_inventar : dict~str, Artikel~
+        -_bestand : dict~str, int~
+        +fuege_zum_inventar_hinzu(a : Artikel)
+        +gib_bestand(a : Artikel) int
+        +lagere_artikel_ein(a : Artikel, n : int)
+        +nehme_artikel_aus_lager(a : Artikel, n : int)
+    }
+    LagerModul --> Artikel : verwaltet
+```
+
+<div style="font-size: 0.78em; color: #1e293b; margin-top: 6px; background: #f8fafc; border-left: 3px solid #27ae60; padding: 6px 10px;">
+<strong>Schnittstellen-Design:</strong> Sprechende Methodennamen (statt <code>upd_inv()</code>) und definierte Fachobjekte (<code>Artikel</code> statt loser Einzelwerte) als Parameter verwenden.
+</div>
+
+</div>
+</div>
+
+---
+
+## Design-Entscheidungen dokumentieren & „Fail early, fail fast“
+
+<div class="two-cols">
+<div class="col">
+
+Beim Entwurf tauchen immer **Grenzfragen** auf, die nicht im Lastenheft standen. Ein sauberer Entwurf dokumentiert jede Entscheidung explizit:
+
+1. *Hat ein neuer Artikel im `Inventar` sofort `Bestand = 0`?*  
+   👉 **Ja**, wird direkt mit `0` angelegt.
+2. *Darf ein Artikel gelöscht werden, solange noch Töpfe im Regal (`Bestand > 0`) stehen?*  
+   👉 **Nein!** Erst muss der Restbestand ausgebucht werden.
+3. *Was passiert, wenn jemand `lagere_artikel_ein()` für einen unbekannten Artikel aufruft?*  
+   👉 **Sofortiger Abbruch mit Fehlermeldung (*Fail Fast*)!**
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Das Mantra: *„Fail early, fail fast!“*
+Kehre fehlerhafte Aufrufe niemals unter den Teppich – brich sofort in der ersten Zeile mit einer klaren Exception ab:
+
+```python
+class LagerModul:
+    def lagere_artikel_ein(self, artikel: Artikel, anz: int) -> None:
+        # 1. Fail Fast: Ist der Artikel im Sortiment?
+        if artikel.artikel_nr not in self._inventar:
+            raise ValueError(
+                f"Unbekannter Artikel {artikel.artikel_nr}!"
+            )
+        # 2. Fail Fast: Keine negativen Mengen!
+        if anz <= 0:
+            raise ValueError(f"Menge muss > 0 sein (war: {anz})")
+            
+        self._bestand[artikel.artikel_nr] += anz
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+## Python-Handwerkszeug: Module (`.py`) vs. Packages (Ordner)
+
+<div class="two-cols">
+<div class="col">
+
+### 1. Das Python-Modul (Eine `.py`-Datei)
+* Jede Datei (`lager.py`) ist ein **Modul** mit eigenem Namensraum:
+  ```python
+  from common import Artikel, Geldbetrag
+  ```
+
+### 2. Das Python-Package (Ordner mit `__init__.py`)
+* Wächst ein Modul, teilen wir es in einen **Ordner** auf (`modelle.py`, `service.py`).
+* Die Datei **`__init__.py`** macht den Ordner zum **Package** und wirkt wie eine **Fassade**: Sie legt mit `__all__` fest, welche Klassen nach außen exportiert werden.
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+```text
+adas_shop/
+├── common/
+│   ├── __init__.py
+│   └── artikel.py
+├── lager/
+│   ├── __init__.py   <-- Fassade des Lagers
+│   ├── modelle.py
+│   └── service.py
+└── main.py
+```
+
+```python
+# In adas_shop/lager/__init__.py:
+from .service import LagerService
+__all__ = ["LagerService"]
+
+# In main.py (kurzer, sauberer Import):
+from adas_shop.lager import LagerService
+```
+
+</div>
+
+</div>
+</div>
+
+---
+
+## Information Hiding in Python: Öffentlich vs. Privat (`_`)
+
+<div class="two-cols">
+<div class="col">
+
+Ein Modul zeigt nach außen seine **Schnittstelle**, verbirgt aber seine interne Datenstruktur (**Information Hiding / Geheimnisprinzip**).
+
+### Wie markiert man „Intern / Privat“ in Python?
+Anders als Java kennt Python kein erzwingendes Schlüsselwort `private`. Stattdessen gilt eine **Namenskonvention (PEP 8)**:
+
+1. **Öffentliche Schnittstelle (Kein Unterstrich):**  
+   * `lagere_artikel_ein()`, `gib_bestand()`
+   * Gehört offiziell zur Modulschnittstelle. Andere Module dürfen diese Methoden aufrufen.
+2. **Modulintern / Privat (Führender Unterstrich `_`):**  
+   * `self._bestand`, `def _hat_genug_vorrat():`
+   * Kennzeichnet ein internes Implementierungsdetail dieses Moduls, auf das von außen nicht direkt zugegriffen werden darf.
+
+</div>
+<div class="col">
+
+```python
+# adas_shop/lager/service.py
+
+class LagerService:
+    def __init__(self) -> None:
+        # Internes Dictionary (Führender Unterstrich '_'):
+        # Kein anderes Modul greift direkt auf _bestand zu.
+        self._bestand: dict[str, int] = {}
+
+    # ÖFFENTLICHE SCHNITTSTELLE (Kein Unterstrich):
+    def nehme_artikel_aus_lager(self, art_nr: str, anz: int) -> None:
+        if not self._hat_genug_vorrat(art_nr, anz):
+            raise ValueError("Nicht genügend Bestand im Lager!")
+        self._bestand[art_nr] -= anz
+
+    # INTERNE HILFSMETHODE (Führender Unterstrich '_'):
+    def _hat_genug_vorrat(self, art_nr: str, anz: int) -> bool:
+        aktuell = self._bestand.get(art_nr, 0)
+        return aktuell >= anz
+```
+
+<div style="font-size: 0.78em; color: #475569; margin-top: 8px; background: #f8fafc; border-left: 3px solid #27ae60; padding: 6px 10px;">
+<strong>Vorteil:</strong> Wenn intern <code>_bestand</code> später auf eine andere Datenstruktur umgestellt wird, bleibt der Code aller anderen Module unverändert.
+</div>
+
+</div>
+</div>
+
+---
+
+## Anfängerfalle 2: Zirkuläre Importe in Python verstehen
+
+<div class="two-cols">
+<div class="col">
+
+Beim Aufteilen von Code auf mehrere Dateien tritt häufig folgender Fehler auf:
+
 ```text
 ImportError: cannot import name 'Bestellung' 
 from partially initialized module 'bestellung' 
 (most likely due to a circular import)
 ```
 
-### Warum passiert das?
-1. Python lädt `bestellung.py`.
-2. Zeile 1: `from kunde import Kunde`.
-3. Python pausiert `bestellung.py` und beginnt `kunde.py` auszuführen.
-4. Zeile 1 in `kunde.py`: `from bestellung import Bestellung`.
-5. Python prüft `sys.modules`: `bestellung` wird gerade initialisiert, hat die Klasse `Bestellung` aber noch gar nicht erreicht!
-6. **Crash: `ImportError`!**
-
-</div>
-</div>
-
----
-
-## Wie löst man zirkuläre Importe sauber?
-
-<div class="two-cols">
-<div class="col">
-
-### Lösung A: Entkopplung über IDs (Empfohlen)
-Trennen Sie Daten und Verhalten. `Bestellung` muss nicht die gesamte `Kunde`-Instanz kennen – eine `kunde_id` genügt!
-
-```python
-# Saubere Entkopplung über IDs
-class Bestellung:
-    def __init__(self, kunde_id: str, betrag: float):
-        self.kunde_id = kunde_id  # Keine Abhängigkeit!
-        self.betrag = betrag
-
-class Kunde:
-    def __init__(self, kunde_id: str, name: str):
-        self.id = kunde_id
-        self.name = name
-```
-
-> **Design-Regel:** Wenn zwei Module sich gegenseitig importieren müssen, gehören sie entweder in **dasselbe Modul** oder ihr Zusammenspiel muss über **IDs / Interfaces** entkoppelt werden.
-
-</div>
-<div class="col">
-
-### Lösung B: `typing.TYPE_CHECKING`
-Wenn der Import **nur für Type Hints** benötigt wird, verhindert `TYPE_CHECKING` den Import zur Python-Laufzeit:
-
-```python
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    # Wird nur von mypy / IDE gelesen, 
-    # NIE zur Python-Laufzeit ausgeführt!
-    from bestellung import Bestellung
-
-class Kunde:
-    def __init__(self, name: str):
-        self.name = name
-        self.bestellungen: list[Bestellung] = []
-```
-
-</div>
-</div>
-
----
-
-## 3. Die fundamentalen Prinzipien: Kohäsion (Cohesion)
-
-<div class="two-cols">
-<div class="col">
-
-### Was ist Kohäsion?
-* **Definition:** Kohäsion beschreibt den **inneren Zusammenhalt** eines Moduls oder einer Klasse.
-* **Frage:** „Tun alle Teile dieses Moduls Dienst an derselben, klar umrissenen Aufgabe?“
-
-### Niedrige Kohäsion (Low Cohesion - Schlecht)
-* Typische Mülleimer-Dateien: `utils.py`, `helpers.py`, `common.py`.
-* Enthält: Datumsformatierung, String-Trimming, DB-Verbindung, Passwort-Hashing.
-* **Problem:** Niemand weiß, was die Datei eigentlich tut. Jede Änderung birgt Risiken.
-
-### Hohe Kohäsion (High Cohesion - Erstrebenswert)
-* Jedes Modul hat eine **einzige, klare Verantwortung** (Single Responsibility Principle).
-
-</div>
-<div class="col">
-
-```mermaid
-graph TD
-    subgraph Low["Niedrige Kohäsion (Mülleimer-Modul)"]
-        U["utils.py"] --> U1["format_date()"]
-        U --> U2["hash_password()"]
-        U --> U3["connect_db()"]
-    end
-    subgraph High["Hohe Kohäsion (Fokussiert)"]
-        R["rabatt.py"] --> R1["MengenRabatt"]
-        R --> R2["TreueRabatt"]
-        R --> R3["GutscheinRabatt"]
-    end
-    style Low fill:#ffebee,stroke:#c62828
-    style High fill:#e8f8f5,stroke:#27ae60
-```
-
-> **Beispiel:** `rabatt.py` enthält ausschließlich Rabattregeln. Ändern sich Rabatte, fasst man genau dieses Modul an.
-
-</div>
-</div>
-
----
-
-## 3. Die fundamentalen Prinzipien: Kopplung (Coupling)
-
-<div class="two-cols">
-<div class="col">
-
-### Was ist Kopplung?
-* **Definition:** Kopplung beschreibt den **Grad der Abhängigkeit** zwischen verschiedenen Modulen.
-* **Frage:** „Wie viel muss Modul A über das Innenleben von Modul B wissen?“
-
-### Enge Kopplung (Tight Coupling - Schlecht)
-* Modul A greift direkt auf interne SQL-Queries oder Variablen von Modul B zu.
-* Ändert sich Modul B minimal, bricht Modul A sofort zusammen.
-
-### Lose Kopplung (Loose Coupling - Erstrebenswert)
-* Module kommunizieren **ausschließlich über Schnittstellen** (`Protocol`).
-* Modul A weiß *was* Modul B tut, aber nicht *wie*.
-* SQLite kann durch PostgreSQL oder In-Memory ersetzt werden, ohne Modul A zu ändern!
+### Warum passiert dieser Fehler?
+1. In `bestellung.py` steht oben: `from kunde import Kunde`.
+2. Python pausiert `bestellung.py` (bevor `class Bestellung` definiert wurde) und lädt `kunde.py`.
+3. In `kunde.py` steht oben: `from bestellung import Bestellung`.
+4. Python schaut in das pausierte Modul `bestellung` – dort existiert die Klasse `Bestellung` zu diesem Zeitpunkt noch nicht. Das Programm bricht mit einem `ImportError` ab.
 
 </div>
 <div class="col">
 
 ```mermaid
 flowchart TD
-    subgraph Tight["1. Enge Kopplung (Fragil)"]
-        A1["BestellService"] -->|kennt SQL & Tabellen| B1[("SQLite DB")]
-    end
-    subgraph Loose["2. Lose Kopplung (Flexibel)"]
-        A2["BestellService"] -->|nutzt| P["<<Protocol>>\nOrderRepository"]
-        B2[("PostgreSQL")] -.->|erfüllt| P
-        B3[("In-Memory")] -.->|erfüllt| P
-    end
-    style Tight fill:#ffebee,stroke:#c62828
-    style Loose fill:#e8f8f5,stroke:#27ae60
+    B["bestellung.py<br/>1. importiert Kunde"] -->|"pausiert bestellung.py"| K["kunde.py<br/>2. importiert Bestellung"]
+    K -->|"sucht Bestellung in<br/>unfertigem Modul -> ImportError"| B
+    style B fill:#ffebee,stroke:#c62828
+    style K fill:#ffebee,stroke:#c62828
 ```
+
+> **Ursache:** Zwei Module importieren sich gegenseitig auf oberster Dateiebene (Zyklus `A ⇄ B`).
 
 </div>
 </div>
 
 ---
 
-## Das Zusammenspiel: Die goldene Architekturregel
+## Zirkuläre Importe sauber auflösen (`common` & ID-Entkopplung)
 
 <div class="two-cols">
 <div class="col">
-
-### Die 4 Architektur-Zustände
-
-<div class="col-card" style="margin-bottom: 12px;">
-
-#### 🏆 Das Ziel: High Cohesion & Low Coupling
-* **Hohe Kohäsion:** Jedes Modul ist in sich hochgradig fokussiert.
-* **Lose Kopplung:** Module interagieren nur über schlanke, stabile Schnittstellen (`Protocol`).
-* **Ergebnis:** Wartbar, modular, isoliert testbar und zukunftssicher.
-
-</div>
 
 <div class="col-card">
 
-#### ⚠️ Die typischen Fehlzustände:
-* **Spaghetti-Code:** Niedrige Kohäsion + Hohe Kopplung (Alles hängt von allem ab).
-* **Verkrampft:** Hohe Kohäsion + Hohe Kopplung (Klare Aufgaben, aber wie Kletten verhakt).
+#### Lösung 1: Gemeinsame Klassen in `common` ablegen
+Wenn `verkauf.py` und `lager.py` beide die Klasse `Artikel` benötigen, wird `Artikel` in `common.py` definiert. Beide Module importieren dann nur in eine Richtung (`verkauf → common` und `lager → common`).
 
 </div>
+
+<div class="col-card" style="margin-top: 12px;">
+
+#### Lösung 2: Über IDs statt über Klassen-Objekte referenzieren
+Die Klasse `Bestellung` muss nicht die Klasse `Kunde` importieren – es genügt, die `kunde_id: str` zu speichern. Dadurch entfällt der Rück-Import komplett.
+
+</div>
+
+</div>
+<div class="col">
+
+```python
+# bestellung.py (Kein Import von kunde.py nötig)
+from dataclasses import dataclass
+from common import Geldbetrag
+
+@dataclass
+class Bestellung:
+    bestell_nr: str
+    kunde_id: str        # Referenz nur über die ID (str)
+    betrag: Geldbetrag
+```
+
+<div style="font-size: 0.8em; color: #475569; margin-top: 10px; background: #f8fafc; border-left: 3px solid #27ae60; padding: 8px 12px;">
+<strong>Hinweis für Typ-Prüfung (<code>mypy</code>):</strong> Wird eine Klasse ausschließlich für Type Hints benötigt, kann sie unter <code>if typing.TYPE_CHECKING:</code> importiert werden (wird zur Laufzeit nicht ausgeführt).
+</div>
+
+</div>
+</div>
+
+---
+
+## Architekturentscheidung: Wo speichern wir unsere Daten?
+
+| Speicher-Alternative | Vorteile (+) | Nachteile (–) |
+| :--- | :--- | :--- |
+| **1. In-Memory (`dict` im RAM)** | Sehr schnell (`< 1 ms`), kein Setup nötig, gut geeignet für Unit-Tests. | Bei Programmende gehen alle Daten verloren. |
+| **2. Lokale Datei (JSON / CSV)** | Einfach lesbar, Daten bleiben nach Neustart erhalten. | Langsam bei großen Datenmengen; Konflikte bei gleichzeitigem Schreibzugriff. |
+| **3. SQL-Datenbank (SQLite / Postgres)** | Transaktionssicher bei gleichzeitigem Zugriff, skaliert für große Datenmengen. | Höherer Einrichtungsaufwand; macht Unit-Tests langsamer. |
+| **4. Cloud-Storage** | Automatische Backups, von mehreren Servern erreichbar. | Erfordert Netzwerkverbindung; laufende Kosten. |
+
+<div class="col-card" style="margin-top: 12px; font-size: 0.84em;">
+
+**Konsequenz für die Architektur:** Für schnelle automatisierte Unit-Tests benötigen wir **In-Memory**, für den Produktivbetrieb dagegen eine **SQL-Datenbank**. Die Fachlogik sollte daher so entworfen werden, dass sich die Speichertechnik austauschen lässt, ohne den Fachcode zu ändern.
+
+</div>
+
+---
+
+## Klassische Schichtenarchitektur & die „Datenbank-Dominanz“
+
+<div class="two-cols">
+<div class="col">
+
+### Die 3 klassischen Schichten:
+1. **Präsentation (Oben – UI / API):** Nimmt Benutzereingaben entgegen.
+2. **Geschäftslogik (Mitte – Fachmodule):** `BestellService`, `LagerService`.
+3. **Datenzugriff (Unten – Datenbank):** Speichert Daten per SQL.
+
+### Das Problem dieser Struktur:
+Die Abhängigkeiten (`import`) verlaufen **von oben nach unten**:
+* Die **`Geschäftslogik` importiert direkt die `Datenbank`**.
+* **Folge:** Die Fachlogik ist eng an die SQL-Datenbank gekoppelt und lässt sich nicht isoliert im Arbeitsspeicher testen.
 
 </div>
 <div class="col">
 
 ```mermaid
 flowchart TD
-    subgraph Ideal["🏆 Ideal: High Cohesion + Low Coupling"]
-        M1["Modul: Katalog\n(Fokussiert)"]
-        M2["Modul: Bestellung\n(Fokussiert)"]
-        M3["Modul: Zahlung\n(Fokussiert)"]
-        M1 <-->|Schlankes Protocol| M2
-        M2 <-->|Schlankes Protocol| M3
+    subgraph Layer3["1. Präsentation (Oben)"]
+        UI["Webshop UI / Kasse"]
+    end
+    subgraph Layer2["2. Geschäftslogik (Mitte)"]
+        Service["BestellService & LagerService"]
+    end
+    subgraph Layer1["3. Datenzugriff (Unten)"]
+        SQL["SQLite / PostgreSQL"]
     end
     
-    subgraph Chaos["❌ Anti-Pattern: Spaghetti-Monolith"]
-        C1["app.py\n(Alles in einem)"]
-        C1 --> C2["DB"]
-        C1 --> C3["Mail"]
-        C1 --> C4["UI"]
-    end
-    
-    style Ideal fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
-    style Chaos fill:#ffebee,stroke:#c62828,stroke-width:2px
-```
-
-</div>
-</div>
-
----
-
-## 4. Python-Bausteine: Module vs. Packages
-
-<div class="two-cols">
-<div class="col">
-
-### 1. Das Modul (`.py`-Datei)
-* Jede Python-Datei ist ein eigenständiges Modul mit eigenem Namensraum.
-* Variablen in `katalog.py` verschmutzen **nicht** den Namensraum von `bestellung.py`.
-* Zugriff erfolgt explizit über `import`:
-  ```python
-  import katalog
-  pflanze = katalog.Pflanze(...)
-  ```
-* **Best Practice:** 1 Modul = 1 fachlich zusammengehöriges Thema (z. B. `rabatt.py`).
-
-</div>
-<div class="col">
-
-### 2. Das Package (Verzeichnis)
-* Fasst mehrere verwandte Module zu einer hierarchischen Einheit zusammen.
-* Enthält eine `__init__.py` zur Paket-Initialisierung.
-* Ermöglicht saubere Unterstrukturen:
-  ```text
-  adas_botanical/
-  ├── __init__.py
-  ├── katalog/
-  │   ├── __init__.py
-  │   ├── modelle.py
-  │   └── repository.py
-  ```
-
-</div>
-</div>
-
----
-
-## Die Rolle der `__init__.py`: Kapselung & Facade
-
-<div class="two-cols">
-<div class="col">
-
-### Wozu dient `__init__.py`?
-1. **Markiert Verzeichnis als Package:** Signalisiert Python, dass der Ordner importierbar ist.
-2. **Kapselung (Information Hiding):** Versteckt interne Dateistrukturen vor der Außenwelt.
-3. **Facade-Muster:** Exponiert nur die öffentliche API des Pakets über `__all__`.
-
-### Der Vorteil für den Aufrufer:
-Nutzer des Pakets müssen nicht wissen, ob `Pflanze` intern in `modelle.py`, `entities.py` oder `schema.py` liegt. Sie importieren einfach direkt aus dem Package!
-
-</div>
-<div class="col">
-
-```python
-# adas_botanical/katalog/__init__.py
-# Interne Aufteilung bleibt gekapselt.
-# Wir exponieren nur die öffentliche Schnittstelle:
-from .modelle import Pflanze, Kategorie
-from .repository import KatalogRepository
-
-__all__ = [
-    'Pflanze', 
-    'Kategorie', 
-    'KatalogRepository'
-]
-```
-
-```python
-# Verwendung von außen (sauber & entkoppelt):
-from adas_botanical.katalog import Pflanze
-
-monstera = Pflanze(name="Monstera Deliciosa", preis=29.99)
-```
-
-</div>
-</div>
-
----
-
-## Information Hiding in Python: Was ist öffentlich, was privat?
-
-<div class="two-cols">
-<div class="col">
-
-### Konvention statt Schlüsselwörter
-Python hat kein `private` wie Java. Kapselung beruht auf **Namenskonventionen**:
-
-1. **Öffentlich (`public`):**
-   * Kein Unterstrich: `def buche_betrag():`
-   * Teil der stabilen Schnittstelle. Darf von außen genutzt werden.
-2. **Modulintern (`_private`):**
-   * Führender Unterstrich: `def _pruefe_limit():`, `_api_key`
-   * Signal an Entwickler: *„Internes Detail! Nicht von außen importieren, kann sich jederzeit ändern.“*
-
-> **Regel:** Respektieren Sie den führenden Unterstrich `_`!
-
-</div>
-<div class="col">
-
-```python
-# adas_botanical/zahlung/service.py
-
-class ZahlungsService:
-    def __init__(self, api_key: str):
-        self._api_key = api_key  # Internes Detail
-    
-    # Öffentliche Methode (Teil der API)
-    def buche_betrag(self, betrag: float) -> bool:
-        if not self._pruefe_limit(betrag):
-            return False
-        return self._sende_an_bank(betrag)
-    
-    # Interne Hilfsmethoden (Finger weg von außen!)
-    def _pruefe_limit(self, betrag: float) -> bool:
-        return betrag <= 5000.0
-        
-    def _sende_an_bank(self, betrag: float) -> bool:
-        # ... Netzwerkaufruf an Bank ...
-        return True
-```
-
-</div>
-</div>
-
----
-
-## 5. Architekturmuster: Die klassische Schichtenarchitektur
-
-<div class="two-cols">
-<div class="col">
-
-### Die 3 Schichten
-1. **Präsentationsschicht (Presentation):**
-   * UI, REST-Endpoints (FastAPI/Flask), CLI.
-2. **Geschäftslogikschicht (Business / Service):**
-   * Use Cases, Validierung, Rabattberechnung.
-3. **Datenzugriffsschicht (Data Access):**
-   * Datenbank-Queries, SQL, externe APIs.
-
-### Die fundamentale Schichtenregel:
-Abhängigkeiten fließen **ausschließlich von OBEN nach UNTEN**!  
-Jede Schicht kennt nur die Schicht direkt darunter.
-
-</div>
-<div class="col">
-
-```mermaid
-flowchart TD
-    subgraph Layer3["1. Präsentationsschicht"]
-        API["FastAPI Controller"]
-    end
-    subgraph Layer2["2. Geschäftslogik (Business)"]
-        OrderService["BestellService"]
-    end
-    subgraph Layer1["3. Datenzugriff (Persistence)"]
-        SQL["SQLAlchemy / SQLite"]
-    end
-    
-    API --> OrderService
-    OrderService --> SQL
+    UI -->|"ruft auf"| Service
+    Service -->|"hängt direkt ab von"| SQL
     
     style Layer3 fill:#e3f2fd,stroke:#1565c0
     style Layer2 fill:#e8f5e9,stroke:#2e7d32
-    style Layer1 fill:#fff3e0,stroke:#e65100
+    style Layer1 fill:#ffebee,stroke:#c62828,stroke-width:2px
 ```
 
 </div>
@@ -816,354 +942,127 @@ flowchart TD
 
 ---
 
-## Die Schwachstelle der klassischen Schichtenarchitektur
+## Die Lösung: Ports & Adapters (Hexagonale Architektur)
 
 <div class="two-cols">
 <div class="col">
 
-### Das Problem der Datenbank-Dominanz
-In der klassischen Schichtenarchitektur hängt die Geschäftslogik direkt von der Datenbank ab:
+Wir kehren die Abhängigkeitsrichtung mithilfe des **Dependency Inversion Principle (SOLID)** um:
 
-<div class="col-card" style="margin: 12px 0; text-align: center;">
-
-**Geschäftslogik (Business)** &rarr; **Datenbank (Persistence)**
-
-</div>
-
-* **Die fatale Konsequenz:**
-  * Entwickler modellieren zuerst Datenbanktabellen (`CREATE TABLE ...`).
-  * Domänenklassen werden zu reinen Abbildern von ORM-Modellen (z. B. SQLAlchemy `Base`).
-  * Die Geschäftslogik ist untrennbar mit SQL und Fremdschlüsseln verstrickt.
-* **Test-Albtraum:**
-  * Jeder Test der Geschäftslogik benötigt eine laufende Datenbank!
+1. **Innen: Fachlogik (Domäne)**  
+   Kennt nur Fachklassen (`Bestellung`, `Artikel`, `Geldbetrag`) und keinen Datenbank-Code.
+2. **Der Port = Die Schnittstelle (`typing.Protocol`)**  
+   Die Fachlogik definiert als Interface, welche Methoden ein Speicher bereitstellen muss (`speichere(b)` und `lade(id)`).
+3. **Der Adapter = Die technische Umsetzung (Außen)**  
+   * **Adapter A (`InMemoryAdapter`):** Speichert im RAM-`dict` (für Tests).
+   * **Adapter B (`SqliteAdapter`):** Speichert in SQLite (für den Betrieb).
 
 </div>
 <div class="col">
 
 ```mermaid
 flowchart TD
-    subgraph Problem["Die fatale Abhängigkeit"]
-        BL["Geschäftslogik\n(BestellService)"]
-        DB["Datenzugriff\n(SQLAlchemy ORM)"]
-        RDBMS[("Echte Datenbank\n(Postgres / SQLite)")]
-        
-        BL -->|importiert direkt| DB
-        DB -->|erfordert| RDBMS
+    subgraph Innen["INNEN: Fachlogik"]
+        Service["BestellService"] --> Port["Port (Schnittstelle)<br/>&lt;&lt;Protocol&gt;&gt; BestellSpeicherPort"]
     end
-    style Problem fill:#ffebee,stroke:#c62828,stroke-width:2px
+
+    subgraph Aussen["AUSSEN: Technik-Adapter"]
+        AdaptMem["Adapter 1: InMemory"]
+        AdaptSQL["Adapter 2: SqliteDB"]
+    end
+
+    AdaptMem -.->|implementiert| Port
+    AdaptSQL -.->|implementiert| Port
+
+    style Innen fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
+    style Aussen fill:#f8fafc,stroke:#64748b,stroke-dasharray: 5 5
 ```
 
-> **Kern-Einsicht:** Die Datenbank ist nur ein technisches Detail. Warum sollte unsere Geschäftslogik von der Datenbank abhängen?
+> **Prinzip:** Die Datenbank-Adapter hängen von der Schnittstelle der Fachlogik ab – nicht umgekehrt.
 
 </div>
 </div>
 
 ---
 
-## Hexagonale Architektur (Ports & Adapters)
+## Schritt-für-Schritt im Code: 1. Domäne & Port (`Protocol`)
 
 <div class="two-cols">
 <div class="col">
 
-### Das Prinzip der Dependency Inversion
-* **Die Domäne steht im Zentrum:** Sie weiß **NICHTS** von Datenbanken, Webframeworks oder HTTP!
-* **Ports (Schnittstellen):** Die Domäne definiert Verträge für das, was sie braucht (`OrderRepository`, `PaymentGateway`).
-* **Adapters (Technik):** Externe Komponenten implementieren diese Ports (`PostgresRepo`, `StripeAdapter`).
+Wir schauen uns an, wie das Ganze in Python aussieht.
 
-### Die Dependency Rule:
-**Alle Abhängigkeiten zeigen nach INNEN!**  
-Technik hängt von der Domäne ab – niemals umgekehrt!
+### Schritt 1: Die Fachklasse (`domain.py`)
+* Unsere `Bestellung` und der `Geldbetrag` aus Modul 2.
+* Reines Python ohne Datenbank-Imports.
 
-</div>
-<div class="col">
-
-```mermaid
-flowchart TD
-    subgraph Adapter["Adapter (Außen: Technik)"]
-        Web["FastAPI Controller"]
-        DB["Postgres Adapter"]
-        Mem["In-Memory Test Adapter"]
-    end
-    
-    subgraph Core["Hexagon (Innen: Reine Domäne)"]
-        Ports["Ports (typing.Protocol)"]
-        Domain["Entities & Use Cases"]
-    end
-    
-    Web -->|ruft auf| Ports
-    Ports --> Domain
-    DB -.->|erfüllt| Ports
-    Mem -.->|erfüllt| Ports
-    
-    style Core fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
-    style Adapter fill:#f4f6f7,stroke:#7f8c8d
-```
-
-</div>
-</div>
-
----
-
-## Ports vs. Adapters im Detail
-
-<div class="two-cols">
-<div class="col">
-
-<div class="col-card">
-
-### 1. Ports (Schnittstellen / Verträge)
-* Gehören zum **inneren Kern**.
-* In Python meist als `typing.Protocol` definiert.
-* Beschreiben **WAS** getan werden muss, nicht *WIE*.
-* **Unterscheidung nach Cockburn (2 Richtungen):**
-  * **Driving Ports (Primär / Eingehend):** Steuern den Kern (z. B. Use-Case-Interfaces, die von Web-API oder CLI aufgerufen werden).
-  * **Driven Ports (Sekundär / Ausgehend):** Werden vom Kern aufgerufen (z. B. Datenbank-Repositories, Payment-Gateways).
-* **Beispiele:**
-  * `OrderRepository`: Driven Port – „Kann eine `Order` speichern und laden.“
-  * `PaymentGateway`: Driven Port – „Kann einen Betrag abbuchen.“
-
-</div>
+### Schritt 2: Der Port als `Protocol` (`ports.py`)
+* Aus Modul 1 ist `typing.Protocol` bekannt.
+* Ein **Port** wird als `Protocol`-Klasse definiert, die festlegt, welche Methodensignaturen ein Speicher-Adapter bereitstellen muss (`speichere` und `lade`).
+* Die Auslassungspunkte `...` kennzeichnen, dass das `Protocol` nur die Signatur vorgibt, aber keine Implementierung enthält.
 
 </div>
 <div class="col">
-
-<div class="col-card">
-
-### 2. Adapters (Die konkrete Technik)
-* Liegen am **äußeren Rand**.
-* Enthalten den konkreten technischen Code.
-* **Beispiele für `OrderRepository`:**
-  * `SqliteOrderRepository` (Entwicklung)
-  * `PostgresOrderRepository` (Produktion)
-  * `InMemoryOrderRepository` (RAM-Tests!)
-* **Beispiele für `PaymentGateway`:**
-  * `StripeAdapter` (Echtbetrieb)
-  * `FakePaymentAdapter` (Tests ohne Geld)
-
-</div>
-
-</div>
-</div>
-
-> **Analogie:** Der Port ist die Wandsteckdose (230V, 50Hz). Der Adapter ist das Netzteil. Welches Netzteil eingesteckt wird, ist der Steckdose egal!
-
----
-
-## 6. Vom Analysemodell (Modul 2) zur Code-Struktur
-
-<div class="two-cols">
-<div class="col">
-
-### Die Brücke von der Analyse zum Code
-In Modul 2 haben wir für **Ada's Botanical Innovations** drei Bounded Contexts identifiziert:
-* **Verkauf & Webshop:** Katalog, Warenkorb, Bestellung, B2B-Kunden.
-* **Lager & Bestand:** Lagerplätze, Vorratsprüfung.
-* **Logistik & Kurier:** 2h-Expressrouten, Versand.
-
-<div class="col-card" style="margin-top: 14px;">
-
-#### Die fundamentale Architektur-Regel:
-**1 Bounded Context = 1 eigenständiges Package!**  
-Für die Implementierung fokussieren wir uns auf das Herzstück **`adas_botanical.bestellung`**:
-* **Reiner Domänenkern:** `Order` (`Bestellung`), `OrderItem` (`BestellPosition`), `Money` (Value Object).
-* **Driven Ports:** Entkoppelte Verträge für Repositories, Payment (Stripe) und Notification (Mail).
-* **Driving Port:** Schnittstelle für Web-Controller, CLI und Tests.
-
-</div>
-
-</div>
-<div class="col">
-
-```mermaid
-flowchart TD
-    subgraph Driving["Driving Adapter (Primär)"]
-        Web["Webshop FastAPI / CLI"]
-    end
-
-    subgraph Hexagon["Bounded Context: adas_botanical.bestellung"]
-        DP["<<Driving Port>>\nPlaceOrderUseCase"]
-        subgraph Core["Reiner Domänenkern"]
-            O["Order (Bestellung)"]
-            OI["OrderItem (Position)"]
-            M["Money (Value Object)"]
-        end
-        P_Repo["<<Driven Port>>\nOrderRepository"]
-        P_Pay["<<Driven Port>>\nPaymentGateway"]
-        P_Notif["<<Driven Port>>\nNotificationService"]
-    end
-
-    subgraph Driven["Driven Adapter (Sekundär)"]
-        DB[("PostgreSQL / SQLite")]
-        Stripe["Stripe Payment API"]
-        Mail["SMTP Mail Gateway"]
-    end
-
-    Web -->|ruft auf| DP
-    DP --> Core
-    Core --> P_Repo
-    Core --> P_Pay
-    Core --> P_Notif
-    P_Repo -.-> DB
-    P_Pay -.-> Stripe
-    P_Notif -.-> Mail
-
-    style Hexagon fill:#e8f8f5,stroke:#27ae60,stroke-width:2px
-    style Core fill:#d5f5e3,stroke:#2ecc71
-    style Driving fill:#eaf2f8,stroke:#2980b9
-    style Driven fill:#fef9e7,stroke:#f39c12
-```
-
-</div>
-</div>
-
----
-
-## Die Projektstruktur für Ada's Botanical Innovations
-
-<div class="two-cols">
-<div class="col">
-
-<div class="col-card">
-
-#### Die Struktur im Bounded Context `bestellung`:
-* 📁 `domain/`: **Reine Fachlogik**  
-  `Order`, `OrderItem`, `Money` – ohne Frameworks oder SQL!
-* 📁 `ports/`: **Schnittstellenverträge (`typing.Protocol`)**  
-  *Driving:* `PlaceOrderUseCase`  
-  *Driven:* `OrderRepository`, `PaymentGateway`, `NotificationService`.
-* 📁 `services/`: **Application Services (Use Cases)**  
-  `PlaceOrderService` (orchestriert den Ablauf).
-* 📁 `adapters/`: **Konkrete technische Implementierungen**  
-  `SqliteOrderRepo`, `InMemoryOrderRepo`, `StripeAdapter`, `SmtpMailAdapter`.
-* 📄 `main.py`: **Composition Root**  
-  Verdrahtet Adapter und Services via Dependency Injection.
-
-</div>
-
-</div>
-<div class="col">
-
-```text
-adas_botanical/
-├── core/
-│   └── money.py                 # Value Object: Money (Immutability)
-├── bestellung/
-│   ├── __init__.py              # Öffentliche Facade (__all__)
-│   ├── domain/
-│   │   └── models.py            # Reiner Kern: Order, OrderItem
-│   ├── ports/
-│   │   ├── use_cases.py         # Driving Port: PlaceOrderUseCase
-│   │   ├── order_repository.py  # Driven Port: OrderRepository
-│   │   ├── payment_gateway.py   # Driven Port: PaymentGateway
-│   │   └── notification.py      # Driven Port: NotificationService
-│   ├── services/
-│   │   └── place_order.py       # Application Service (Orchestrierung)
-│   └── adapters/
-│       ├── sqlite_repo.py       # SQLite Adapter (Produktion)
-│       ├── in_memory_repo.py    # Test Adapter (RAM)
-│       ├── stripe_adapter.py    # Stripe API Adapter
-│       └── mail_adapter.py      # SMTP Mail Adapter
-├── main.py                      # Composition Root (Dependency Injection)
-└── tests/
-    └── test_order.py            # Blitzschnelle Tests (< 5 ms)!
-```
-
-</div>
-</div>
-
----
-
-## 7. Praxisfall Ada: 1. Die reine Domäne (`models.py`)
-
-<div class="two-cols">
-<div class="col">
-
-### Die Domänenmodelle aus Modul 2
-* **Entity (`Order` / `Bestellung`):**
-  * Besitzt eine eindeutige fachliche Identität (`id`).
-  * Fachliche Invarianten & Statuswechsel (`markiere_als_bezahlt()`).
-* **Value Object (`OrderItem`, `Money`):**
-  * Reine Werteobjekte ohne eigene Identität, **unveränderlich (`frozen=True`)**.
-  * **Warum `Money` statt `float`?**  
-    `0.1 + 0.2 != 0.3` in IEEE-754 Floats! Rundungsfehler im Handel führen zu Verlusten. Ein Value Object schützt vor arithmetischen Bugs.
 
 ```python
+# 1. Fachklassen (Domäne ohne Technik-Abhängigkeit)
+from dataclasses import dataclass
+from typing import Protocol
+
 @dataclass(frozen=True)
-class OrderItem:
-    pflanze_id: str
-    menge: int
-    einzelpreis: Money
-
-    def gesamtpreis(self) -> Money:
-        return self.einzelpreis.multiply(self.menge)
-```
-
-</div>
-<div class="col">
-
-```python
-# adas_botanical/bestellung/domain/models.py
-from dataclasses import dataclass, field
-from core.money import Money
+class Geldbetrag:
+    cent: int
 
 @dataclass
-class Order:
-    id: str
+class Bestellung:
+    bestell_nr: str
     kunde_id: str
-    items: list[OrderItem] = field(default_factory=list)
+    betrag: Geldbetrag
     bezahlt: bool = False
-
-    def berechne_gesamtsumme(self) -> Money:
-        summe = Money(0.0)
-        for item in self.items:
-            summe = summe.add(item.gesamtpreis())
-        return summe
 
     def markiere_als_bezahlt(self) -> None:
         if self.bezahlt:
-            raise ValueError("Bestellung ist bereits bezahlt!")
+            raise ValueError("Bereits bezahlt!")
         self.bezahlt = True
-```
 
-</div>
-</div>
 
----
-
-## Praxisfall Ada: 2. Die Ports: Driving vs. Driven (`ports/`)
-
-<div class="two-cols">
-<div class="col">
-
-<div class="col-card">
-
-#### 1. Driving Port (Primär / Eingehend):
-Definiert die Schnittstelle für Web-Controller, CLI und Tests:
-
-```python
-# bestellung/ports/use_cases.py
-from typing import Protocol
-from bestellung.domain.models import Order
-
-class PlaceOrderUseCase(Protocol):
-    """Driving Port: Eingehende Schnittstelle."""
-    def execute(self, order: Order, email: str) -> bool:
+# 2. Der Port (Schnittstellen-Vertrag als Protocol)
+class BestellSpeicherPort(Protocol):
+    """Jeder Speicher-Adapter muss diese 2 Methoden bieten:"""
+    
+    def speichere(self, bestellung: Bestellung) -> None:
+        ...
+        
+    def lade(self, bestell_nr: str) -> Bestellung | None:
         ...
 ```
 
 </div>
+</div>
 
-<div class="col-card" style="margin-top: 8px;">
+---
 
-#### 2. Driven Port: Benachrichtigung
+## Schritt-für-Schritt im Code: 2. Zwei austauschbare Adapter
+
+<div class="two-cols">
+<div class="col">
+
+Nun implementieren wir zwei unterschiedliche **Adapter**, die beide die Methoden `speichere()` und `lade()` des `BestellSpeicherPort` bereitstellen:
+
+<div class="col-card">
+
+#### Adapter A: `InMemoryBestellSpeicher` (Für Tests)
 ```python
-# bestellung/ports/notification.py
-from typing import Protocol
+class InMemoryBestellSpeicher:
+    """Speichert Bestellungen im RAM-Dictionary."""
+    def __init__(self) -> None:
+        self._daten: dict[str, Bestellung] = {}
 
-class NotificationService(Protocol):
-    """Driven Port für Kundenbenachrichtigung."""
-    def send_confirmation(self, order_id: str, email: str) -> None:
-        ...
+    def speichere(self, bestellung: Bestellung) -> None:
+        self._daten[bestellung.bestell_nr] = bestellung
+
+    def lade(self, bestell_nr: str) -> Bestellung | None:
+        return self._daten.get(bestell_nr)
 ```
 
 </div>
@@ -1173,128 +1072,129 @@ class NotificationService(Protocol):
 
 <div class="col-card">
 
-#### 3. Driven Ports: Persistenz & Zahlung
-Werden vom inneren Kern aufgerufen (ausgehend):
-
+#### Adapter B: `SqliteBestellSpeicher` (Für den Produktivbetrieb)
 ```python
-# bestellung/ports/order_repository.py
-from typing import Protocol, Optional
-from bestellung.domain.models import Order
-
-class OrderRepository(Protocol):
-    """Driven Port für Bestellspeicherung."""
-    def save(self, order: Order) -> None: ...
-    def get_by_id(self, order_id: str) -> Optional[Order]: ...
-
-# bestellung/ports/payment_gateway.py
-from typing import Protocol
-from core.money import Money
-
-class PaymentGateway(Protocol):
-    """Driven Port für Zahlungsabwicklung."""
-    def charge(self, kunde_id: str, betrag: Money) -> bool: ...
-```
-
-</div>
-
-</div>
-</div>
-
-> **Beachten Sie:** Alle Ports sind reine Verträge (`typing.Protocol`) ohne Implementierung (`...`). Der Core steuert Driven Ports an und wird über Driving Ports gesteuert!
-
----
-
-## Praxisfall Ada: 3. Der Application Service (`services/`)
-
-<div class="two-cols">
-<div class="col">
-
-### Was macht der Service?
-* Implementiert den **Driving Port (`PlaceOrderUseCase`)**.
-* Orchestriert den Geschäftsablauf und kennt **nur die Schnittstellen**, niemals konkrete Datenbanken oder SMTP-Server!
-* **Ablauf im Service:**
-  1. Gesamtsumme im Domänenmodell ermitteln.
-  2. Zahlung über den Port anfordern.
-  3. Bei Erfolg: Fachlichen Status `bezahlt` setzen.
-  4. Über das Repository persistieren.
-  5. Bestätigung via Notification-Port versenden.
-
-<div class="col-card" style="margin-top: 10px;">
-
-#### Dependency Injection (DI):
-Alle benötigten Ports (`repo`, `payment`, `notifier`) werden dem Service im Konstruktor von außen übergeben.
-
-</div>
-
-</div>
-<div class="col">
-
-```python
-# adas_botanical/bestellung/services/place_order.py
-from bestellung.domain.models import Order
-from bestellung.ports.order_repository import OrderRepository
-from bestellung.ports.payment_gateway import PaymentGateway
-from bestellung.ports.notification import NotificationService
-
-class PlaceOrderService:
-    """Implementiert den Use Case via Dependency Injection."""
-    def __init__(
-        self, 
-        repo: OrderRepository, 
-        payment: PaymentGateway,
-        notifier: NotificationService
-    ):
-        self._repo = repo
-        self._payment = payment
-        self._notifier = notifier
-
-    def execute(self, order: Order, email: str) -> bool:
-        summe = order.berechne_gesamtsumme()
-        
-        # 1. Bezahlung via Driven Port
-        if not self._payment.charge(order.kunde_id, summe):
-            return False
-            
-        # 2. Fachliche Invariante setzen
-        order.markiere_als_bezahlt()
-        
-        # 3. Persistieren & Benachrichtigen via Driven Ports
-        self._repo.save(order)
-        self._notifier.send_confirmation(order.id, email)
-        return True
-```
-
-</div>
-</div>
-
----
-
-## Praxisfall Ada: 4. Die Adapter (`adapters/`)
-
-<div class="two-cols">
-<div class="col">
-
-<div class="col-card">
-
-#### Adapter 1: Produktion (SQLite)
-```python
-# bestellung/adapters/sqlite_repo.py
 import sqlite3
-from bestellung.domain.models import Order
 
-class SqliteOrderRepository:
-    def __init__(self, db_path: str):
-        self.db_path = db_path
+class SqliteBestellSpeicher:
+    """Speichert Bestellungen in einer SQLite-Datenbank."""
+    def __init__(self, db_datei: str) -> None:
+        self._db_datei = db_datei
 
-    def save(self, order: Order) -> None:
-        with sqlite3.connect(self.db_path) as conn:
+    def speichere(self, bestellung: Bestellung) -> None:
+        with sqlite3.connect(self._db_datei) as conn:
             conn.execute(
-                "INSERT OR REPLACE INTO orders "
-                "VALUES (?, ?, ?)",
-                (order.id, order.kunde_id, 
-                 order.bezahlt)
+                "INSERT OR REPLACE INTO orders VALUES (?, ?, ?, ?)",
+                (bestellung.bestell_nr, bestellung.kunde_id,
+                 bestellung.betrag.cent, int(bestellung.bezahlt))
             )
+
+    def lade(self, bestell_nr: str) -> Bestellung | None:
+        # ... lädt Datensatz per SELECT aus SQLite ...
+        ...
 ```
+
+</div>
+
+> **Typsicherheit durch `Protocol` & `mypy`:** Beide Klassen implementieren exakt dieselben Methodensignaturen (`speichere`, `lade`). Durch das `Protocol` und den statischen Typprüfer `mypy` wird bereits vor dem Programmstart sichergestellt, dass beide Adapter zum `BestellSpeicherPort` kompatibel sind.
+
+</div>
+</div>
+
+---
+
+## Schritt-für-Schritt im Code: 3. Dependency Injection & Unit-Test
+
+<div class="two-cols">
+<div class="col">
+
+### Was bedeutet „Dependency Injection“ (DI)?
+> **Dependency Injection** bedeutet: Eine Klasse erzeugt ihren Speicher-Adapter **nicht selbst** im Inneren, sondern bekommt ihn beim Erstellen **von außen über den Konstruktor `__init__` übergeben**.
+
+* **Im Produktivbetrieb (`main.py`):**  
+  Dem `BestellService` wird eine Instanz von `SqliteBestellSpeicher` übergeben.
+* **Im Unit-Test (`test_bestellung.py`):**  
+  Demselben `BestellService` wird eine Instanz von `InMemoryBestellSpeicher` übergeben.
+* **Vorteil:** Der Unit-Test prüft die Fachlogik direkt im Arbeitsspeicher, ohne dass eine Datenbank eingerichtet sein muss.
+
+</div>
+<div class="col">
+
+```python
+# Der Service arbeitet nur gegen das Protocol (den Port):
+class BestellService:
+    def __init__(self, speicher: BestellSpeicherPort) -> None:
+        # Dependency Injection: Adapter wird von außen übergeben
+        self._speicher = speicher
+
+    def kaufe_auf_rechnung(self, bestellung: Bestellung) -> None:
+        bestellung.markiere_als_bezahlt()
+        self._speicher.speichere(bestellung)
+
+
+# =========================================================
+# Unit-Test mit dem In-Memory-Adapter (ohne Datenbank):
+# =========================================================
+def test_kauf_auf_rechnung() -> None:
+    # 1. Arrange: In-Memory-Adapter übergeben
+    ram_speicher = InMemoryBestellSpeicher()
+    service = BestellService(speicher=ram_speicher)
+    
+    b = Bestellung("B-100", "KUNDE-1", Geldbetrag(cent=2999))
+
+    # 2. Act: Fachlogik ausführen
+    service.kaufe_auf_rechnung(b)
+
+    # 3. Assert: Prüfen, ob bezahlt & im Speicher abgelegt
+    gespeichert = ram_speicher.lade("B-100")
+    assert gespeichert is not None
+    assert gespeichert.bezahlt is True
+```
+
+</div>
+</div>
+
+---
+
+## Zusammenfassung Modul 3
+
+<div class="two-cols">
+<div class="col">
+
+1. **Warum Modularisierung?** Unser Arbeitsgedächtnis fasst nur 7 ± 2 Dinge (*Millers Law*). Die „God-Datei“ (`app.py`) führt zu unwartbarem Spaghetti-Code.
+2. **Hohe Kohäsion & Lose Kopplung:** Im Inneren eines Moduls gehört alles eng zusammen (Werkzeugkasten); nach außen kommunizieren Module nur über schmale Schnittstellen.
+3. **Fachlicher Modulschnitt:** Große Systeme schneidet man nach Fachbereichen (**Bounded Contexts**: `verkauf`, `lager`, `logistik`) plus einem schlanken `common`-Modul für gemeinsame Grundtypen (`Artikel`, `Geldbetrag`).
+4. **Detailliertes Modul-Design & Fail Fast:** Jedes Modul dokumentiert seine Schnittstellen und Annahmen. Ungültige Aufrufe werden sofort am Eingang abgewiesen (*„Fail early, fail fast“*).
+
+</div>
+<div class="col">
+
+5. **Python-Handwerkszeug & Zirkuläre Importe:** Packages bündeln Dateien hinter einer `__init__.py` (Empfangsbüro). Ein führender Unterstrich (`_`) schützt interne Details. Zirkuläre Importe löst man durch Auslagern nach `common` oder Entkopplung über IDs (`kunde_id: str`).
+6. **Von der Schichten- zur Hexagonalen Architektur:** In der klassischen Schichtenarchitektur klebt die Fachlogik an der Datenbank. Mit **Ports (`Protocol`-Steckdose)**, **Adaptern (Technik-Stecker)** und **Dependency Injection** bleibt die Fachlogik zu 100 % frei von Datenbank-Code und lässt sich in Millisekunden *In-Memory* testen!
+
+</div>
+</div>
+
+---
+
+## Denkpause & Reflexionsfragen
+
+<div class="two-cols">
+<div class="col">
+
+<div class="col-card">
+
+#### Frage 1: Kohäsion & Kopplung
+Ein Entwickler legt eine Datei `allgemein.py` an, in der er eine Funktion zur MwSt-Berechnung, eine Funktion zum Verbinden mit der SQLite-Datenbank und eine Funktion zum Prüfen der Bodenfeuchte von Orchideen speichert.  
+* Welches Prinzip ist hier verletzt und warum?
+
+</div>
+
+<div class="col-card" style="margin-top: 15px;">
+
+#### Frage 2: Zirkuläre Importe & Ports
+1. Warum stürzt Python ab, wenn `kunde.py` oben `from bestellung import Bestellung` schreibt und `bestellung.py` oben `from kunde import Kunde`?
+2. Warum darf unser `BestellService` im Inneren nicht einfach `self.db = SqliteBestellSpeicher("shop.db")` aufrufen?
 
 </div>
 
@@ -1303,223 +1203,35 @@ class SqliteOrderRepository:
 
 <div class="col-card">
 
-#### Adapter 2: Tests (In-Memory!)
-```python
-# bestellung/adapters/in_memory_repo.py
-from typing import Optional
-from bestellung.domain.models import Order
-
-class InMemoryOrderRepository:
-    """Speichert Daten blitzschnell im RAM."""
-    def __init__(self):
-        self._storage: dict[str, Order] = {}
-
-    def save(self, order: Order) -> None:
-        self._storage[order.id] = order
-
-    def get_by_id(self, order_id: str) -> Optional[Order]:
-        return self._storage.get(order_id)
-```
+#### Antworten zur Selbstkontrolle:
+1. **Niedrige Kohäsion (Kram-Schublade):**  
+   Die drei Funktionen haben fachlich nichts miteinander zu tun. Ändert sich die Datenbank oder die Pflanzensensorik, muss jedes Mal dieselbe Sammeldatei angefasst werden.
+2. **Importe & Dependency Injection:**
+   * Beim ersten Import pausiert Python das erste Modul, bevor dessen Klasse fertig geladen ist, und versucht im zweiten Modul genau diese noch unfertige Klasse zu importieren (*Circular Import*).
+   * Wenn der Service `SqliteBestellSpeicher` selbst erzeugt, ist er **fest mit SQLite verlötet** (enge Kopplung). Erst durch Übergabe von außen (**Dependency Injection** gegen den `Port`) können wir im Test den `InMemorySpeicher` einstecken!
 
 </div>
-
-</div>
-</div>
-
-> Beide Adapter erfüllen das `OrderRepository`-Protocol – einer schreibt auf die Festplatte, der andere arbeitet im Arbeitsspeicher!
-
----
-
-## 8. Composition Root: Alles zusammenfügen (`main.py`)
-
-<div class="two-cols">
-<div class="col">
-
-### Was ist die Composition Root?
-* Der **einzige Ort** in der gesamten Anwendung, an dem konkrete Adapter instanziiert und dem Service übergeben werden.
-* **Separation of Concerns:** Trennung von *Objekterzeugung* (hier in `main.py`) und *Objektverwendung* (im Service).
-
-<div class="col-card" style="margin-top: 12px;">
-
-#### Vorher vs. Nachher:
-* ❌ **Vorher:** Service ruft `sqlite3.connect()` selbst auf $\to$ Feste Kopplung!
-* ✅ **Nachher (DI):** Service erhält `repo`, `payment` und `notifier` von außen $\to$ Jeder Adapter austauschbar!
-
-</div>
-
-</div>
-<div class="col">
-
-```python
-# main.py - Composition Root für Ada's Botanical Innovations
-import os
-from adas_botanical.bestellung.services.place_order import (
-    PlaceOrderService
-)
-from adas_botanical.bestellung.adapters.sqlite_repo import (
-    SqliteOrderRepository
-)
-from adas_botanical.bestellung.adapters.stripe_adapter import (
-    StripePaymentAdapter
-)
-from adas_botanical.bestellung.adapters.mail_adapter import (
-    SmtpNotificationAdapter
-)
-
-def bootstrap() -> PlaceOrderService:
-    # 1. Konkrete Adapter erzeugen
-    repo = SqliteOrderRepository(db_path="shop.db")
-    payment = StripePaymentAdapter(api_key=os.getenv("STRIPE_KEY", "sk_test"))
-    notifier = SmtpNotificationAdapter(host="smtp.mail.de")
-    
-    # 2. Dependency Injection: Zusammenbauen
-    return PlaceOrderService(repo=repo, payment=payment, notifier=notifier)
-
-if __name__ == "__main__":
-    app_service = bootstrap()
-    print("Ada's Botanical Innovations betriebsbereit!")
-```
 
 </div>
 </div>
 
 ---
 
-## Warum sich der Aufwand lohnt: Triviales Unit-Testing!
+## Ausblick auf Modul 4: Aspekte, Entwurfsmuster & Funktionales Design
 
 <div class="two-cols">
 <div class="col">
 
-### Der Praxis-Gewinn:
-* **Ausführungszeit: < 5 ms** direkt im RAM!
-* Keine Datenbankinstallation nötig, keine Dateisystemsperren, kein Internet für Stripe.
-* Zuverlässig in jeder CI/CD-Pipeline.
+### Was wir in Modul 3 erreicht haben:
+* Wir haben Adas Plattform in saubere Module (`verkauf`, `lager`, `common`) aufgeteilt und die Fachlogik über Ports & Adapters von der Datenbank entkoppelt.
 
-<div class="col-card" style="margin-top: 12px;">
-
-#### 🧠 Thinking Points:
-1. **Technologiewechsel:** Wenn Ada von SQLite zu PostgreSQL oder DynamoDB wechselt, müssen wir **nur einen neuen Adapter** schreiben – Domäne und Use Case bleiben zu 100% unberührt!
-2. **Kapselung:** Warum darf die Domäne niemals Exceptions von Drittanbieter-Bibliotheken werfen?
-
-</div>
-
-</div>
-<div class="col">
-
-```python
-# tests/test_order_service.py
-class FakePaymentGateway:
-    def __init__(self, succeed: bool = True):
-        self.succeed = succeed
-
-    def charge(self, kunde_id: str, betrag: Money):
-        return self.succeed
-
-class MockNotificationService:
-    def __init__(self):
-        self.sent_emails: list[tuple[str, str]] = []
-
-    def send_confirmation(self, order_id: str, email: str) -> None:
-        self.sent_emails.append((order_id, email))
-
-def test_erfolgreiche_bestellung():
-    # 1. Arrange: Test-Doppelgänger instanziieren
-    repo = InMemoryOrderRepository()
-    payment = FakePaymentGateway(succeed=True)
-    notifier = MockNotificationService()
-    service = PlaceOrderService(repo=repo, payment=payment, notifier=notifier)
-    
-    order = Order(id="ORD-1", kunde_id="KUNDE-42")
-    order.items.append(OrderItem("MONSTERA-1", 2, Money(29.99)))
-
-    # 2. Act
-    erfolg = service.execute(order, email="kunde@office.de")
-
-    # 3. Assert: Fachliche Korrektheit prüfen
-    assert erfolg is True
-    assert order.bezahlt is True
-    assert repo.get_by_id("ORD-1") is not None
-    assert len(notifier.sent_emails) == 1
-```
-
-</div>
-</div>
-
----
-
-## Zusammenfassung & Best-Practice-Checkliste
-
-<div class="two-cols">
-<div class="col">
-
-### Die 5 goldenen Regeln für Modulentwurf:
-
-1. **Eine Datei = Ein logisches Modul:**
-   Vermeiden Sie God-Dateien. Mehr als 300 Zeilen sind ein Warnsignal.
-2. **High Cohesion, Low Coupling:**
-   Was fachlich zusammengehört, bleibt zusammen. Interaktion nur über schlanke Protokolle.
-3. **Zirkuläre Importe sofort stoppen:**
-   Entkoppeln Sie über IDs oder nutzen Sie `typing.TYPE_CHECKING`.
-4. **Dependency Rule respektieren:**
-   Die Domänenlogik darf **niemals** von Frameworks oder Datenbanken abhängen!
-5. **Dependency Injection nutzen:**
-   Übergeben Sie Abhängigkeiten über den Konstruktor.
-
-<div class="col-card" style="margin-top: 10px; font-size: 0.85em;">
-
-#### 📚 Vorbereitung für Übungsblatt 3:
-* **Aufgabe 1 (God-File & Millers Law):** Folien 5–7
-* **Aufgabe 2 (Zirkuläre Importe in CPython):** Folien 8–9
-* **Aufgabe 3 (Schichtenarchitektur & DB-Dominanz):** Folien 16–18
-* **Aufgabe 4 (Domäne, Driving & Driven Ports):** Folien 19–23
-* **Aufgabe 5 (Adapter, DI & In-Memory Tests):** Folien 24–27
-
-</div>
-
-</div>
-<div class="col">
-
-```mermaid
-mindmap
-  root((Modulare\nArchitektur))
-    Bounded Contexts
-      Verkauf & Shop
-      Lager & Bestand
-      Logistik & Kurier
-    Hexagonal Core
-      Entity Order
-      Value Object Money
-      Use Case Logik
-    Ports & Adapters
-      Driving Ports Web/CLI
-      Driven Ports DB/Pay
-      In-Memory für Tests
-    Entkopplung
-      Dependency Injection
-      Composition Root
-      Keine Zirkel-Imports
-```
-
-</div>
-</div>
-
----
-
-## Ausblick auf Modul 4
-
-<div class="two-cols">
-<div class="col">
-
-### Was wir bisher erreicht haben:
-* **Modul 1:** Objektorientierung & SOLID-Prinzipien
-* **Modul 2:** Objektorientierte Analyse (OOA) & der Übergang zum Entwurf
-* **Modul 3:** Code-Modularisierung & Hexagonale Architektur
-
-### Was uns in Modul 4 erwartet:
-* Wie behandeln wir **querschneidende Belange** (Logging, Caching, Retry), ohne sauberen Modulcode wieder zu verschmutzen?
-* **Aspektorientierte Programmierung & Python-Dekoratoren**
-* Fortgeschrittene **Entwurfsmuster (GoF)**
-* **Funktionale Programmierung** in Python
+### Das nächste Problem:
+* Plötzlich verlangt Chefin Ada: *„Ich möchte, dass bei **jedem** Methodenaufruf im Lager und Verkauf die Ausführungszeit gemessen, ein Sicherheits-Log geschrieben und bei Netzwerkfehlern 3-mal automatisch wiederholt wird!“*
+* Wenn wir jetzt in 50 Methoden `time.time()`, `log.info()` und `try/except`-Schleifen hineinkopieren, machen wir unseren sauberen Code wieder kaputt!
+* **Was wir in Modul 4 lernen:**
+  * Wie wir solche **Querschnittsaufgaben (Aspekte)** mit **Python-Decorators (`@retry`, `@measure_time`)** elegant auslagern.
+  * Wie Module über einen **EventBus (Observer Pattern)** lose gekoppelt Nachrichten austauschen.
+  * Wie **Funktionale Programmierung** und **Pattern Matching (`match/case`)** Datenflüsse ohne heimliche Nebeneffekte ermöglichen!
 
 </div>
 <div class="col">
@@ -1532,11 +1244,9 @@ flowchart TD
     M4 --> M5["Modul 5: Systemdesign & Cloud-Native"]
     M5 --> M6["Modul 6: Threat Modeling"]
     
-    style M3 fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
-    style M4 fill:#9b59b6,stroke:#8e44ad,color:#fff
+    style M3 fill:#bdc3c7,stroke:#7f8c8d,color:#2c3e50
+    style M4 fill:#9b59b6,stroke:#8e44ad,stroke-width:3px,color:#fff
 ```
-
-> **Frage zum Weiterdenken:** Wo platzieren wir Logging und Caching in unserer Hexagonalen Architektur? In der Domäne, im Service oder im Adapter? Das klären wir in Modul 4!
 
 </div>
 </div>

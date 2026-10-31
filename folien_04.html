@@ -144,6 +144,27 @@
             width: auto !important;
             max-width: 100% !important;
         }
+
+        /* Tables in Slides */
+        .reveal table {
+            font-size: 0.65em !important;
+            width: 100% !important;
+            margin: 6px 0 !important;
+            border-collapse: collapse;
+        }
+        .reveal table th, .reveal table td {
+            padding: 5px 8px !important;
+            border: 1px solid var(--border) !important;
+            text-align: left;
+        }
+        .reveal table th {
+            background: #f1f5f9;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        .reveal table tr:nth-child(even) td {
+            background: #fafbfc;
+        }
     </style>
 </head>
 <body>
@@ -202,12 +223,13 @@
 1. **Das Problem:** Code Tangling & Code Scattering
 2. **Die Lösung:** Aspektorientierte Programmierung (AOP)
 3. **UML-Modellierung:** Aspekte im Klassendiagramm
-4. **Python Decorators verstehen:** Wrapper-Funktionen Schritt für Schritt
-5. **Praxisbeispiel Resilienz:** Der `@retry_with_backoff`-Decorator
+4. **Grundlage in Python:** Funktionen als Objekte (*First-Class Citizens*)
+5. **Python Decorators verstehen:** Das Zwiebelschalen-Prinzip (`@measure_time`)
+6. **Praxisbeispiel Resilienz:** Der `@retry_with_backoff`-Decorator
 
 #### Teil 2: Ereignissteuerung & Entwurfsmuster
-6. **Das Observer Pattern:** Entkopplung nach dem Sender-Empfänger-Prinzip
-7. **Implementierung:** Ein typsicherer `EventBus` in Python
+7. **Das Observer Pattern:** Lose Kopplung zwischen den Modulen aus Modul 3
+8. **Implementierung:** Ein typsicherer `EventBus` in Python
 
 </div>
 <div class="col">
@@ -401,15 +423,13 @@ flowchart TD
 <div class="col">
 
 #### Das Entwurfs-Dilemma bei Aspekten:
-Da ein Aspekt transparent agiert (Aufrufer und Fachklasse rufen ihn im Fachcode nicht explizit auf), ist er im klassischen Klassendiagramm schwer sichtbar!
+Da ein Aspekt im Hintergrund agiert (die Fachklasse ruft ihn im eigenen Code gar nicht selbst auf), ist er im normalen Klassendiagramm leicht zu übersehen!
 
-#### Standard-Konvention im Softwareentwurf:
-1. **Eigene Aspekt-Komponente:**
-   Wird als Klasse mit dem Stereotyp `<<aspect>>` dargestellt.
-2. **Pointcuts & Advices als Operationen:**
-   Zeigt, *wann* der Aspekt eingreift (z. B. `before()`, `around(joinpoint)`, `after()`).
-3. **Explizite Abhängigkeitspfeile:**
-   Eine gestrichelte Abhängigkeit (`..>`) mit Stereotyp `<<uses aspect>>` zeigt, welche Fachmethode durch den Aspekt geschützt oder erweitert wird.
+#### Fachbegriffe einfach erklärt:
+* **Joinpoint (Einhängepunkt):** Die konkrete Methode im Fachcode, bei der eingegriffen wird (z. B. `erstelleBestellung`).
+* **Pointcut (Auswahlregel):** Die Regel, *welche* Methoden überwacht werden sollen.
+* **Advice (Zusatzaktion):** *Was* und *wann* der Aspekt etwas tut (`before` = vorher, `after` = nachher, `around` = drumherum).
+* **UML-Notation:** Wir kennzeichnen Aspekt-Klassen mit `<<aspect>>` und zeichnen einen gestrichelten Pfeil `<<uses aspect>>`.
 
 </div>
 <div class="col">
@@ -440,19 +460,71 @@ classDiagram
 
 ---
 
-### Python Decorators Schritt für Schritt
+### Vorwissen für Decorators: Funktionen sind in Python normale Objekte!
 
 <div class="two-cols">
 <div class="col">
 
-Ein **Decorator** ist eine Funktion, die eine andere Funktion als Parameter entgegennimmt, sie in eine Hülle ("Wrapper") einpackt und die erweiterte Funktion zurückgibt.
+Bevor wir verstehen können, wie ein `@decorator` funktioniert, müssen wir eine besondere Eigenschaft von Python kennenlernen:
 
-#### Der Aufbau eines Decorators:
-1. **Äußere Funktion:** Nimmt die Originalfunktion `func` entgegen.
-2. **Innere Wrapper-Funktion:**  
-   Führt Vorarbeiten aus, ruft `func(*args, **kwargs)` auf, führt Nacharbeiten aus und gibt das Ergebnis zurück.
-3. **`@functools.wraps`:**  
-   Bewahrt den ursprünglichen Funktionsnamen und den Docstring.
+> **First-Class Citizens (Bürger erster Klasse):**  
+> In Python sind Funktionen keine starren Befehle, sondern **ganz normale Objekte** – genau wie Zahlen (`42`), Texte (`"Hallo"`) oder Listen!
+
+#### Was bedeutet das konkret?
+1. **Mit Klammern `sag_hallo()`:**  
+   Die Funktion wird **sofort ausgeführt**; wir erhalten ihr Ergebnis (den Rückgabewert).
+2. **Ohne Klammern `sag_hallo`:**  
+   Die Funktion wird **nicht ausgeführt**, sondern wie ein Paket als Wert in einer Variable gespeichert oder an eine andere Funktion übergeben!
+
+</div>
+<div class="col">
+
+<div class="col-card">
+
+#### Schritt-für-Schritt im Code:
+
+```python
+def begruessung(name: str) -> str:
+    return f"Willkommen bei Ada, {name}!"
+
+# 1. Funktion OHNE () einer Variable zuweisen:
+meine_aktion = begruessung
+print(meine_aktion("Max"))  # "Willkommen bei Ada, Max!"
+
+# 2. Funktion als Parameter an andere Funktion übergeben:
+def fuehre_mit_log_aus(funktions_objekt, kunde: str):
+    print(f"📢 Starte Funktion: {funktions_objekt.__name__}")
+    ergebnis = funktions_objekt(kunde)  # Hier erst Aufruf mit ()!
+    print("✅ Fertig!")
+    return ergebnis
+
+# Wir übergeben 'begruessung' OHNE Klammern:
+fuehre_mit_log_aus(begruessung, "Anna")
+```
+
+* Genau dieses Prinzip nutzen **Decorators**: Sie nehmen eine Funktion entgegen und bauen eine schützende Hülle darum!
+
+</div>
+
+</div>
+</div>
+
+---
+
+### Python Decorators Schritt für Schritt (Das Zwiebelschalen-Prinzip)
+
+<div class="two-cols">
+<div class="col">
+
+Ein **Decorator** ist eine Funktion, die eine andere Funktion (`func`) entgegennimmt, sie in eine Hülle (**Wrapper** = Geschenkpapier / Zwiebelschale) einpackt und die verpackte Funktion zurückgibt.
+
+#### Was passiert im Hintergrund?
+* Die Schreibweise `@measure_time` über einer Funktion ist nur eine elegante Abkürzung (**Syntactic Sugar**) für:  
+  `berechne = measure_time(berechne)`
+* **`*args, **kwargs`:**  
+  Bedeutet: *"Nimm beliebig viele Parameter entgegen und reiche sie unverändert an die Originalfunktion weiter."*
+* **`@wraps(func)`:**  
+  Sorgt dafür, dass die verpackte Funktion ihren echten Namen und Docstring behält.
 
 </div>
 <div class="col">
@@ -462,12 +534,16 @@ import time
 from functools import wraps
 
 def measure_time(func):
-    """Zentraler Timing-Aspekt"""
+    """Zentraler Timing-Aspekt (Die äußere Zwiebelschale)"""
     @wraps(func)
     def wrapper(*args, **kwargs):
+        # 1. VORHER (Before-Advice): Stoppuhr starten
         start = time.perf_counter()
-        # Aufruf der eigentlichen Fachfunktion:
+        
+        # 2. ORIGINAL-FUNKTION aufrufen:
         result = func(*args, **kwargs)
+        
+        # 3. NACHHER (After-Advice): Zeit messen
         dauer = time.perf_counter() - start
         print(f"⏱️ {func.__name__} brauchte {dauer:.4f}s")
         return result
@@ -475,9 +551,9 @@ def measure_time(func):
 
 # Anwendung mit sauberer @-Syntax:
 @measure_time
-def berechne_inventurwert(pflanzen: list) -> float:
+def berechne_inventurwert(preise_cent: list[int]) -> int:
     time.sleep(0.1)  # Simuliere Arbeit
-    return sum(p.preis for p in pflanzen)
+    return sum(preise_cent)
 ```
 
 </div>
@@ -490,13 +566,15 @@ def berechne_inventurwert(pflanzen: list) -> float:
 <div class="two-cols">
 <div class="col">
 
-In verteilten Systemen schlagen Netzwerkaufrufe (z. B. zur Großhändler-API oder zu IoT-Bodenfeuchtesensoren) gelegentlich fehl.
+In echten Systemen schlagen Netzwerkaufrufe (z. B. zur Großhändler-API oder zu WLAN-Bodenfeuchtesensoren) manchmal kurzzeitig fehl.
 
-Statt in jeder Methode manuelle `while`-Schleifen und `try-except`-Blöcke zu schreiben, kapseln wir das Wiederholungsverhalten in einem wiederverwendbaren Decorator:
+#### Zwei wichtige Fachbegriffe:
+* **Resilienz (Widerstandsfähigkeit):**  
+  Die Fähigkeit eines Systems, bei Teilausfällen nicht sofort abzustürzen, sondern sich selbst zu erholen.
+* **Exponential Backoff (Exponentielles Abwarten):**  
+  Wenn ein Server überlastet ist, bombardieren wir ihn nicht im Millisekundentakt weiter! Wir **verdoppeln** nach jedem Fehlversuch die Pause (z. B. 1 s → 2 s → 4 s), damit sich der Server erholen kann.
 
-* Fängt Netzwerkfehler (`ConnectionError`, `TimeoutError`) ab.
-* Wiederholt den Aufruf bis zu `max_retries` Mal.
-* Verdoppelt die Wartezeit nach jedem Versuch (**exponentieller Backoff**), um den überlasteten Server zu schonen.
+*(Da dieser Decorator eigene Parameter wie `max_retries=3` annimmt, hat er eine äußere Konfigurations-Schale um den Decorator.)*
 
 </div>
 <div class="col">
@@ -513,20 +591,20 @@ def retry_with_backoff(max_retries=3, delay=1.0):
             for attempt in range(1, max_retries + 1):
                 try:
                     return func(*args, **kwargs)
-                except (ConnectionError, TimeoutError) as e:
+                except (ConnectionError, TimeoutError):
                     if attempt == max_retries:
                         raise  # Letzter Versuch gescheitert!
                     print(f"⚠️ Versuch {attempt} fehlgeschlagen. "
                           f"Warte {current_delay}s...")
                     time.sleep(current_delay)
-                    current_delay *= 2.0  # Exponentieller Backoff
+                    current_delay *= 2.0  # Wartezeit verdoppeln!
         return wrapper
     return decorator
 
 @retry_with_backoff(max_retries=3, delay=0.5)
-def frage_grosshaendler_preis(art_nr: str) -> float:
-    # Fachcode bleibt völlig frei von Retry-Schleifen!
-    return api_client.get_price(art_nr)
+def frage_grosshaendler_preis(art_nr: str) -> int:
+    # Fachcode bleibt zu 100 % frei von Retry-Schleifen!
+    return api_client.get_price_cents(art_nr)
 ```
 
 </div>
@@ -534,29 +612,30 @@ def frage_grosshaendler_preis(art_nr: str) -> float:
 
 ---
 
-### Das Observer Pattern (Beobachter-Muster)
+### Das Observer Pattern: Module entkoppeln (Brücke zu Modul 3)
 
 <div class="two-cols">
 <div class="col">
 
-#### Das Problem enger Kopplung:
-Wenn ein Kunde eine Bestellung aufgibt, müssen mehrere Module reagieren:
-* Das **Lager** muss die Ware reservieren.
-* Der **Kurierdienst** muss die Route planen.
-* Die **Marketing-Abteilung** muss Treuepunkte gutschreiben.
+#### Rückblick auf Modul 3 (Bounded Contexts):
+Wir haben Adas System in getrennte Packages aufgeteilt: `verkauf`, `lager` und `logistik`.
 
-Wenn der `BestellService` all diese Klassen direkt importiert und aufruft, entsteht ein unentwirrbares Knäuel aus Abhängigkeiten!
+#### Das Problem bei direktem Aufruf:
+Wenn eine Bestellung bezahlt wird, müssen `lager` (Ware reservieren) und `logistik` (Kurier planen) reagieren.
+* Importiert der `BestellService` (in `verkauf`) nun direkt den `LagerService` und `KurierService`, entsteht wieder **starke Kopplung**!
+* Kommt morgen ein `RechnungsService` hinzu, müssen wir den `BestellService` schon wieder umbauen (Verstoß gegen das *Open-Closed-Prinzip* aus Modul 1!).
 
 </div>
 <div class="col">
 
 <div class="col-card">
 
-#### Die Lösung: Der Radio-Sender
-* Das Subjekt (**EventBus / Sender**) ruft niemanden direkt an.
-* Es sendet lediglich eine Benachrichtigung: *"Bestellung #42 wurde bezahlt!"*.
-* Beliebig viele **Beobachter (Observer / Listener)** abonnieren das Ereignis unabhängig voneinander.
-* Neue Listener (z. B. ein Statistik-Modul) können hinzugefügt werden, **ohne den BestellService auch nur um eine Zeile zu ändern!**
+#### Die Lösung: Das Radio-Sender-Prinzip (Observer)
+* Der `BestellService` (**Sender / Publisher**) ruft niemanden direkt auf.
+* Er sendet eine Nachricht in einen neutralen **EventBus** (im `common`-Modul):  
+  *"Ereignis: Bestellung #101 wurde platziert!"*
+* Beliebig viele **Beobachter (Observer / Subscriber)** aus anderen Modulen hören diese Frequenz und reagieren selbstständig.
+* **Vorteil:** `verkauf` kennt weder `lager` noch `logistik`!
 
 </div>
 
@@ -670,24 +749,24 @@ print(katalog_monstera.preis)  # 20.0 (Unerwünschter Seiteneffekt!)
 <div class="two-cols">
 <div class="col">
 
-#### Der mathematische Funktionsbegriff:
-In der Mathematik ist eine Funktion *f* eine eindeutige Zuordnung:
+#### Der mathematische Funktionsbegriff einfach erklärt:
+In der Mathematik ist eine Funktion *f* wie eine verlässliche Maschine:
 <div style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 8px 0; color: #1e293b; font-weight: 600;">
     f: D → Z, &nbsp; x ↦ f(x)
 </div>
-Jedem Element *x* aus der Definitionsmenge *D* wird **genau ein** Element *y* aus der Zielmenge *Z* zugeordnet.
+Für jede **Eingabe** *x* (aus der Eingabemenge *D*) kommt **garantiert immer dieselbe Ausgabe** *y* (aus der Zielmenge *Z*) heraus.
 
-#### Die Kernprinzipien im Code:
-* **Deterministisch:** Bei gleicher Eingabe *x* erhalten wir **immer** die gleiche Ausgabe *y*.
-* **Seiteneffektfrei (Stateless):** Eine Funktion verändert weder globale Variablen noch ihre übergebenen Argumente noch den Systemzustand.
-* **Referenzielle Transparenz:** Ein Funktionsaufruf `f(x)` kann jederzeit durch sein Ergebnis ersetzt werden, ohne das Programmverhalten zu ändern!
+#### Die 3 Kernprinzipien im Code:
+* **Deterministisch:** Gleiche Eingabe → **immer** exakt gleiche Ausgabe.
+* **Seiteneffektfrei (Stateless):** Die Funktion ändert heimlich nichts im Hintergrund (keine globalen Variablen, keine übergebenen Objekte).
+* **Ersetzbarkeit (*Referenzielle Transparenz*):** Man kann den Aufruf `f(x)` überall durch sein Ergebnis ersetzen, ohne dass sich das Programm anders verhält!
 
 </div>
 <div class="col">
 
 <div class="col-card">
 
-#### Gegenüberstellung: Methode vs. Pure Function
+#### Gegenüberstellung: Seiteneffekt vs. Pure Function
 
 ```python
 # ❌ Imperativ mit Seiteneffekt (Impure):
@@ -706,7 +785,7 @@ def berechne_neuen_stand(stand: float,
 neuer_stand = berechne_neuen_stand(kontostand, 30.0)
 ```
 
-> **Wichtig für Anfänger:** In der FP wird das Ergebnis einer Funktion **immer als Rückgabewert weitergereicht**, statt bestehende Variablen im Speicher zu überschreiben!
+> **Wichtig für Anfänger:** In der FP wird das Ergebnis **immer als Rückgabewert (`return`) weitergereicht**, statt bestehende Variablen im Speicher zu überschreiben! *(Hinweis: Für kompakte FP-Formeln nutzen wir hier `float`, in echten Kassensystemen `Geldbetrag` mit `cent: int` aus Modul 2.)*
 
 </div>
 
@@ -724,11 +803,11 @@ neuer_stand = berechne_neuen_stand(kontostand, 30.0)
 * **Deterministisch:** Gleicher Input erzeugt **immer** exakt denselben Output.
 * **Keine Seiteneffekte (No Side Effects):**  
   Keine globalen Variablen ändern, keine Parameter manipulieren, keine Festplatten- oder Datenbankänderungen im Verborgenen.
-* Extrem einfach zu testen und parallel auszuführen!
+* Extrem einfach zu testen (`assert fn(x) == y`) und parallel auszuführen!
 
 #### 2. Immutability (Unveränderlichkeit)
-* Ein Datenobjekt kann nach der Erstellung **niemals modifiziert werden**.
-* Bei Änderungen wird ein **neues Objekt** mit den neuen Werten erzeugt.
+* Ein Datenobjekt ist wie ein **ausgedruckter Kassenbon**: Nach der Erstellung kann er **niemals überschrieben werden** (`@dataclass(frozen=True)`).
+* Bei einer Preisänderung wird mit `replace()` ein **neues Objekt** erzeugt – das Original im Katalog bleibt geschützt!
 
 </div>
 <div class="col">
@@ -736,7 +815,7 @@ neuer_stand = berechne_neuen_stand(kontostand, 30.0)
 ```python
 from dataclasses import dataclass, replace
 
-# ✅ Unveränderliche Datenstruktur:
+# ✅ Unveränderliche Datenstruktur (frozen=True):
 @dataclass(frozen=True)
 class Pflanze:
     botanischer_name: str
@@ -759,24 +838,22 @@ print(angebots_monstera.preis)  # 20.0 (Neues Objekt!)
 
 ---
 
-### Typen im Funktionalen Design: Primitive & Produkt-Typen
+### Typen im Funktionalen Design: Primitive & Produkt-Typen ("UND-Kombination")
 
 <div class="two-cols">
 <div class="col">
 
-In der OOP modellieren wir die Welt über Klassen mit Methoden.  
-Im **Funktionalen Design** trennen wir Daten und Logik strikt: **Daten sind reine Typen!**
+In der OOP stecken Daten und Methoden gemeinsam in Klassen.  
+Im **Funktionalen Design** trennen wir strikt: **Daten sind reine, unveränderliche Strukturen!**
 
-#### 1. Primitive Typen (Basiselemente):
-* Typen beschreiben Wertemengen: `int`, `float`, `str`, `bool`.
-* Ein Wert gehört zu einem Typ (z. B. `42: int`, `"Monstera": str`).
+#### 1. Primitive Typen (Grundbausteine):
+* Einfache Einzelwerte: `int` (Ganzzahl), `float` (Kommazahl), `str` (Text), `bool` (Wahrheitswert).
 
-#### 2. Produkt-Typen (Kartesisches Produkt A × B):
-* Das kartesische Produkt `A × B` ist die Menge aller Paare `(a, b)` mit `a ∈ A` und `b ∈ B`.
-* In der Programmierung: Ein **Tupel** oder Record mit **fester Anzahl** an Feldern verschiedener Typen.
-* *Beispiel Ada's Blumenladen:*
+#### 2. Produkt-Typen (Die "UND-Kombination", A × B):
+* Warum heißt das *Produkt-Typ* (`A × B`)? Weil ein Datensatz **Feld A UND Feld B UND Feld C** gleichzeitig enthält (wie ein ausgefülltes Formular).
+* In Python nutzen wir dafür ein **Tupel** oder noch besser ein **`NamedTuple`** (ein unveränderliches Tupel mit sprechenden Feldnamen):
   <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
-    BestellPosition = ArtikelId × Menge × Einzelpreis<br>
+    BestellPosition = ArtikelId UND Menge UND Einzelpreis<br>
     (str × int × float)
   </div>
 
@@ -800,14 +877,14 @@ class BestellPosition(NamedTuple):
     einzelpreis: float
 
 pos = BestellPosition("PFL-101", 3, 14.50)
-print(pos.artikel_id)  # "PFL-101"
+print(pos.artikel_id)               # "PFL-101"
 print(pos.menge * pos.einzelpreis)  # 43.50
 
-# Unveränderlich (Immutable):
+# Automatisch unveränderlich (Immutable):
 # pos.menge = 5  💥 AttributeError: can't set attribute!
 ```
 
-* **Vorteil:** Feste Struktur, kein verdecktes Überschreiben, direkte Destrukturierbarkeit!
+* **Vorteil:** Feste Struktur, kein heimliches Überschreiben!
 
 </div>
 
@@ -816,39 +893,38 @@ print(pos.menge * pos.einzelpreis)  # 43.50
 
 ---
 
-### Typen im Funktionalen Design: Union-Typen & Listen
+### Typen im Funktionalen Design: Union-Typen ("ODER-Auswahl") & Listen
 
 <div class="two-cols">
 <div class="col">
 
-Neben dem Produkt zweier Typen gibt es zwei weitere grundlegende Typkonstruktionen:
+Neben der "UND-Kombination" (Produkt-Typ) brauchen wir noch zwei weitere Werkzeuge:
 
-#### 3. Union-Typen (Summen-Typen A ∪ B):
-* Ein Wert ist **entweder** vom Typ `A` **oder** vom Typ `B`.
-* Modelliert Alternativen und Varianten ohne Vererbungshierarchien!
+#### 3. Union-Typen (Die "ENTWEDER-ODER-Auswahl", A | B):
+* Ein Wert ist **entweder** vom Typ `A` **oder** vom Typ `B` (in Python mit dem Oder-Strich `|` geschrieben).
+* Modelliert verschiedene Varianten ganz ohne komplizierte Vererbung!
 * *Beispiel Ada's Blumenladen:*
   <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
-    Zahlungsart = Bar | Kreditkarte | Rechnung<br>
+    Zahlungsart = Bar | Karte | Rechnung<br>
     Rabatt = KeinRabatt | Prozent(float) | Gutschein(float)
   </div>
 
-#### 4. Listen-Typen ([A] bzw. `list[A]`):
-* Eine Sequenz von **beliebig vielen Werten desselben Typs** `A`.
-* **Unterschied Tupel vs. Liste:**
-  * **Tupel (Produkt):** Feste Länge, unterschiedliche Typen (heterogen).
-  * **Liste:** Variable Länge, gleicher Typ (homogen).
+#### 4. Listen-Typen (`list[A]`):
+* Beliebig viele Elemente **desselben Typs** `A`.
+* **Merksatz für Anfänger:**
+  * **Tupel (`NamedTuple`):** Feste Felder *verschiedener* Typen (z. B. `str`, `int`, `float`).
+  * **Liste (`list`):** Beliebig viele Einträge *desselben* Typs (z. B. 10 Bestellpositionen).
 
 </div>
 <div class="col">
 
 <div class="col-card">
 
-#### Python-Syntax für Union & Listen
+#### Python-Syntax für Union (`|`) & Listen
 
 ```python
 from dataclasses import dataclass
 
-# Python 3.12+ (PEP 695 Type-Alias-Statement):
 @dataclass(frozen=True)
 class Bar: pass
 
@@ -860,10 +936,10 @@ class Karte:
 class Rechnung:
     iban: str
 
-# Summen-Typ (Union): Genau EINE dieser Ausprägungen!
+# Union-Typ (ENTWEDER Bar ODER Karte ODER Rechnung):
 type Zahlungsart = Bar | Karte | Rechnung
 
-# Listen-Typ: Homogene Sequenz beliebiger Länge
+# Listen-Typ: Beliebig viele BestellPositionen
 type Warenkorb = list[BestellPosition]
 
 bestellung: Warenkorb = [
@@ -872,7 +948,7 @@ bestellung: Warenkorb = [
 ]
 ```
 
-* Vollständig typisiert, selbsterklärend und ideal für Pattern Matching!
+* Vollständig typisiert und ideal für `match/case`!
 
 </div>
 
@@ -881,27 +957,25 @@ bestellung: Warenkorb = [
 
 ---
 
-### Funktionstypen & Vollständigkeit
+### Funktionstypen & Totale Funktionen (Vollständigkeit)
 
 <div class="two-cols">
 <div class="col">
 
-#### 1. Die Notation von Funktionstypen:
-In der funktionalen Modellierung schreiben wir:
+#### 1. Wie liest man einen Funktionstyp?
+Im Funktionalen Design beschreibt der Pfeil `→`, was in eine Funktion **hineingeht** und was **herauskommt**:
 <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
     Eingabetyp → Ausgabetyp
 </div>
 
-* `BestellPosition → float`: Nimmt eine Position, berechnet deren Zeilenpreis.
-* `(float × float) → float`: Nimmt zwei Gleitkommazahlen, liefert eine Summe.
-* In Python: `Callable[[BestellPosition], float]`.
+* `BestellPosition → float`: Nimmt eine Position, liefert den Zeilenpreis.
+* In Python schreiben wir dafür: `Callable[[BestellPosition], float]`.
 
-#### 2. Das Prinzip der Vollständigkeit:
-In `Aspekte.txt` gilt: Eine Funktion muss für **jede gültige Eingabe eine definierte Ausgabe** liefern!
-* Imperativer Code wirft oft ungefangene Exceptions ⇒ Programm stürzt unvorhersehbar ab.
-* Funktionaler Code gibt stattdessen ein **Ergebnistupel** oder `Result`-Typ zurück:
+#### 2. Das Prinzip der Vollständigkeit (Totale Funktionen):
+Eine Funktion heißt **vollständig (total)**, wenn sie für **jede mögliche Eingabe eine reguläre Ausgabe** liefert – statt mitten im Betrieb mit einer Exception abzustürzen!
+* Statt bei Fehlern zu crashen, gibt die Funktion ein **Ergebnistupel** `(Wert, Erfolg)` oder einen Union-Typ `Ergebnis | Fehler` zurück:
   <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 6px 0; color: #1e293b;">
-    teile: (float × float) → (float × bool)
+    sichere_division: (float × float) → (float × bool)
   </div>
 
 </div>
@@ -914,14 +988,14 @@ In `Aspekte.txt` gilt: Eine Funktion muss für **jede gültige Eingabe eine defi
 ```python
 from typing import Callable
 
-# Typdefinition einer Berechnungsfunktion:
+# Typdefinition: Nimmt BestellPosition, liefert float
 type PreisRechner = Callable[[BestellPosition], float]
 
 berechne_zeile: PreisRechner = (
     lambda pos: pos.menge * pos.einzelpreis
 )
 
-# Sichere, vollständige Funktion ohne Crash:
+# Sichere, vollständige Funktion ohne Programmabsturz:
 def sichere_division(zaehler: float, 
                      nenner: float) -> tuple[float, bool]:
     if nenner == 0.0:
@@ -933,7 +1007,7 @@ if not ok:
     print("⚠️ Ungültige Berechnung sicher abgefangen!")
 ```
 
-* Fehler werden Teil des Datentyps – keine heimlichen Abstürze!
+* Der Aufrufer *sieht* schon am Rückgabetyp, dass etwas schiefgehen kann!
 
 </div>
 
@@ -942,53 +1016,51 @@ if not ok:
 
 ---
 
-### Higher-Order Functions: Funktionen als Daten
+### Higher-Order Functions: Funktionen als "Funktions-Fabrik"
 
 <div class="two-cols">
 <div class="col">
 
-In der Funktionalen Programmierung sind Funktionen **First-Class Citizens**:
-* Sie können wie normale Variablen übergeben werden.
-* Sie können als Rückgabewert einer anderen Funktion entstehen.
+Da Funktionen in Python normale Objekte (*First-Class Citizens*) sind, können wir Funktionen bauen, die mit anderen Funktionen arbeiten!
 
-#### Was ist eine Higher-Order Function (HoF)?
-Eine Funktion, die:
-1. Mindestens eine **Funktion als Argument** entgegennimmt, oder
-2. Eine **neue Funktion als Ergebnis** zurückgibt.
+#### Was ist eine Higher-Order Function (Funktion höherer Ordnung)?
+Eine Funktion heißt *Higher-Order Function (HoF)*, wenn sie:
+1. Eine andere **Funktion als Parameter** annimmt (wie unser Decorator oder `map`), **oder**
+2. Eine **neue Funktion herstellt und zurückgibt** (wie eine **Funktions-Fabrik**).
 
-#### Der Funktionstyp einer HoF:
+#### Was ist eine Closure ("Funktion mit Rucksack")?
 <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.9em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
-    A → (B → C)
+    prozent: float → (betrag: float → float)
 </div>
-*"Nimmt ein Argument vom Typ A und liefert eine Funktion, die B auf C abbildet."*
+Wenn unsere Fabrik eine neue Funktion baut, packt sie die Konfiguration (z. B. `prozent = 10.0`) wie in einen unsichtbaren **Rucksack (Closure)** direkt in die erzeugte Funktion hinein!
 
 </div>
 <div class="col">
 
 <div class="col-card">
 
-#### Beispiel: Rabatt-Fabrik für Ada's Blumenladen
+#### Beispiel: Die Rabatt-Fabrik für Ada's Blumenladen
 
 ```python
 from typing import Callable
 
-# HoF: Erzeugt eine spezialisierte Rabattfunktion:
+# HoF (Funktions-Fabrik): Baut eine fertige Rabattfunktion!
 def erstelle_rabatt_rechner(prozent: float) -> Callable[[float], float]:
-    """Schließt 'prozent' in einer Closure ein"""
+    """Packt 'prozent' in den Rucksack (Closure) der inneren Funktion"""
     def rabattiere(betrag: float) -> float:
         return betrag * (1.0 - prozent / 100.0)
-    return rabattiere
+    return rabattiere  # Gibt die Funktion OHNE () zurück!
 
-# Wir erzeugen spezialisierte Funktionsdaten:
+# 1. Wir produzieren zwei maßgeschneiderte Funktionen:
 rabatt_stammkunde = erstelle_rabatt_rechner(10.0)
 rabatt_vip = erstelle_rabatt_rechner(25.0)
 
-# Jetzt wenden wir die Funktionsdaten an:
-print(rabatt_stammkunde(100.0))  # 90.0 €
-print(rabatt_vip(100.0))          # 75.0 €
+# 2. Später im Kassensystem wenden wir sie einfach an:
+print(rabatt_stammkunde(100.0))  # 90.0 € (weiß noch: 10%!)
+print(rabatt_vip(100.0))          # 75.0 € (weiß noch: 25%!)
 ```
 
-* Die innere Funktion "merkt" sich den Rabattsatz (**Closure**), ohne globale Variablen zu benötigen!
+* `rabatt_stammkunde` erinnert sich dank *Closure* immer an seine `10.0` %!
 
 </div>
 
@@ -997,52 +1069,51 @@ print(rabatt_vip(100.0))          # 75.0 €
 
 ---
 
-### Currying & Partielle Applikation
+### Currying & Partielle Applikation ("Parameter vor-ausfüllen")
 
 <div class="two-cols">
 <div class="col">
 
-Oft haben Funktionen mehrere Parameter. Wie vereinfacht man deren Wiederverwendung?
+Oft hat man eine allgemeine Funktion mit mehreren Parametern (z. B. `berechne_brutto(steuersatz, netto)`), möchte aber einen Parameter fest voreinstellen:
 
-#### 1. Partielle Applikation:
-* Man legt einen Teil der Parameter fest und erhält eine neue Funktion mit weniger Parametern.
-* In Python direkt über `functools.partial` verfügbar.
+#### 1. Partielle Applikation ("Vor-Ausfüllen" mit `partial`):
+* Wie bei einem Überweisungsformular, in das der Empfänger schon fest eingedruckt ist: Man legt das erste Argument fest (z. B. `steuersatz = 0.07`) und erhält eine neue, einfachere Funktion, die nur noch den `netto`-Betrag braucht.
 
-#### 2. Currying (nach Haskell Curry):
-* Die mathematische Umformung einer Funktion mit mehreren Argumenten in eine Kette einstelliger Funktionen:
+#### 2. Currying (nach dem Mathematiker Haskell Curry):
+* Eine Funktion mit 2 Parametern wird so geschrieben, dass sie die Parameter **nacheinander einzeln** entgegennimmt:
 <div style="background: #f1f5f9; padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 0.88em; text-align: center; margin: 6px 0; color: #1e293b; font-weight: 600;">
-    (A₁ × A₂ → B) &nbsp; ⟺ &nbsp; A₁ → (A₂ → B)
+    (Steuersatz × Netto → Brutto) &nbsp; ⟺ &nbsp; Steuersatz → (Netto → Brutto)
 </div>
-* Statt `f(x, y)` ruft man `f(x)(y)` auf.
-* Ermöglicht extrem modulare Datenfluss-Pipelines!
+* Statt `f(0.07, 20.0)` kann man `f(0.07)` aufrufen, um einen Steuerrechner zu erhalten!
 
 </div>
 <div class="col">
 
 <div class="col-card">
 
-#### Praxis: Steuersätze im Blumenladen
+#### Praxis: Steuersätze im Blumenladen voreinstellen
 
 ```python
 from functools import partial
 
-# Standard-Funktion mit 2 Parametern:
+# Allgemeine Funktion mit 2 Parametern:
 def berechne_brutto(steuersatz: float, netto: float) -> float:
     return round(netto * (1.0 + steuersatz), 2)
 
-# 1. Partielle Applikation mit partial():
-mwst_pflanzen = partial(berechne_brutto, 0.07)  # 7%
-mwst_deko = partial(berechne_brutto, 0.19)      # 19%
+# 1. Partielle Applikation (Steuersatz fest voreinstellen):
+mwst_pflanzen = partial(berechne_brutto, 0.07)  # 7% für Pflanzen
+mwst_deko = partial(berechne_brutto, 0.19)      # 19% für Übertöpfe
 
+# Im Kassen-Code brauchen wir nur noch den Netto-Preis übergeben:
 print(mwst_pflanzen(20.0))  # 21.40 €
 print(mwst_deko(20.0))      # 23.80 €
 
-# 2. Curried-Syntax mit Lambdas:
-curried_brutto = lambda satz: lambda netto: netto * (1.0 + satz)
+# 2. Zum Vergleich als Curried-Funktion:
+curried_brutto = lambda satz: lambda netto: round(netto * (1.0 + satz), 2)
 print(curried_brutto(0.07)(20.0))  # 21.40 €
 ```
 
-* Sehr nützlich, um universelle Funktionen in Daten-Pipelines einzubinden!
+* Ideal, um Funktionen passgenau für Daten-Pipelines (`map`) vorzubereiten!
 
 </div>
 

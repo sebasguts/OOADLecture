@@ -688,13 +688,21 @@ flowchart TD
 
 <h4>Die STRIDE-Kategorien im Überblick:</h4>
 <ul>
-<li><strong>S – Spoofing:</strong> Identität vortäuschen <em>(Ziel: Authentizität)</em></li>
+<li><strong>S – Spoofing:</strong> Identität vortäuschen <em>(Ziel: Authentifizierung)</em></li>
 <li><strong>T – Tampering:</strong> Daten manipulieren <em>(Ziel: Integrität)</em></li>
 <li><strong>R – Repudiation:</strong> Aktionen leugnen <em>(Ziel: Verbindlichkeit)</em></li>
 <li><strong>I – Information Disclosure:</strong> Daten leaken <em>(Ziel: Vertraulichkeit)</em></li>
 <li><strong>D – Denial of Service:</strong> Dienst lahmlegen <em>(Ziel: Verfügbarkeit)</em></li>
 <li><strong>E – Elevation of Privilege:</strong> Rechte erschleichen <em>(Ziel: Autorisierung)</em></li>
 </ul>
+<blockquote>
+<p><strong>Wichtige Eselsbrücke für Einsteiger:</strong></p>
+<ul>
+<li><strong>Authentifizierung (AuthN – Spoofing):</strong> <em>&quot;Wer bist du?&quot;</em> (Reisepass an der Grenze vorzeigen).</li>
+<li><strong>Autorisierung (AuthZ – Elevation of Privilege):</strong> <em>&quot;Was darfst du tun?&quot;</em> (Darf der Gast mit seinem Ticket auch ins Cockpit?).</li>
+<li><strong>Integrität (Tampering):</strong> <em>&quot;Wurden die Daten unterwegs heimlich verändert?&quot;</em> (Gefälschtes Preisschild).</li>
+</ul>
+</blockquote>
 </div>
 
 </div>
@@ -715,8 +723,8 @@ flowchart TD
 <h4>Das Szenario bei Ada:</h4>
 <ul>
 <li>Ein Angreifer sendet gefälschte API-Requests an den internen <code>BestellService</code>.</li>
-<li>Im HTTP-Header setzt er einfach:<br><code>&quot;X-User-Role&quot;: &quot;admin&quot;</code> und <code>&quot;X-User-Id&quot;: &quot;ada&quot;</code>.</li>
-<li>Der Server vertraut diesem Header blind und führt teure Großhandelsbestellungen im Namen von Ada aus!</li>
+<li>Im <strong>HTTP-Header</strong> <em>(den unsichtbaren Begleit-Metadaten jeder Web-Anfrage, wie der Absendername auf einem Briefumschlag)</em> setzt er einfach:<br><code>&quot;X-User-Role&quot;: &quot;admin&quot;</code> und <code>&quot;X-User-Id&quot;: &quot;ada&quot;</code>.</li>
+<li>Der Server vertraut diesem ungesicherten Briefumschlag blind und führt teure Großhandelsbestellungen im Namen von Ada aus!</li>
 </ul>
 <h4>Wer ist der Threat Actor?</h4>
 <ul>
@@ -760,9 +768,9 @@ def admin_order(request: Request):
 
 <h4>Wie wehrt man Spoofing ab?</h4>
 <ol>
-<li><strong>Kryptografische Token (JWT / OAuth 2.0):</strong><br>Header werden nicht im Klartext geglaubt, sondern mit einem geheimen Schlüssel signiert.</li>
-<li><strong>Digitale Signaturprüfung:</strong><br>Der Server validiert die Signatur mit dem Public Key des Auth-Servers (z. B. Auth0 / Keycloak).</li>
-<li><strong>Multi-Faktor-Authentifizierung (MFA):</strong><br>Für sensible Aktionen (Admin-Bestellungen) ist ein zweiter Faktor (TOTP-App) zwingend nötig.</li>
+<li><strong>Kryptografische Token (JWT = JSON Web Token):</strong><br>Ein <strong>digital versiegelter Ausweis</strong>: Der Server versieht den Ausweis beim Login mit einem kryptografischen Siegel (Signatur). Ändert ein Angreifer im Token die Rolle auf <code>&quot;admin&quot;</code>, bricht das Siegel sofort!</li>
+<li><strong>Digitale Signaturprüfung:</strong><br>Der Server prüft bei jedem Request mathematisch die Echtheit der Signatur.</li>
+<li><strong>Multi-Faktor-Authentifizierung (MFA):</strong><br>Für sensible Aktionen (Admin-Bestellungen) ist ein zweiter Nachweis (z. B. Handy-Code) zwingend nötig.</li>
 </ol>
 </div>
 <div class="col">
@@ -938,8 +946,8 @@ def buy_plant(req: CheckoutRequest):
 
 <h4>Wie wehrt man Repudiation ab?</h4>
 <ol>
-<li><strong>Revisionssichere Audit-Logs (WORM):</strong><br>Protokolle werden in unveränderlichem Speicher (<em>Write Once, Read Many</em>, z. B. AWS S3 mit Object Lock) abgelegt.</li>
-<li><strong>Lückenlose Transaktionsdaten:</strong><br>Jeder Log-Eintrag enthält: User-ID, Zeitstempel (UTC), IP-Adresse, Transaktions-Hash und Aktionsart.</li>
+<li><strong>Revisionssichere Audit-Logs (WORM = <em>Write Once, Read Many</em>):</strong><br>Ein Speicher, in den Log-Zeilen <strong>nur einmal hineingeschrieben, aber selbst von Administratoren nachträglich niemals geändert oder gelöscht</strong> werden können (wie eine Kassenbon-Rolle im Tresor, z. B. AWS S3 Object Lock).</li>
+<li><strong>Lückenlose Transaktionsdaten:</strong><br>Jeder Log-Eintrag enthält: User-ID, Zeitstempel (UTC), IP-Adresse, kryptografische Prüfsumme (Hash) und Aktionsart.</li>
 <li><strong>Digitale Signaturen &amp; Bestätigungen:</strong><br>Verbindliche Bestellbestätigung per E-Mail mit digital signiertem PDF-Beleg.</li>
 </ol>
 </div>
@@ -985,7 +993,7 @@ def buy_plant(req: CheckoutRequest):
 <ul>
 <li>Ein Kunde ruft <code>GET /api/v1/plants/9999</code> auf (die ID existiert nicht).</li>
 <li>Die ungesicherte Python-App wirft eine unbehandelte Exception.</li>
-<li>Im Browser erscheint ein 50-zeiliger <strong>Stacktrace</strong>:<ul>
+<li>Im Browser erscheint ein 50-zeiliger <strong>Stacktrace</strong> <em>(der technische Absturzbericht von Python mit exakten Dateinamen und Codezeilen)</em>:<ul>
 <li>Vollständige Dateipfade auf dem Server (<code>/home/ada/backend/database.py</code>).</li>
 <li>Datenbank-Benutzername und Passwort in Umgebungsvariablen.</li>
 <li>Verwendete Bibliotheken und veraltete Versionsnummern!</li>
@@ -999,9 +1007,9 @@ def buy_plant(req: CheckoutRequest):
 
 <h4>Weitere fatale Datenlecks:</h4>
 <ul>
-<li><strong>API-Tokens im Git-Repository:</strong><br>Entwickler pusht <code>.env</code>-Datei versehentlich auf GitHub → Bots leeren das Konto in 10 Minuten!</li>
-<li><strong>Kreditkartendaten im Klartext-Log:</strong><br>Entwickler loggt <code>print(request.body)</code> → Kreditkartennummer landet unverschlüsselt im Log-Server!</li>
-<li><strong>Fehlende Zugriffskontrolle (IDOR):</strong><br><code>GET /api/invoices/101</code> → Ändert man die URL zu <code>/102</code>, sieht man fremde Rechnungen!</li>
+<li><strong>API-Tokens im Git-Repository:</strong><br>Entwickler lädt <code>.env</code>-Passwortdatei versehentlich auf GitHub hoch → Bots finden sie in Sekunden!</li>
+<li><strong>Kreditkartendaten im Klartext-Log:</strong><br>Entwickler loggt <code>print(request.body)</code> → Kreditkartennummer landet unverschlüsselt im Log!</li>
+<li><strong>IDOR (<em>Insecure Direct Object Reference</em> – Fehlende Besitzerprüfung):</strong><br>Kunde A ruft <code>GET /api/invoices/101</code> auf, ändert die Zahl in der Adresszeile einfach auf <code>/102</code> und sieht plötzlich die fremde Rechnung von Kunde B!</li>
 </ul>
 </div>
 
@@ -1100,9 +1108,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 <h4>Wie wehrt man DoS-Angriffe ab?</h4>
 <ol>
-<li><strong>Rate Limiting:</strong><br>Begrenzung der maximalen Anfragen pro IP-Adresse (z. B. max. 60 Requests/Minute via Redis).</li>
-<li><strong>Web Application Firewall (WAF / Cloudflare):</strong><br>Erkennt Botnetze, analysiert Verhaltensmuster und blockiert schädliche IPs an der Edge.</li>
-<li><strong>Aggressives In-Memory-Caching:</strong><br>95 % aller Kataloganfragen aus dem Redis-Cache servieren → Datenbank wird nicht berührt!</li>
+<li><strong>Rate Limiting (Der &quot;Türsteher mit Strichliste&quot;):</strong><br>Begrenzt, wie oft eine IP-Adresse pro Minute anfragen darf (z. B. max. 60 Klicks/Minute in Redis gezählt). Wer öfter anfragt, wird mit <code>429 Too Many Requests</code> abgewiesen!</li>
+<li><strong>Web Application Firewall (WAF / Cloudflare):</strong><br>Schutzschild vor dem Server: Erkennt Botnetze und blockiert Angreifer-IPs, bevor sie unseren Python-Code erreichen.</li>
+<li><strong>Aggressives In-Memory-Caching:</strong><br>95 % aller Kataloganfragen aus dem Redis-RAM beantworten → schont die Datenbank!</li>
 <li><strong>Auto-Scaling:</strong> Automatische Zuweisung neuer Container bei Lastspitzen.</li>
 </ol>
 </div>
@@ -1189,9 +1197,9 @@ def update_profile(user_id: str, data: dict):
 
 <h4>Wie verhindert man Rechteausweitung?</h4>
 <ol>
-<li><strong>Principle of Least Privilege:</strong><br>Jeder Benutzer und Service erhält nur die absolut minimalen Rechte, die er für seine Arbeit benötigt.</li>
-<li><strong>Strikte Serverseitige RBAC (Role-Based Access Control):</strong><br>Rollen dürfen <strong>niemals</strong> über generische Update-Endpunkte geändert werden.</li>
-<li><strong>Declarative Method Security:</strong><br>Jeder geschützte Endpunkt prüft zwingend die Berechtigung im Token.</li>
+<li><strong>Principle of Least Privilege (Minimalprinzip):</strong><br>Jeder Benutzer und Service erhält immer nur genau die minimalen Rechte, die er für seine Aufgabe zwingend braucht.</li>
+<li><strong>Strikte Serverseitige RBAC (<em>Role-Based Access Control</em> = Rollenbasierte Zugriffskontrolle):</strong><br>Rechte hängen an klar definierten Rollen (<code>Kunde</code>, <code>Lagerist</code>, <code>Admin</code>). Ein Nutzer darf seine eigene Rolle <strong>niemals</strong> selbst im Profil-Update ändern!</li>
+<li><strong>Explizite Türsteher-Prüfung an jedem Endpunkt:</strong><br>Jeder sensible API-Endpunkt prüft vor der Ausführung aktiv die Rolle im signierten Token.</li>
 </ol>
 </div>
 <div class="col">

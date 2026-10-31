@@ -144,6 +144,27 @@
             width: auto !important;
             max-width: 100% !important;
         }
+
+        /* Tables in Slides */
+        .reveal table {
+            font-size: 0.65em !important;
+            width: 100% !important;
+            margin: 6px 0 !important;
+            border-collapse: collapse;
+        }
+        .reveal table th, .reveal table td {
+            padding: 5px 8px !important;
+            border: 1px solid var(--border) !important;
+            text-align: left;
+        }
+        .reveal table th {
+            background: #f1f5f9;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        .reveal table tr:nth-child(even) td {
+            background: #fafbfc;
+        }
     </style>
 </head>
 <body>
@@ -325,14 +346,13 @@ Auf dem Entwickler-Laptop läuft eine Anwendung meist einfach:
 <div class="two-cols">
 <div class="col">
 
-#### Warum entwirft man das System VOR den Komponenten?
-* **Die typische Anfängerfalle:**
-  * Man beginnt sofort mit Klassen: `class Order`, `class Flower`, `class Customer`.
-  * Man weiß aber noch gar nicht: Läuft alles in einem Prozess? Wo werden Daten gespeichert? Welche Latenzen sind gefordert?
-  * **Folge:** Man baut starre Klassenstrukturen, die zerbrechen, sobald Netzwerk, Caching oder verteilte Datenbanken ins Spiel kommen.
-* **Die System-First-Methode:**
-  * Zuerst definieren wir die **Leitplanken des Gesamtsystems**: Servicegrenzen, synchrone vs. asynchrone Datenflüsse, Persistenz und Skalierungsanforderungen.
-  * Erst wenn das Makro-Design steht, entwerfen wir die internen Klassen und Komponenten (Mikro-Design).
+#### Warum im echten Projekt das System VOR den Klassen kommt:
+* **Unsere Vorlesungsreise (Bottom-Up zum Lernen):**  
+  In Modul 1–4 haben wir im Kleinen (Klassen, Methoden, Module) begonnen, um das Programmierhandwerk zu lernen.
+* **Die Realität im Berufsleben (Top-Down im Entwurf):**  
+  In einem neuen Softwareprojekt beginnt man **niemals** sofort mit `class Order` oder `class Flower`!
+  * Wer zuerst Klassen baut, ohne zu wissen, ob das System auf einem Laptop oder verteilt in der Cloud läuft, baut starre Strukturen, die am ersten Tag im Echtbetrieb zerbrechen.
+  * **System-First-Regel:** Zuerst legen wir die **Leitplanken des Gesamtsystems** (Makro-Design) fest – erst danach entwerfen wir die Module (Meso) und Klassen (Mikro).
 
 </div>
 <div class="col">
@@ -357,7 +377,7 @@ flowchart TD
     style S3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
 ```
 
-> **Leitsatz:** *"Architecture represents the significant design decisions that shape a system, where significant is measured by cost of change."* (Grady Booch)
+> **Merksatz (Grady Booch):** *"Architektur umfasst die Entscheidungen, die später am teuersten zu ändern sind."*
 
 </div>
 </div>
@@ -501,7 +521,7 @@ flowchart TD
 
 ---
 
-### Die 5 Stufen im architektonischen Detail
+### Die 5 Stufen im architektonischen Detail (mit Glossar)
 
 <div class="two-cols">
 <div class="col">
@@ -509,16 +529,15 @@ flowchart TD
 <div class="col-card">
 
 #### Stufe 1: Single Instance Monolith
-* **Setup:** Eine EC2-Instanz oder Hetzner-Server. Python, SQLite/PostgreSQL und Bilddateien liegen auf derselben Festplatte.
-* **Grenze:** Fällt der Server aus $\to$ Totalausfall (**SPOF**). CPU/RAM-Limit erreicht $\to$ System stürzt ab.
+* **Setup:** Ein einzelner gemieteter Server (z. B. AWS EC2). Python-Code, Datenbank und Produktfotos liegen auf derselben Festplatte.
+* **Grenze:** Fällt der Server aus → Totalausfall (**SPOF = Single Point of Failure**).
 
-#### Stufe 2: State Extraction (Zustandslosigkeit)
-* **Setup:** Die Datenbank wandert zu **Amazon RDS**, Bilder zu **Amazon S3**.
-* **Gewinn:** Der Webserver speichert keine persistenten Daten mehr. Er kann jederzeit neu gestartet oder ersetzt werden!
+#### Stufe 2: State Extraction (Daten auslagern)
+* **Setup:** Datenbank wandert in eine **Managed DB (Amazon RDS)**, Produktfotos in einen **Cloud-Dateispeicher (Amazon S3 = "Cloud-Festplatte für Dateien")**.
+* **Gewinn:** Der Webserver speichert selbst nichts mehr. Er kann jederzeit gefahrlos neu gestartet werden!
 
 #### Stufe 3: Horizontale Skalierung
-* **Setup:** Ein **Application Load Balancer (ALB)** verteilt Traffic auf 2 bis 20 Webserver. Nutzersitzungen liegen in einem **Redis In-Memory-Cluster**.
-* **Gewinn:** Hohe Ausfallsicherheit und Bewältigung von Lastspitzen.
+* **Setup:** Ein **Load Balancer (ALB = "Verkehrspolizist")** verteilt Kundenanfragen gleichmäßig auf 2 bis 20 Webserver. Logins liegen in **Redis** (blitzschneller RAM-Speicher).
 
 </div>
 
@@ -528,12 +547,12 @@ flowchart TD
 <div class="col-card">
 
 #### Stufe 4: Container & Microservices
-* **Setup:** Aufteilung in Bounded Contexts (Katalog, Checkout, Lager) als Docker-Container auf **AWS ECS** oder **Kubernetes**.
-* **Gewinn:** Teams deployen unabhängig; Komponenten mit Speicherlecks reißen andere nicht mit.
+* **Was ist ein Docker-Container?** Wie ein genormter **Schiffscontainer**: Er verpackt unseren Python-Code samt exakt passender Python-Version, damit er auf jedem Server der Welt identisch läuft.
+* **Orchestrierung (ECS / Kubernetes):** Der "Hallenmeister", der hunderte solcher Container automatisch startet und überwacht.
 
 #### Stufe 5: Serverless & Event-Driven
-* **Setup:** **AWS Fargate** für containerisierte REST-APIs, **AWS Lambda** für asynchrone Hintergrundjobs (z. B. Bildanalyse bei Upload), **EventBridge & SQS** zur Pufferung.
-* **Gewinn:** Zero-Server-Management, automatische Skalierung von 0 auf 10.000 Instanzen in Sekunden, **Pay-per-Use** (0 € Kosten bei Inaktivität!).
+* **Was heißt Serverless?** Natürlich gibt es noch Server – aber **wir müssen sie nicht mehr selbst verwalten oder im Leerlauf bezahlen!**
+* **AWS Lambda / Fargate:** Startet unseren Code nur in der Sekunde, in der ein Kunde klickt (**Pay-per-Use**: 0 Anfragen = 0 € Kosten).
 
 </div>
 
@@ -692,12 +711,12 @@ Stufe 4: Code
 <div class="two-cols-wide-left">
 <div class="col">
 
-Das **System Context Diagramm** betrachtet *Ada's Botanical Platform* als Black Box und zeigt die Einbettung in die Umwelt:
+Das **System Context Diagramm** betrachtet *Ada's Botanical Platform* als Black Box und zeigt die Einbettung in die Umwelt (konsistent mit den **Rollen** aus Modul 2!):
 
-* **Menschliche Akteure:**
+* **Menschliche Akteure (Rollen):**
   * 👤 **Endkunde:** Stöbert, bestellt Blumen, lädt Pflanzenfotos zur KI-Diagnose hoch.
   * 💼 **Ladenpersonal:** Bedient das Kassensystem im Ladengeschäft.
-  * 👩‍💼 **Chefin Ada:** Überwacht Finanzen und gibt Großbestellungen frei.
+  * 👩‍💼 **Geschäftsführung (z. B. Ada):** Überwacht Finanzen und gibt Großbestellungen frei.
 * **Externe Partnersysteme:**
   * 💳 **Stripe / PayPal:** Sichere Zahlungsabwicklung.
   * 🚚 **Stadtkurier-API:** Beauftragung von Express-Lieferungen.
@@ -710,7 +729,7 @@ Das **System Context Diagramm** betrachtet *Ada's Botanical Platform* als Black 
 flowchart TD
     Kunde["👤 Endkunde"] --> System["🏢 Ada's Botanical Platform"]
     Personal["💼 Ladenpersonal"] --> System
-    Ada["👩‍💼 Chefin Ada"] --> System
+    Mgmt["👩‍💼 Geschäftsführung"] --> System
     
     System --> Payment["💳 Stripe (Zahlungs-API)"]
     System --> Courier["🚚 Kurierdienst-API"]
@@ -727,14 +746,14 @@ flowchart TD
 <div class="two-cols-wide-left">
 <div class="col">
 
-Auf Container-Ebene sehen wir die **technologische Infrastruktur** und die Protokolle:
+Auf Container-Ebene sehen wir die **technologische Infrastruktur** und wie die Bausteine zusammenspielen:
 
-* **Load Balancer (ALB):** Verteilt HTTPS-Traffic und terminiert SSL.
-* **Storefront Service (FastAPI):** Beantwortet Katalog- und Checkout-Anfragen via REST.
-* **Lager & Agent Service:** Führt autonome Einkäufe und Sensor-Monitoring durch.
-* **Redis:** Speichert Sessions und gecachte Katalogdaten (`< 1 ms`).
-* **PostgreSQL:** Persistente Hauptdatenbank für Kunden und Bestellungen.
-* **Message Queue (RabbitMQ / SQS):** Entkoppelt asynchrone Kurieraufträge.
+* **Load Balancer (ALB):** Der "Verkehrspolizist" am Eingang – verteilt HTTPS-Anfragen auf die Server.
+* **Storefront Service (FastAPI):** Unser Python-Webserver für Katalog- und Checkout-Anfragen.
+* **Lager & Agent Service:** Hintergrund-Service für autonome Nachbestellungen und Sensoren.
+* **Redis Cache:** Blitzschnelles Kurzzeitgedächtnis im Arbeitsspeicher (`< 1 ms`).
+* **PostgreSQL:** Dauerhafte relationale Hauptdatenbank für Kunden und Bestellungen.
+* **Message Queue (RabbitMQ / SQS):** Ein digitaler **Briefkasten (Warteschlange)**: Der Shop wirft Kurieraufträge ein und antwortet dem Kunden sofort; der Kurier-Service arbeitet den Briefkasten im eigenen Tempo ab!
 
 </div>
 <div class="col">
@@ -903,9 +922,9 @@ Aus `Systemdesign.txt`: Im Systemdesign plant man Datenbanken nicht nach Klassen
 #### Relational (SQL) vs. NoSQL (Key-Value / Document):
 * **Relational (PostgreSQL, MySQL):**  
   * Perfekt für Finanztransaktionen, Aufträge und Beziehungen (Foreign Keys).
-  * ACID-Garantien schützen vor Race Conditions und inkonsistenten Daten.
+  * **ACID-Garantien (*Alles-oder-Nichts-Prinzip*):** Wenn beim Bezahlen der Strom ausfällt, wird die Transaktion komplett zurückgerollt – es gibt niemals abgebuchtes Geld ohne gespeicherte Bestellung!
 * **Key-Value Store (Redis):**  
-  * Extrem schnell für einfache Abfragen per Schlüssel (`GET plant:101`).
+  * Wie ein riesiges Python-`dict` im Arbeitsspeicher: Extrem schnell für Abfragen per Schlüssel (`GET plant:101`).
 
 </div>
 <div class="col">
@@ -1096,14 +1115,13 @@ def aktualisiere_pflanzen_preis(pflanze_id: str,
 > **REST (Representational State Transfer)** ist der globale Architektur-Standard für Webservices über das HTTP-Protokoll.
 
 #### Die 4 wichtigsten HTTP-Methoden:
-* `GET /api/v1/plants`  
-  Ressourcen abrufen (**Safe & Idempotent**: Ändert niemals Daten).
-* `POST /api/v1/orders`  
-  Neue Ressource erzeugen (**Nicht idempotent**: Jeder Aufruf legt eine neue Bestellung an!).
-* `PUT /api/v1/plants/{id}`  
-  Ressource vollständig überschreiben (**Idempotent**).
-* `DELETE /api/v1/plants/{id}`  
-  Ressource löschen (**Idempotent**).
+* `GET /api/v1/plants` → Daten lesen (**Idempotent**: Ändert nichts).
+* `POST /api/v1/orders` → Neu anlegen (**NICHT idempotent**: 5x klicken = 5 Bestellungen!).
+* `PUT /api/v1/plants/42` → Komplett überschreiben (**Idempotent**).
+* `DELETE /api/v1/plants/42` → Löschen (**Idempotent**).
+
+> **Was bedeutet *Idempotent*?**  
+> Wie der **Rufknopf am Aufzug**: Egal ob man 1-mal oder 10-mal hintereinander drückt – das Ergebnis im System bleibt exakt gleich (der Aufzug kommt genau einmal, der Preis steht auf 19,99 €). Bei `POST` (Bestellung aufgeben) löst dagegen jeder Klick eine weitere Bestellung aus!
 
 </div>
 <div class="col">
@@ -1406,20 +1424,22 @@ flowchart TB
 
 ---
 
-### Infrastructure as Code: AWS CDK in Python
+### Infrastructure as Code (IaC): AWS CDK in Python
 
 <div class="two-cols">
 <div class="col">
 
-Statt Cloud-Ressourcen mühsam per Hand in der Webkonsole zusammenzuklicken (**"ClickOps"**), beschreiben wir die gesamte Infrastruktur mit dem **AWS Cloud Development Kit (CDK)** in echtem **Python-Code**!
+Statt Cloud-Server und Datenbanken mühsam per Mausklick im Browser anzulegen (**"ClickOps"** – fehleranfällig und nicht reproduzierbar!), beschreiben wir unsere Infrastruktur als Code (**Infrastructure as Code / IaC**).
 
-#### Vorteile von AWS CDK:
-1. **Echte Programmiersprache:** Klassen, Vererbung, Schleifen und Typ-Prüfung in der IDE.
-2. **Wiederverwendbare Konstrukte:** Vorkonfigurierte Best-Practice-Bausteine von AWS.
-3. **Synthese:** Kompiliert in CloudFormation-Vorlagen und wird atomar ausgerollt.
+#### Imperativ vs. Deklarativ (Der Bauplan):
+* **Imperativ:** *"Klicke hier, erstelle Ordner, installiere Paket..."*
+* **Deklarativ (IaC):** Wir beschreiben nur den **gewünschten Zielzustand** (*"Ich möchte 1 S3-Speicher und 1 Redis-Cache"*). Das Werkzeug kümmert sich automatisch um den Aufbau!
 
-> **Hinweis zu Terraform:**  
-> Das weit verbreitete Werkzeug **HashiCorp Terraform** nutzt eine deklarative Sprache (HCL) und ist provider-agnostisch (AWS, Azure, GCP). CDK ist die moderne, objektorientierte Alternative!
+#### Vorteile von AWS CDK in Python:
+1. **Gewohnte Sprache:** Wir nutzen normale Python-Klassen, Typprüfung und Git-Versionierung für unsere Server-Architektur!
+2. **Wiederverwendbar:** Einmal geschrieben, lässt sich exakt dieselbe Umgebung für Test und Produktion starten.
+
+> **Praxis-Tipp:** Neben AWS CDK ist **HashiCorp Terraform** der Industriestandard, wenn man mehrere Cloud-Anbieter (AWS, Azure, Google Cloud) gleichzeitig nutzt.
 
 </div>
 <div class="col">
